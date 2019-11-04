@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="wendu.dsbridge">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <activity android:name="wendu.dsbridge.game.GameActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AppTheme.Game"
+            android:screenOrientation="user"
+            />
+        <activity android:name="wendu.dsbridge.game.GameHActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AppTheme.Game"
+            android:screenOrientation="user"
+            />
+    </application>
+
+</manifest>
