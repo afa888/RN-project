@@ -119,7 +119,7 @@ export default class MainScreen extends Component<Props> {
             tabBarOptions: {
                 showIcon: true,
                 resetOnBlur: true, //切换离开屏幕时，重置所有嵌套导航器的状态
-                activeTintColor: '#cda469',
+                activeTintColor: theme_color,
                 inactiveTintColor: '#a6a1aa',
                 style: {backgroundColor: 'white', height: 50},
                 labelStyle: {fontSize: 12},
