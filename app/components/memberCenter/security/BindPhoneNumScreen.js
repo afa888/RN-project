@@ -134,7 +134,7 @@ export default class BindPhoneNumScreen extends Component<Props> {
     };
 
     _onShowCustomer  = () => {
-        this.props.navigation.navigate('客服')
+        this.props.navigation.navigate('优惠')
     }
 
     render() {
