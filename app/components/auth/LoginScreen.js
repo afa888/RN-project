@@ -213,87 +213,91 @@ export default class LoginScreen extends Component<Props> {
     }
 }
 
-function createLoginStyle() {
-    let loginStyle = StyleSheet.create({
-        header_img: {
-            resizeMode: 'cover',
-            width: 15,
-            height: 15,
-            margin: 10
-        },
-        count_img: {
-            resizeMode: 'contain',
-            width: 20,
-            height: 22,
-        },
+const styles = StyleSheet.create({
+    header_img: {
+        resizeMode: 'cover',
+        width: 15,
+        height: 15,
+        margin: 10
+    },
 
-        logo_img: {
-            width: 200,
-            height: 60,
-            resizeMode: 'contain',
-            marginTop: 20,
-        },
-        pass_hide_img: {
-            resizeMode: 'cover',
-            width: 26,
-            height: 22
-        },
+    count_img: {
+        resizeMode: 'contain',
+        width: 20,
+        height: 22,
+    },
 
-        logo_text: {
-            fontWeight: 'bold',
-            fontSize: 25,
-            color: "black",
-            marginTop: 40,
-            textAlign: "left",
-            width: 300, // 和下面的登录框的宽度保持一致
-        },
+    logo_img: {
+        width: 200,
+        height: 60,
+        resizeMode: 'contain',
+        marginTop: 20,
+    },
+    
+    pass_hide_img: {
+        resizeMode: 'cover',
+        width: 26,
+        height: 22
+    },
 
-        count_text: { height: 40, width: 300, marginLeft: 0 },
+    logo_text: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: "black",
+        marginTop: 40,
+        textAlign: "left",
+        width: 300, // 和下面的登录框的宽度保持一致
+    },
 
-        login_button_title: {
-            color: 'white'
-        },
-        register_button: {
-            width: 320,
-            height: 40,
-            marginTop: 20,
-            backgroundColor: '#EEEEEE',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 3
-        },
-        register_button_title: {
-            color: '#999999'
-        },
-        remember_pwd_container: {
-            width: 300,
-            height: 40,
-            marginTop: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            position: 'relative'
-        },
-        remember_pwd_title: {
-            color: '#999999',
-            fontSize: 15,
-            flex: 1,
-        }
-    });
+    count_text: { height: 40, width: 300, marginLeft: 0 },
 
-    loginStyle.divide_view = {
+    login_button_title: {
+        color: 'white'
+    },
+
+    register_button: {
+        width: 320,
+        height: 40,
+        marginTop: 20,
+        backgroundColor: '#EEEEEE',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3
+    },
+
+    register_button_title: {
+        color: '#999999'
+    },
+
+    remember_pwd_container: {
+        width: 300,
+        height: 40,
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        position: 'relative'
+    },
+
+    remember_pwd_title: {
+        color: '#999999',
+        fontSize: 15,
+        flex: 1,
+    },
+
+    divide_view: {
         width: 320,
         height: 0.8,
         backgroundColor: MainTheme.GrayColor,
-    };
+    },
 
-    loginStyle.divide_view_highlighted = {
+    divide_view_highlighted: {
         width: 320,
         height: 0.8,
         backgroundColor: MainTheme.SpecialColor,
-    };
+    },
 
-    loginStyle.login_button = {
+    login_button: {
         width: 320,
         height: 40,
         backgroundColor: MainTheme.SpecialColor,
@@ -301,9 +305,5 @@ function createLoginStyle() {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
-    };
-
-    return loginStyle;
-}
-
-const styles = createLoginStyle();
+    },
+});

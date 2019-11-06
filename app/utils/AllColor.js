@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 
 export const category_tab_checked_bg_color = "#f2f2f2";
@@ -12,10 +12,13 @@ export const funRecordGreen = '#06d82d';
 
 export const specialTextColor = '#CFA359';
 
-
-export const MainTheme = {
-    SpecialColor: '#DE4A38',
-    GrayColor: '#CCCCCC',
+/**
+ * 定义全局主题相关属性
+ * @author Nail
+**/
+export class MainTheme {
+    static SpecialColor = '#DE4A38';
+    static GrayColor = '#CCCCCC';
 };
 
 export default MainTheme;

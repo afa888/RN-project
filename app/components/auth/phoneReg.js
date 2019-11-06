@@ -124,7 +124,7 @@ export default class PhoneRegister extends Component<Props> {
                         {codeSending ?
                             <CountDown _openSendCode={() => this.changeSendingStatus()} /> :
                             <Text
-                                style={{ color: '#fff',fontSize:9 }}
+                                style={{ color: '#fff', fontSize: 9 }}
                                 onPress={() => this.sendImgCode()}
                             >发送验证码</Text>
                         }
@@ -164,35 +164,33 @@ export default class PhoneRegister extends Component<Props> {
     }
 }
 
-function createStyle() {
-    let style = StyleSheet.create({});
-
-    style.regItem = {
+const styles = StyleSheet.create({
+    regItem: {
         height: 50,
         marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center',
-    };
+    },
 
-    style.count_img = {
+    count_img: {
         resizeMode: 'contain',
         width: 20,
         height: 22,
-    };
+    },
 
-    style.count_text = {
+    count_text: {
         height: 40,
         width: 320,
         marginLeft: 5,
         borderBottomWidth: 0.8,
         borderBottomColor: MainTheme.GrayColor,
-    };
+    },
 
-    style.count_text_hilighted = {
+    count_text_hilighted: {
         borderBottomColor: MainTheme.SpecialColor,
-    };
+    },
 
-    style.reg_button = {
+    reg_button: {
         height: 46,
         width: 320,
         backgroundColor: MainTheme.SpecialColor,
@@ -200,9 +198,9 @@ function createStyle() {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3
-    };
+    },
 
-    style.login_button = {
+    login_button: {
         height: 46,
         width: 320,
         backgroundColor: '#EEEEEE',
@@ -212,9 +210,5 @@ function createStyle() {
         borderRadius: 3,
         borderWidth: 0.1,
         borderColor: '#999999',
-    };
-
-    return style;
-}
-
-const styles = createStyle();
+    },
+});

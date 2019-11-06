@@ -225,4 +225,50 @@ function createStyle() {
     return style;
 }
 
-const styles = createStyle();
+const styles = StyleSheet.create({
+    regItem: {
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    count_img: {
+        resizeMode: 'contain',
+        width: 20,
+        height: 22,
+    },
+
+    count_text: {
+        height: 40,
+        width: 320,
+        marginLeft: 5,
+        borderBottomWidth: 0.8,
+        borderBottomColor: MainTheme.GrayColor,
+    },
+
+    count_text_hilighted: {
+        borderBottomColor: MainTheme.SpecialColor,
+    },
+
+    reg_button: {
+        height: 46,
+        width: 320,
+        backgroundColor: MainTheme.SpecialColor,
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3
+    },
+
+    login_button: {
+        height: 46,
+        width: 320,
+        backgroundColor: '#EEEEEE',
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        borderWidth: 0.1,
+        borderColor: '#999999',
+    },
+});
