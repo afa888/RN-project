@@ -1,12 +1,12 @@
 import React, {Component, ReactPage, FlowPage, JestPage} from 'react';
-import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert} from 'react-native';
-import {theme_color} from '../../utils/AllColor'
+import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert, TextInput} from 'react-native';
+import {category_group_divide_line_color, theme_color, textThreeHightTitleColor} from '../../utils/AllColor'
 import CategoryScreen from './GameGridListScreen'
 import AndroidNativeGameActiviy from '../../customizeview/AndroidIosNativeGameActiviy';
 import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view'
 import http from "../../http/httpFetch";
 import SpinnerLoding from "../../tools/SpinnerLoding";
-
+import deviceValue from "../../utils/DeviceValue";
 
 
 let gameId
@@ -40,7 +40,7 @@ export default class GameListScreen extends Component<Props> {
             pageSize: 24,
             id: gameId,
         };
-        http.get('game/getThirdTab', prams,true).then(res => {
+        http.get('game/getThirdTab', prams, true).then(res => {
             console.log(res);
             if (res.status === 10000) {
                 this.setState({data: res.data})
@@ -55,30 +55,61 @@ export default class GameListScreen extends Component<Props> {
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
         return {
-            headerTitle: params.title !== '' ? <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Image
-                    source={{uri: params.title}}
+            headerRight: (<View
                     style={{
-                        resizeMode: 'contain',
-                        width: 130,
-                        height: 40,
-                    }}/>
-            </View> : <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> {params.gameName}</Text></View>,
-            headerRight: (
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('SeachGameList', {gameId: searchId})
-                }}>
-                    <Image source={require('../../static/img/ic_menu_search.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               marginRight: 12
-                           }}/>
-                </TouchableOpacity>
+                        width: deviceValue.windowWidth - 60,
+                        height: 48,
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                    <Text style={{
+                        fontSize: 18,
+                        color: 'black',
+                        fontWeight: 'bold',
+                        width: 150,
+                    }}> {params.gameName}</Text>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('SeachGameList', {gameId: searchId})
+                    }}>
+                        <View
+                            style={{
+                                width: deviceValue.windowWidth - 220,
+                                height: 32,
+                                justifyContent: 'center',
+                            }}>
+
+                            <View style={{
+                                backgroundColor: category_group_divide_line_color,
+                                borderRadius: 6,
+                                flex: 1,
+                                width: deviceValue.windowWidth - 220,
+                                height: 21,
+                                alignItems: 'center',
+                                flexDirection: 'row'
+                            }}>
+                                <Image source={require('../../static/img/ic_menu_search.png')}
+                                       style={{
+                                           resizeMode: 'contain',
+                                           width: 20,
+                                           height: 20,
+                                           marginLeft: 12
+                                       }}/>
+                                <Text
+                                    style={{
+                                        marginLeft: 4,
+                                        flex: 1,
+                                        fontSize: 12,
+                                        alignItems: 'center',
+                                        color: textThreeHightTitleColor
+                                    }}
+                                >请输入游戏名称</Text>
+                            </View>
+
+                        </View>
+                    </TouchableOpacity>
+
+                </View>
             ),
             headerLeft: (
                 <TouchableOpacity onPress={() => {
@@ -110,7 +141,7 @@ export default class GameListScreen extends Component<Props> {
 
         return (
             <View style={{flex: 1}}>
-                {this.state.data.length>0&& <ScrollableTabView
+                {this.state.data.length > 0 && <ScrollableTabView
                     style={{}}
                     initialPage={0}
                     renderTabBar={() => <ScrollableTabBar/>}

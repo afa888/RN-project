@@ -44,7 +44,7 @@ export default class GameGridListScreen extends Component<Props> {
         };
     }
 
-
+    //这里为了保持原图，比例是按图片比例缩放的
     rightItem = ({item, index}) => {
         return (
             <TouchableOpacity onPress={() => {
@@ -53,23 +53,26 @@ export default class GameGridListScreen extends Component<Props> {
                 <View style={{
                     width: deviceValue.windowWidth / 3, flexDirection: 'row',
                     backgroundColor: category_tab_checked_bg_color,
-                    height: deviceValue.windowWidth / 3+30, alignItems: 'center', justifyContent: 'center'
+                    marginTop:15,
+                    height: (deviceValue.windowWidth / 3 - 24)* (312 / 276), alignItems: 'center', justifyContent: 'center'
                 }}>
 
                     <ImageBackground style={{
                         marginLeft: 12,
                         flex: 1,
-                        height: deviceValue.windowWidth / 3,
+                        width: deviceValue.windowWidth / 3 - 24,
+                        height: (deviceValue.windowWidth / 3 - 24)* (312 / 276),
                         marginRight: 12,
-                    }} source={require('../../static/img/game_item_bg.png')} resizeMode='cover'>
+                    }} source={require('../../static/img/game_item_bg.png')} resizeMode='contain'>
 
                         <View style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}>
+                            <Text style={{marginTop: 8,}} numberOfLines={1}>{item.name}</Text>
 
                             <FastImage
                                 style={{
-                                    marginTop: 15,
+                                    marginTop: 5,
                                     width: deviceValue.windowWidth / 3 - 24 - 20,
-                                    height: deviceValue.windowWidth / 3 - 24 - 30,
+                                    height: deviceValue.windowWidth / 3 - 24 - 20,
                                 }}
                                 source={{
                                     uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
@@ -78,7 +81,6 @@ export default class GameGridListScreen extends Component<Props> {
                                 }}
                                 resizeMode={FastImage.resizeMode.contain}
                             />
-                            <Text style={{marginTop: 10, }} numberOfLines={1}>{item.name}</Text>
                         </View>
 
                     </ImageBackground>
@@ -99,7 +101,7 @@ export default class GameGridListScreen extends Component<Props> {
             model: 3
         };
 
-        http.post('game/forwardGame', prams,true).then((res) => {
+        http.post('game/forwardGame', prams, true).then((res) => {
             if (res.status === 10000) {
                 console.log(res)
                 if ("error" === res.data.message) {
@@ -109,7 +111,7 @@ export default class GameGridListScreen extends Component<Props> {
                 } else if (res.data.url === '') {
                     this.tostTitle('获取游戏地址失败')
                 } else {
-                    this.props.gotoGame(res.data.url, item.gameId,item.platformKey)
+                    this.props.gotoGame(res.data.url, item.gameId, item.platformKey)
                 }
             }
         }).catch(err => {
@@ -191,7 +193,7 @@ export default class GameGridListScreen extends Component<Props> {
 
     renderFooter = () => {
 
-        if (this.state.data.length >10 && this.state.isLoreMoreing == 'LoreMoreing') {
+        if (this.state.data.length > 10 && this.state.isLoreMoreing == 'LoreMoreing') {
             return (
                 <View style={{
                     height: 44,

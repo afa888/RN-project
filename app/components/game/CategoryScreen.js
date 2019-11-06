@@ -54,9 +54,47 @@ export default class GameListScreen extends Component<Props> {
         });
     }
 
-    gotoGame = (url, id, type) => {
-        AndroidNativeGameActiviy.openGameWith(url, id, type);
+
+    gotoGame = (item) => {
+        console.log(item)
+        if (item.gameId === "") {
+            this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
+                otherParam: '',
+                gameName: item.name,
+                gameId: item.id,
+            } : {otherParam: item.logImgUrl, gameId: item.id, gameName: item.name,})
+        } else {
+            this.forwardGame(item)
+        }
     }
+
+    forwardGame = (item) => {
+        let prams = {
+            gameId: item.gameId,
+            platCode: item.platformKey,
+            gameType: item.gameType,
+            model: 2
+        };
+
+        http.post('game/forwardGame', prams, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if ("error" === res.data.message) {
+                    this.tostTitle('系统错误')
+                } else if ("process" === res.data.message) {
+                    this.tostTitle('维护中')
+                } else if (res.data.url === '') {
+                    this.tostTitle('获取游戏地址失败')
+                } else {
+                    AndroidNativeGameActiviy.openGameWith(res.data.url, item.gameId, item.platformKey);
+                    //this.props.navigation.navigate('Game',{gameUrl:res.data.url})
+                }
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
 
     render() {
         let sreenView = []

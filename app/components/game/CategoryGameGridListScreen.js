@@ -19,7 +19,8 @@ import http from "../../http/httpFetch";
 import DeviceStorage from "../../http/AsyncStorage";
 import {CAGENT} from "../../utils/Config";
 import Toast, {DURATION} from 'react-native-easy-toast'
-import {textTitleColor,textThreeHightTitleColor} from "../../utils/AllColor";
+import {textTitleColor, textThreeHightTitleColor} from "../../utils/AllColor";
+import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 
 let {width, height} = Dimensions.get('window');
 let pageSize = 1;
@@ -46,9 +47,10 @@ export default class CategoryGameGridListScreen extends Component<Props> {
 
 
     rightItem = ({item, index}) => {
+        console.log(item)
         return (
             <TouchableOpacity onPress={() => {
-                this.forwardGame(item)
+                this.props.gotoGame(item)
             }}>
                 <View style={{
                     width: deviceValue.windowWidth / 2, flexDirection: 'column',
@@ -62,51 +64,26 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                                 width: deviceValue.windowWidth / 2 - 30,
                                 height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
                                 margin: 15,
-                                borderRadius:6
+                                borderRadius: 6
                             }}
                             source={{
                                 uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
                                 priority: FastImage.priority.normal,
-
                             }}
                             resizeMode={FastImage.resizeMode.contain}
                         />
 
                     </View>
-                    <Text style={{marginTop: -8,marginLeft:15, fontSize: 14,color: textTitleColor}} numberOfLines={1}>{item.name}</Text>
-                    <Text style={{marginTop: 1,marginLeft:15,fontSize: 12,color:textThreeHightTitleColor}} numberOfLines={1}>{item.remark}</Text>
+                    <Text style={{marginTop: -8, marginLeft: 15, fontSize: 14, color: textTitleColor}}
+                          numberOfLines={1}>{item.name}</Text>
+                    <Text style={{marginTop: 1, marginLeft: 15, fontSize: 12, color: textThreeHightTitleColor}}
+                          numberOfLines={1}>{item.remark}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
 
 
-    forwardGame = (item) => {
-
-        let prams = {
-            gameId: item.gameId,
-            platCode: item.platformKey,
-            gameType: item.gameType,
-            model: 3
-        };
-
-        http.post('game/forwardGame', prams, true).then((res) => {
-            if (res.status === 10000) {
-                console.log(res)
-                if ("error" === res.data.message) {
-                    this.tostTitle('系统错误')
-                } else if ("process" === res.data.message) {
-                    this.tostTitle('维护中')
-                } else if (res.data.url === '') {
-                    this.tostTitle('获取游戏地址失败')
-                } else {
-                    this.props.gotoGame(res.data.url, item.gameId, item.platformKey)
-                }
-            }
-        }).catch(err => {
-            console.error(err)
-        });
-    }
     tostTitle = (msg) => {
         this.refs.toast.show(msg);
     }

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 
 export const category_tab_checked_bg_color = "#f2f2f2"
 
-export const category_group_divide_line_color = "#d3d3d3"
+export const category_group_divide_line_color = "#F2F2F2"
 
 export const theme_color = '#de4938'
 
