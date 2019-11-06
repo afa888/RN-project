@@ -141,6 +141,49 @@ export default class SeachGameListScreen extends Component<Props> {
 
         return (
             <View style={{flex: 1}}>
+                <View
+                    style={{flex: 1, width: deviceValue.windowWidth - 80, height: 40, justifyContent: 'center'}}>
+                    <View style={{
+                        backgroundColor: category_group_divide_line_color,
+                        borderRadius: 16,
+                        marginLeft: 12,
+                        flex: 1,
+                        width: deviceValue.windowWidth - 60,
+                        height: 30,
+                        alignItems: 'center',
+                        flexDirection: 'row'
+                    }}>
+                        <Image source={require('../../static/img/ic_menu_search.png')}
+                               style={{
+                                   resizeMode: 'contain',
+                                   width: 20,
+                                   height: 20,
+                                   marginLeft: 12
+                               }}/>
+                        <TextInput
+                            ref={component => this._textInput = component}
+                            style={{
+                                marginLeft: 12,
+                                marginRight: 3,
+                                flex: 1,
+                                fontSize: 14,
+                                width: deviceValue.windowWidth - 90,
+                                alignItems: 'center'
+                            }}
+                            onSubmitEditing={() => {
+
+                            }}
+                            underlineColorAndroid='transparent'
+                            placeholder="请输入游戏名称"
+                            maxLength={11}
+                            value={this.state.keyWord}
+                            onChangeText={(text) => {}}
+                            returnKeyType='search'
+                        />
+                    </View>
+
+
+                </View>
                 {this.state.data.length>0&&<CategoryScreen
                     searchName={this.state.keyWord}
                     dataList={this.state.data}
