@@ -8,7 +8,7 @@ import SegmentedControlTab from 'react-native-segmented-control-tab'
 import NonePayList from './DepositNonePayListView'
 import Tips from './DepositTipsView'
 import {backgroundViewColor,commonButtonBGColor,commonButton2BGColor,
-        commonButtonTitleColor,commonTextColor} from "../../../utils/AllColor"
+        commonButtonTitleColor,textTitleColor} from "../../../utils/AllColor"
 
 //常规支付
 export default class DepositPayCommonView extends Component<Props> {
@@ -29,7 +29,7 @@ export default class DepositPayCommonView extends Component<Props> {
   _renderItem = ({item, index}) => {
     let selected = this.props.params.money == String(item) ? true : false;
     let bgcolor =  selected ? commonButtonBGColor : commonButton2BGColor;
-    let textColor = selected ? commonButtonTitleColor : commonTextColor;
+    let textColor = selected ? commonButtonTitleColor : textTitleColor;
     return (
         <View style={{padding:5}}>
             <View style={{width: Dimensions.get('window').width / 4 -10,
@@ -56,7 +56,7 @@ export default class DepositPayCommonView extends Component<Props> {
 
     let choosed = this.props.params.payTypeSelectedIndex == index;
     let bgcolor =  choosed ? commonButtonBGColor : commonButton2BGColor;
-    let textColor = choosed ? commonButtonTitleColor : commonTextColor;
+    let textColor = choosed ? commonButtonTitleColor : textTitleColor;
     return (
         <View style={{padding:5}}>
             <View style={{width: 60,

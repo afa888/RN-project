@@ -69,14 +69,14 @@ const LoginBeforeTabs = {
     首页: {screen: HomeStack},
     分类: {screen: CategoryStack},
     注册: {screen: RegisterStack, navigationOptions: {tabBarVisible: false}},
-    客服: {screen: CustomerServiceStack},
+    优惠: {screen: CustomerServiceStack},
     登录: {screen: LoginStack, navigationOptions: {tabBarVisible: false}}
 };
 const LoginAfterTabs = {
     首页: {screen: HomeStack},
     分类: {screen: CategoryStack},
     存款: {screen: DepositStack, navigationOptions: {tabBarVisible: false,color:theme_color},color: theme_color},
-    客服: {screen: CustomerServiceStack},
+    优惠: {screen: CustomerServiceStack},
     会员中心: {screen: MemberCenterIndexStack}
 };
 export default class MainScreen extends Component<Props> {
@@ -119,7 +119,7 @@ export default class MainScreen extends Component<Props> {
             tabBarOptions: {
                 showIcon: true,
                 resetOnBlur: true, //切换离开屏幕时，重置所有嵌套导航器的状态
-                activeTintColor: '#cda469',
+                activeTintColor: theme_color,
                 inactiveTintColor: '#a6a1aa',
                 style: {backgroundColor: 'white', height: 50},
                 labelStyle: {fontSize: 12},
@@ -147,7 +147,7 @@ export default class MainScreen extends Component<Props> {
                             source={focused ? require('../../static/img/tab_deposit_hover.png') :
                                 require('../../static/img/tab_deposit_hover.png')}
                             style={styles.tab_icom_regiter}/>;
-                    } else if (routeName === '客服') {
+                    } else if (routeName === '优惠') {
                         return <Image
                             source={focused ? require('../../static/img/tab_cs_hover.png') :
                                 require('../../static/img/tab_cs_normal.png')}

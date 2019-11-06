@@ -10,7 +10,7 @@ import loadingImage from '../../static/img/zx.gif'
 
 export default class CustomerServiceScreen extends Component<Props> {
     static navigationOptions = {
-        title: '客服',
+        title: '优惠',
         headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
         headerBackTitle:null,
     };
