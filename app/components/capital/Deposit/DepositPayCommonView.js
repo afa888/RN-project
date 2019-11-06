@@ -7,7 +7,8 @@ import FastImage from 'react-native-fast-image'
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import NonePayList from './DepositNonePayListView'
 import Tips from './DepositTipsView'
-
+import {backgroundViewColor,commonButtonBGColor,commonButton2BGColor,
+        commonButtonTitleColor,commonTextColor} from "../../../utils/AllColor"
 
 //常规支付
 export default class DepositPayCommonView extends Component<Props> {
@@ -27,19 +28,20 @@ export default class DepositPayCommonView extends Component<Props> {
 
   _renderItem = ({item, index}) => {
     let selected = this.props.params.money == String(item) ? true : false;
+    let bgcolor =  selected ? commonButtonBGColor : commonButton2BGColor;
+    let textColor = selected ? commonButtonTitleColor : commonTextColor;
     return (
         <View style={{padding:5}}>
             <View style={{width: Dimensions.get('window').width / 4 -10,
-                backgroundColor: selected ? '#CFA359' : '#ffffff',justifyContent:'center',
-                height: 30,
-                borderRadius:1,borderWidth:1,borderColor:'#8B8B8B',borderStyle: 'solid'}}>
+                backgroundColor: bgcolor,justifyContent:'center',
+                height: 30}}>
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={this.itemClick.bind(this, item, index)}>
                     <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
                     }}>
 
-                        <Text style={{paddingLeft:10,color: selected ? '#FFFFFF' : '#7A7C7F'}}>{String(item)}</Text>
+                        <Text style={{paddingLeft:10,color: textColor}}>{String(item)}</Text>
                     </View>
 
                 </TouchableOpacity>
@@ -51,25 +53,21 @@ export default class DepositPayCommonView extends Component<Props> {
   }
 
   _renderTypeItem = ({item, index}) => {
+
+    let choosed = this.props.params.payTypeSelectedIndex == index;
+    let bgcolor =  choosed ? commonButtonBGColor : commonButton2BGColor;
+    let textColor = choosed ? commonButtonTitleColor : commonTextColor;
     return (
         <View style={{padding:5}}>
-            <View style={{width: Dimensions.get('window').width / 3 -10,
-                backgroundColor: '#efeff4',justifyContent:'center',
-                height: 30,
-                borderRadius:1,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid'}}>
+            <View style={{width: 60,
+                backgroundColor: bgcolor,justifyContent:'center',
+                height: 25}}>
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={this.handleIndexChange.bind(this, index)}>
                     <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
                     }}>
-
-                    {this.props.params.payTypeSelectedIndex == index ? <Image source= {require('../../../static/img/icon_reddot.png')}
-                                style={{height:12,width:12}}
-                            /> : <Image source= {require('../../../static/img/icon_reddot-n.png')}
-                                style={{height:12,width:12}}
-                    />}
-
-                    <Text style={{paddingLeft:10,color:'#CFA359'}}>{String(item)}</Text>
+                    <Text style={{color:textColor}}>{String(item)}</Text>
                     </View>
 
                 </TouchableOpacity>
@@ -117,6 +115,9 @@ export default class DepositPayCommonView extends Component<Props> {
             }
             return (
                 <View style={{flex:1,justifyContent:'center'}}>
+                    <View style={{paddingTop:0,height:25,width:Dimensions.get('window').width}}>
+                        <Text style={{paddingLeft:10}}>支付渠道</Text>
+                    </View>
                     <FlatList
                         numColumns={3}
                         style={styles.flatListStyle}

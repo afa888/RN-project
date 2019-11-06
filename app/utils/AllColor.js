@@ -12,5 +12,16 @@ export const funRecordGreen= '#06d82d'
 
 export const specialTextColor = '#CFA359'
 
+export const backgroundViewColor = '#FFFFFF'
+
+export const commonButtonBGColor = '#E94335'
+
+export const commonButton2BGColor = '#EFEFF4'
+
+export const commonButtonTitleColor = '#FFFFFF'
+
+export const commonTextColor = '#333333'
+
+
 
 
