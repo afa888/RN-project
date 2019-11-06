@@ -12,6 +12,14 @@ export const funRecordGreen= '#06d82d'
 
 export const specialTextColor = '#CFA359'
 
+export const backgroundViewColor = '#FFFFFF' //页面默认背景
+
+export const commonButtonBGColor = '#E94335'  //按钮button默认背景
+
+export const commonButton2BGColor = '#EFEFF4' // 特殊选择button 背景
+
+export const commonButtonTitleColor = '#FFFFFF' //button 通用文字颜色
+
 export const textTitleColor = "#333333" //一级文字
 export const textHightTitleColor = "#111111" //最重要文字
 export const textThreeHightTitleColor = "#999999" //次要文字
