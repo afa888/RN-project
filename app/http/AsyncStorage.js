@@ -1,5 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
+// 记住用户名密码
+export const RememberUserKey = '@should_save_account_key';
+export const UserNameKey = '@saved_user_name_key';
+export const UserPwdKey = '@saved_user_password_key';
+
 /**
  *设置
  * @param key
@@ -68,7 +73,16 @@ export const removeStoreData = async (key) => {
  */
 export const clearAllStore = async () => {
     try {
-        await AsyncStorage.clear()
+        // await AsyncStorage.clear()
+        let unDeletedKeys = [RememberUserKey, UserNameKey, UserPwdKey];
+        AsyncStorage.getAllKeys().then((keys) => {
+            let keyArr = keys.filter((key) => {
+                return unDeletedKeys.indexOf(key) == -1;
+            })
+            return AsyncStorage.multiRemove(keyArr);
+        }).catch(() => {
+            console.error("Read All keys failed.");
+        });
     } catch(e) {
         console.log(e)
     }
