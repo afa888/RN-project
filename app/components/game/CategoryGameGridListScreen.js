@@ -106,7 +106,8 @@ export default class CategoryGameGridListScreen extends Component<Props> {
 
 
     renderFooter = () => {
-        if (this.state.data.length >= 12) {
+
+        if (this.state.data!==null&&this.state.data.length >= 12) {
             return (
                 <View style={{
                     height: 44,

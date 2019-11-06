@@ -13,8 +13,26 @@ export default class SeachGameListScreen extends Component<Props> {
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
         return {
-
-            headerLeft: (<View
+            headerLeft: (
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack()
+                }}>
+                    <Image source={require('../../static/img/titlebar_back_normal.png')}
+                           style={{
+                               resizeMode: 'contain',
+                               width: 20,
+                               height: 20,
+                               margin: 12
+                           }}/>
+                </TouchableOpacity>
+            ),
+            headerTitle: (
+                <View
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                    <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 搜索游戏</Text></View>
+            ),
+            headerRight: (<View/>)
+      /*      headerLeft: (<View
                 style={{flex: 1, width: deviceValue.windowWidth - 80, height: 40, justifyContent: 'center'}}>
                 <View style={{
                     backgroundColor: category_group_divide_line_color,
@@ -65,7 +83,7 @@ export default class SeachGameListScreen extends Component<Props> {
                     <Text>取消</Text>
 
                 </TouchableOpacity>
-            ),
+            ),*/
         };
     };
 

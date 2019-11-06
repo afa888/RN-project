@@ -23,6 +23,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 let {width, height} = Dimensions.get('window');
 let pageSize = 1;
 let total = 0;
+//分类第二级页面
 export default class GameGridListScreen extends Component<Props> {
     static navigationOptions = {
         header: null

@@ -43,8 +43,13 @@ export default class GameListScreen extends Component<Props> {
         http.get('game/getThirdTab', prams, true).then(res => {
             console.log(res);
             if (res.status === 10000) {
-                this.setState({data: res.data})
-                searchId = this.state.data[0].id
+                if(res.data!==null&&res.data.length>0){
+                    this.setState({data: res.data})
+                    searchId = this.state.data[0].id
+                }else {
+
+                }
+
             }
         }).catch(err => {
             console.error(err)

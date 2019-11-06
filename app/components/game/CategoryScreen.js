@@ -12,6 +12,7 @@ import DeviceValue from "../../utils/DeviceValue";
 
 let gameId
 let searchId
+//分类页面
 export default class GameListScreen extends Component<Props> {
     static navigationOptions = {
         header: null,  //隐藏顶部导航栏
