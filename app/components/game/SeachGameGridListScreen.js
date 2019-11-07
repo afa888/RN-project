@@ -47,6 +47,7 @@ export default class SeachGameGridListScreen extends Component<Props> {
     }
 
 
+    //这里为了保持原图，比例是按图片比例缩放的
     rightItem = ({item, index}) => {
         return (
             <TouchableOpacity onPress={() => {
@@ -55,25 +56,26 @@ export default class SeachGameGridListScreen extends Component<Props> {
                 <View style={{
                     width: deviceValue.windowWidth / 3, flexDirection: 'row',
                     backgroundColor: category_tab_checked_bg_color,
-                    height: deviceValue.windowWidth / 3 + 30, alignItems: 'center', justifyContent: 'center'
+                    marginTop:15,
+                    height: (deviceValue.windowWidth / 3 - 24)* (312 / 276), alignItems: 'center', justifyContent: 'center'
                 }}>
 
                     <ImageBackground style={{
                         marginLeft: 12,
                         flex: 1,
-                        height: deviceValue.windowWidth / 3,
+                        width: deviceValue.windowWidth / 3 - 24,
+                        height: (deviceValue.windowWidth / 3 - 24)* (312 / 276),
                         marginRight: 12,
-                    }} source={require('../../static/img/game_item_bg.png')} resizeMode='cover'>
+                    }} source={require('../../static/img/game_item_bg.png')} resizeMode='contain'>
 
                         <View style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}>
-
+                            <Text style={{marginTop: 8,}} numberOfLines={1}>{item.name}</Text>
 
                             <FastImage
                                 style={{
-                                    marginTop: 15,
-                                    backgroundColor: 'black',
+                                    marginTop: 5,
                                     width: deviceValue.windowWidth / 3 - 24 - 20,
-                                    height: deviceValue.windowWidth / 3 - 24 - 30,
+                                    height: deviceValue.windowWidth / 3 - 24 - 20,
                                 }}
                                 source={{
                                     uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
@@ -82,7 +84,6 @@ export default class SeachGameGridListScreen extends Component<Props> {
                                 }}
                                 resizeMode={FastImage.resizeMode.contain}
                             />
-                            <Text style={{marginTop: 10,}} numberOfLines={1}>{item.name}</Text>
                         </View>
 
                     </ImageBackground>
@@ -234,7 +235,7 @@ export default class SeachGameGridListScreen extends Component<Props> {
                 />
                 <FlatList
                     numColumns={3}
-                    style={{backgroundColor: category_tab_checked_bg_color}}
+                    style={{backgroundColor: 'white'}}
                     data={this.state.data}
                     ListHeaderComponent={this.renderHeader}//头部
                     ListFooterComponent={this.renderFooter}//尾巴
