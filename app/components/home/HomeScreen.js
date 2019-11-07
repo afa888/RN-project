@@ -118,9 +118,9 @@ export default class HomeScreen extends Component<Props> {
             isDialogVisible: false,
             data: {},
             dataImagUrl: [],
-            dicountUrl: ["http://image.txv2.com/mobile" + CAGENT + "/image/Home/1.jpg",
-                "http://image.txv2.com/mobile" + CAGENT + "/image/Home/2.jpg",
-                "http://image.txv2.com/mobile" + CAGENT + "/image/Home/3.jpg",],
+            dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
+                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/2.jpg",
+                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/3.jpg",],
             noticeTitle: []
         }
 

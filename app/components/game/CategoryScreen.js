@@ -1,5 +1,5 @@
 import React, {Component, ReactPage, FlowPage, JestPage} from 'react';
-import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert} from 'react-native';
+import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
 import {theme_color} from '../../utils/AllColor'
 import CategoryGameGridListScreen from './CategoryGameGridListScreen'
 import AndroidNativeGameActiviy from '../../customizeview/AndroidIosNativeGameActiviy';
@@ -107,28 +107,35 @@ export default class GameListScreen extends Component<Props> {
         }
 
         return (
-            <View style={{flex: 1}}>
-                {this.state.data.length > 0 && <ScrollableTabView
-                    style={{}}
-                    initialPage={0}
-                    renderTabBar={() => <ScrollableTabBar/>}
-                    tabBarActiveTextColor={theme_color}
-                    tabBarUnderlineStyle={{backgroundColor: theme_color, height: 1}}
-                    tabBarTextStyle={{marginLeft: 6, marginRight: 6}}
-                    onChangeTab={(index) => {
-                        searchId = this.state.data[index.i].id
-                    }}
+            <SafeAreaView style={styles.safeArea}>
+                <View style={{flex: 1}}>
+                    {this.state.data.length > 0 && <ScrollableTabView
+                        style={{}}
+                        initialPage={0}
+                        renderTabBar={() => <ScrollableTabBar/>}
+                        tabBarActiveTextColor={theme_color}
+                        tabBarUnderlineStyle={{backgroundColor: theme_color, height: 1}}
+                        tabBarTextStyle={{marginLeft: 6, marginRight: 6}}
+                        onChangeTab={(index) => {
+                            searchId = this.state.data[index.i].id
+                        }}
 
-                >
+                    >
 
-                    {sreenView}
+                        {sreenView}
 
-                </ScrollableTabView>}
-                <SpinnerLoding/>
-            </View>
+                    </ScrollableTabView>}
+                    <SpinnerLoding/>
+                </View>
+            </SafeAreaView>
         );
     }
 }
 
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: 'white'
+    }
+});

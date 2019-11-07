@@ -194,7 +194,7 @@ export default class HomeNoticeView extends Component<Props> {
     }
 }
 const styles = StyleSheet.create({
-    wrapper: {height: deviceValue.windowWidth * 0.4},
+    wrapper: {height: deviceValue.windowWidth * 0.4,backgroundColor:'white'},
     slideFastImage: {
         width: deviceValue.windowWidth,
         height: deviceValue.windowWidth * 0.4,
