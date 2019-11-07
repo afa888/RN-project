@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
 import Dimensions from 'Dimensions'
 import TXToastManager from "../../../tools/TXToastManager"
+import {backgroundViewColor} from "../../../utils/AllColor"
 
 //温馨提示
 export default class Tips extends Component<Props> {
@@ -20,7 +21,7 @@ export default class Tips extends Component<Props> {
                         <Text style={{fontSize:10,color:'red',height:15}} onPress={this.props.onShowCustomer}>“联系客服” </Text>
                         <Text style={{fontSize:10,color:'#8B8B8B',height:15}}>人员获得帮助</Text>
                     </View>
-                    <View style={{height:20,backgroundColor:'#efeff4'}}></View>
+                    <View style={{height:20,backgroundColor:backgroundViewColor}}></View>
                 </View>
         );
     }

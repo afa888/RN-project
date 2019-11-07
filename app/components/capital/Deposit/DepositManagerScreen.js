@@ -365,11 +365,15 @@ export default class DepositManagerScreen extends Component<Props> {
     renderFooter = () => {
         if (this.state.payType == 'bank') {
             return (
-                <PayBank onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal.bind(this)} onChange={this._onChange} params={this.state} />
+                <View style={{paddingTop:10}}>
+                    <PayBank onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal.bind(this)} onChange={this._onChange} params={this.state} />
+                </View>
             );
         }else if(this.state.payType == 'scan') {
             return (
-                <PayScan onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal} onChange={this._onChange} params={this.state} />
+                <View style={{paddingTop:10}}>
+                    <PayScan onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal} onChange={this._onChange} params={this.state} />
+                </View>
             );
         }else {
             return (
@@ -385,7 +389,7 @@ export default class DepositManagerScreen extends Component<Props> {
             <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:{backgroundViewColor}}}>
 
                 <View style={{alignItems: 'center',backgroundColor:{backgroundViewColor}}}>
-                    <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
+                    <View style={{paddingTop:15,height:35,width:Dimensions.get('window').width}}>
                         <Text style={{paddingLeft:10}}>支付方式</Text>
                     </View>
 
@@ -397,6 +401,7 @@ export default class DepositManagerScreen extends Component<Props> {
                         keyExtractor={this._keyExtractor}
                         // ListFooterComponent={this.renderFooter}
                         horizontal={true}
+                        showsHorizontalScrollIndicator={false}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.isRefreshing}
@@ -407,6 +412,7 @@ export default class DepositManagerScreen extends Component<Props> {
                         }
                     />
                 </View>
+                <View style={{height:10,width:Dimensions.get('window').width}}></View>
                 {this.renderFooter()}
             </ScrollView>
         );
@@ -434,36 +440,75 @@ export default class DepositManagerScreen extends Component<Props> {
         )
     }
 
+    //获取不同支付渠道图片
+
+    gerChannelPic = (item) => {
+        if (item.code === 'bank') {
+            //网银
+            return require('../../../static/img/recharge_icon_wy.png');
+        }else if(item.code === 'yl'){
+            //银联扫码
+            return require('../../../static/img/recharge_icon_ylsm.png');
+        }else if(item.code === 'wx'){
+            //微信
+            return require('../../../static/img/recharge_icon_wx.png');
+        }else if(item.code === 'ali'){
+            //支付宝
+            return require('../../../static/img/recharge_icon_aply.png');
+        }else if(item.code === 'cft'){
+            //财付通
+            return require('../../../static/img/recharge_icon_cftzf.png');
+        }else if(item.code === 'jd'){
+            //京东
+            return require('../../../static/img/recharge_icon_jdzf.png');
+        }else if(item.code === 'scan'){
+            //扫码支付
+            return require('../../../static/img/recharge_icon_sm.png');
+        }else if(item.code === 'obank'){
+            //银行汇款
+            return require('../../../static/img/recharge_icon_yhhk.png');
+        }else if(item.code === 'kj'){
+            //快捷
+            return require('../../../static/img/recharge_icon_kjzf.png');
+        }else if(item.code === 'ysf'){
+            //云闪付
+            return require('../../../static/img/recharge_icon_ysf.png');
+        }else if(item.code === 'ysfscan'){
+            //云闪付扫码
+            return require('../../../static/img/recharge_icon_ysfsm.png');
+        }else if(item.code === 'btb'){
+            //比特不支付
+            return require('../../../static/img/recharge_icon_btb.png');
+        }
+    }
+
     //列表的每一行
     renderItem({item,index}) {
         const bdColor = index == this.state.selectedIndex ?  '#CFA359' : '#8B8B8B'
+        let imgUrl = this.gerChannelPic(item,index);
+        var data={src:imgUrl}
         return (
-            <View style={{width: Dimensions.get('window').width / 2,
+            <View style={{width: 110,
                 backgroundColor: {backgroundViewColor},alignItems: 'center',
-                height: 50}}>
+                height: 60}}>
                 <TouchableOpacity
                     onPress={() => this.clickItem(item,index)}>
-                    <View style={{width: Dimensions.get('window').width / 2 - 30,height:35,
-                        borderRadius:1,borderWidth:1,borderColor:bdColor,borderStyle: 'solid',
-                        flexDirection:'row',alignItems: 'center'
-                    }}>
-                        <FastImage
-                                style={{
-                                    marginLeft: 15,
-                                    width: 30,
-                                    height: 30,
-                                }}
-                                source={{
-                                    uri: item.image,
-                                }}
-                        />
-                        <Text style={{flex:1,color:'#000000',paddingLeft:10}}>{item.name}</Text>
-                        <View style={{color:'red',height:35,justifyContent:'flex-end'}}>{index == this.state.selectedIndex ? <Image source={require('../../../static/img/icon_xuanze.png')} style={{width: 22,height: 22,alignItems:'flex-end'}} /> : null}</View>
-                    </View>
+                        <View style={{width: 110,height:60,flexDirection:'row'}}>
+                            
+                            <Image 
+                            source={data.src} 
+                            style={{
+                                    marginLeft: 0,
+                                    marginTop:8,
+                                    width: 100,
+                                    height: 52
+                                }} 
+                            />
+                            <View style={{marginLeft:89,position: 'absolute',color:'red',width:21,height:21,justifyContent:'flex-end'}}>{index == this.state.selectedIndex ? <Image source={require('../../../static/img/icon_xuanze.png')} style={{width: 21,height: 21,alignItems:'flex-end'}} /> : null}</View>
+                        </View>
+                    
                 </TouchableOpacity>
             </View>
-
-
         )
     }
     //绘制列表的分割线

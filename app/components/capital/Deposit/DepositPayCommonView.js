@@ -119,11 +119,12 @@ export default class DepositPayCommonView extends Component<Props> {
                         <Text style={{paddingLeft:10}}>支付渠道</Text>
                     </View>
                     <FlatList
-                        numColumns={3}
                         style={styles.flatListStyle}
                         data={titleArr}
                         listKey = {'type'}
                         keyExtractor={this._keyTypeExtractor}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
                           //是一个可选的优化，用于避免动态测量内容尺寸的开销，不过前提是你可以提前知道内容的高度。
                           //如果你的行高是固定的，getItemLayout用起来就既高效又简单.
                           //注意如果你指定了SeparatorComponent，请把分隔线的尺寸也考虑到offset的计算之中
@@ -157,9 +158,9 @@ export default class DepositPayCommonView extends Component<Props> {
                         </View>
                         <View style={{paddingTop:20,alignItems: 'center',height:50}}>
                             <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                             <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
+                             <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
 
-                                <Text style={{color:'#ffffff',fontSize:17}}>下一步</Text>
+                                <Text style={{color:commonButtonTitleColor,fontSize:17}}>下一步</Text>
                              </View>
                             </TouchableOpacity>
                         </View>
@@ -183,7 +184,6 @@ const styles = StyleSheet.create({
   flatListStyle:{
     color:'red',
     fontSize:16,
-    backgroundColor:'#FFFFFF',
   }
 });
 
