@@ -63,7 +63,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                             height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
                             margin: 15,
                             borderRadius: 6
-                        }} source={require('../../static/img/index_loading.png')} resizeMode='cover'>
+                        }} source={require('../../static/img/home_img_zwt.png')} resizeMode='cover'>
                             <FastImage
                                 style={{
                                     width: deviceValue.windowWidth / 2 - 30,

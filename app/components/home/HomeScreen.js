@@ -21,7 +21,12 @@ import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
 import ModalDialog from '../../customizeview/ModalDialog'
 import HomeMidView from './HomeMidView'
-import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color,textTitleColor} from "../../utils/AllColor";
+import {
+    category_group_divide_line_color,
+    category_tab_checked_bg_color,
+    theme_color,
+    textTitleColor
+} from "../../utils/AllColor";
 import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -42,7 +47,7 @@ export default class HomeScreen extends Component<Props> {
                    }}/>
         </View>,
         headerRight: <View
-            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center',marginRight:12}}>
+            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 12}}>
             <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
 
             }}>
@@ -60,7 +65,7 @@ export default class HomeScreen extends Component<Props> {
                             width: 18,
                             height: 18,
                         }}/>
-                    <Text style={{color: textTitleColor, fontSize: 8,marginTop:2}}>消息</Text>
+                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
@@ -80,7 +85,7 @@ export default class HomeScreen extends Component<Props> {
                             width: 18,
                             height: 18,
                         }}/>
-                    <Text style={{color: textTitleColor, fontSize: 8,marginTop:2}}>消息</Text>
+                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -165,20 +170,20 @@ export default class HomeScreen extends Component<Props> {
     tostTitle = (msg) => {
         this.refs.toast.show(msg);
     }
+
     goMoreGame = (item) => {
+        console.log(item)
         if (item === 'navigate') {
 
             this.props.navigation.navigate('分类')
+        } else if (item.gameId === "") {
+            this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
+                otherParam: '',
+                gameName: item.name,
+                gameId: item.id,
+            } : {otherParam: item.logImgUrl, gameId: item.id, gameName: item.name,})
         } else {
-            if (item.gameId === "") {
-                this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
-                    otherParam: '',
-                    gameName: item.name,
-                    gameId: item.id,
-                } : {otherParam: item.logImgUrl, gameId: item.id})
-            } else {
-                this.forwardGame(item)
-            }
+            this.forwardGame(item)
         }
     }
     httpCategoryRefresh = () => {

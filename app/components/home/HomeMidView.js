@@ -53,7 +53,6 @@ export default class HomeMidView extends Component<Props> {
                 height: 40,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: 12,
                 alignItems: 'center',
                 paddingLeft: 12,
                 paddingRight: 12
