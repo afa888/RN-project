@@ -43,10 +43,10 @@ export default class GameListScreen extends Component<Props> {
         http.get('game/getThirdTab', prams, true).then(res => {
             console.log(res);
             if (res.status === 10000) {
-                if(res.data!==null&&res.data.length>0){
+                if (res.data !== null && res.data.length > 0) {
                     this.setState({data: res.data})
                     searchId = this.state.data[0].id
-                }else {
+                } else {
 
                 }
 
@@ -72,32 +72,33 @@ export default class GameListScreen extends Component<Props> {
                         fontSize: 18,
                         color: 'black',
                         fontWeight: 'bold',
-                        width: 150,
+                        width: deviceValue.windowWidth / 3,
                     }}> {params.gameName}</Text>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate('SeachGameList', {gameId: searchId})
                     }}>
                         <View
                             style={{
-                                width: deviceValue.windowWidth - 220,
+                                width: 4*deviceValue.windowWidth/9,
                                 height: 32,
                                 justifyContent: 'center',
+                                marginLeft:5,
                             }}>
 
                             <View style={{
                                 backgroundColor: category_group_divide_line_color,
                                 borderRadius: 6,
                                 flex: 1,
-                                width: deviceValue.windowWidth - 220,
+                                width: 4*deviceValue.windowWidth/9,
                                 height: 21,
                                 alignItems: 'center',
-                                flexDirection: 'row'
+                                flexDirection: 'row',
                             }}>
                                 <Image source={require('../../static/img/ic_menu_search.png')}
                                        style={{
                                            resizeMode: 'contain',
-                                           width: 20,
-                                           height: 20,
+                                           width: 15,
+                                           height: 15,
                                            marginLeft: 12
                                        }}/>
                                 <Text

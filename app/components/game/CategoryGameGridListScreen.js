@@ -45,7 +45,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
         };
     }
 
-
+    //这里的（17/23）是根据图片比例适配的
     rightItem = ({item, index}) => {
         console.log(item)
         return (
@@ -58,20 +58,25 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                     height: (deviceValue.windowWidth / 2 - 30) * (17 / 23) + 60
                 }}>
                     <View style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}>
-
-                        <FastImage
-                            style={{
-                                width: deviceValue.windowWidth / 2 - 30,
-                                height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
-                                margin: 15,
-                                borderRadius: 6
-                            }}
-                            source={{
-                                uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
-                                priority: FastImage.priority.normal,
-                            }}
-                            resizeMode={FastImage.resizeMode.contain}
-                        />
+                        <ImageBackground style={{
+                            width: deviceValue.windowWidth / 2 - 30,
+                            height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
+                            margin: 15,
+                            borderRadius: 6
+                        }} source={require('../../static/img/index_loading.png')} resizeMode='cover'>
+                            <FastImage
+                                style={{
+                                    width: deviceValue.windowWidth / 2 - 30,
+                                    height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
+                                    borderRadius: 6
+                                }}
+                                source={{
+                                    uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
+                                    priority: FastImage.priority.normal,
+                                }}
+                                resizeMode={FastImage.resizeMode.contain}
+                            />
+                        </ImageBackground>
 
                     </View>
                     <Text style={{marginTop: -8, marginLeft: 15, fontSize: 14, color: textTitleColor}}
@@ -107,7 +112,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
 
     renderFooter = () => {
 
-        if (this.state.data!==null&&this.state.data.length >= 12) {
+        if (this.state.data !== null && this.state.data.length >= 12) {
             return (
                 <View style={{
                     height: 44,
@@ -153,8 +158,6 @@ export default class CategoryGameGridListScreen extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-
-
     right_item_img: {
         flex: 1,
         height: 60,
