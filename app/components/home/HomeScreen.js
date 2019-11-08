@@ -21,7 +21,12 @@ import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
 import ModalDialog from '../../customizeview/ModalDialog'
 import HomeMidView from './HomeMidView'
-import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../../utils/AllColor";
+import {
+    category_group_divide_line_color,
+    category_tab_checked_bg_color,
+    theme_color,
+    textTitleColor
+} from "../../utils/AllColor";
 import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -40,7 +45,51 @@ export default class HomeScreen extends Component<Props> {
                        width: 150,
                        height: 20,
                    }}/>
+        </View>,
+        headerRight: <View
+            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 12}}>
+            <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+
+            }}>
+                <View style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: 28,
+                    height: 48,
+                    justifyContent: 'center'
+                }}>
+                    <Image
+                        source={require('../../static/img/nav_icon_email_nor.png')}
+                        style={{
+                            resizeMode: 'contain',
+                            width: 18,
+                            height: 18,
+                        }}/>
+                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+
+            }}>
+                <View style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: 28,
+                    height: 48,
+                    justifyContent: 'center'
+                }}>
+                    <Image
+                        source={require('../../static/img/nav_icon_kefu_nor.png')}
+                        style={{
+                            resizeMode: 'contain',
+                            width: 18,
+                            height: 18,
+                        }}/>
+                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
+                </View>
+            </TouchableOpacity>
         </View>
+
     }
 
     componentWillMount() {
@@ -69,9 +118,9 @@ export default class HomeScreen extends Component<Props> {
             isDialogVisible: false,
             data: {},
             dataImagUrl: [],
-            dicountUrl: ["http://image.txv2.com/mobile" + CAGENT + "/image/Home/1.jpg",
-                "http://image.txv2.com/mobile" + CAGENT + "/image/Home/2.jpg",
-                "http://image.txv2.com/mobile" + CAGENT + "/image/Home/3.jpg",],
+            dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
+                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/2.jpg",
+                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/3.jpg",],
             noticeTitle: []
         }
 
@@ -100,7 +149,7 @@ export default class HomeScreen extends Component<Props> {
             model: 2
         };
 
-        http.post('game/forwardGame', prams,true).then((res) => {
+        http.post('game/forwardGame', prams, true).then((res) => {
             if (res.status === 10000) {
                 console.log(res)
                 if ("error" === res.data.message) {
@@ -121,20 +170,20 @@ export default class HomeScreen extends Component<Props> {
     tostTitle = (msg) => {
         this.refs.toast.show(msg);
     }
+
     goMoreGame = (item) => {
+        console.log(item)
         if (item === 'navigate') {
 
             this.props.navigation.navigate('分类')
+        } else if (item.gameId === "") {
+            this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
+                otherParam: '',
+                gameName: item.name,
+                gameId: item.id,
+            } : {otherParam: item.logImgUrl, gameId: item.id, gameName: item.name,})
         } else {
-            if (item.gameId === "") {
-                this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
-                    otherParam: '',
-                    gameName: item.name,
-                    gameId: item.id,
-                } : {otherParam: item.logImgUrl, gameId: item.id})
-            } else {
-                this.forwardGame(item)
-            }
+            this.forwardGame(item)
         }
     }
     httpCategoryRefresh = () => {
@@ -211,7 +260,7 @@ export default class HomeScreen extends Component<Props> {
                 />
                 <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
                     <View style={{flex: 1}}>
-                       <HomeNoticeView showDialog={
+                        <HomeNoticeView showDialog={
                             this.showDialog.bind(this)
                         }/>
 

@@ -1,5 +1,5 @@
 import React, {Component, ReactPage, FlowPage, JestPage} from 'react';
-import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert} from 'react-native';
+import {Platform, StyleSheet, View, Text, Image, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
 import {theme_color} from '../../utils/AllColor'
 import CategoryGameGridListScreen from './CategoryGameGridListScreen'
 import AndroidNativeGameActiviy from '../../customizeview/AndroidIosNativeGameActiviy';
@@ -12,6 +12,7 @@ import DeviceValue from "../../utils/DeviceValue";
 
 let gameId
 let searchId
+//分类页面
 export default class GameListScreen extends Component<Props> {
     static navigationOptions = {
         header: null,  //隐藏顶部导航栏
@@ -54,9 +55,47 @@ export default class GameListScreen extends Component<Props> {
         });
     }
 
-    gotoGame = (url, id, type) => {
-        AndroidNativeGameActiviy.openGameWith(url, id, type);
+
+    gotoGame = (item) => {
+        console.log(item)
+        if (item.gameId === "") {
+            this.props.navigation.navigate('GameList', item.logImgUrl === "" ? {
+                otherParam: '',
+                gameName: item.name,
+                gameId: item.id,
+            } : {otherParam: item.logImgUrl, gameId: item.id, gameName: item.name,})
+        } else {
+            this.forwardGame(item)
+        }
     }
+
+    forwardGame = (item) => {
+        let prams = {
+            gameId: item.gameId,
+            platCode: item.platformKey,
+            gameType: item.gameType,
+            model: 2
+        };
+
+        http.post('game/forwardGame', prams, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if ("error" === res.data.message) {
+                    this.tostTitle('系统错误')
+                } else if ("process" === res.data.message) {
+                    this.tostTitle('维护中')
+                } else if (res.data.url === '') {
+                    this.tostTitle('获取游戏地址失败')
+                } else {
+                    AndroidNativeGameActiviy.openGameWith(res.data.url, item.gameId, item.platformKey);
+                    //this.props.navigation.navigate('Game',{gameUrl:res.data.url})
+                }
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
 
     render() {
         let sreenView = []
@@ -68,28 +107,35 @@ export default class GameListScreen extends Component<Props> {
         }
 
         return (
-            <View style={{flex: 1}}>
-                {this.state.data.length > 0 && <ScrollableTabView
-                    style={{}}
-                    initialPage={0}
-                    renderTabBar={() => <ScrollableTabBar/>}
-                    tabBarActiveTextColor={theme_color}
-                    tabBarUnderlineStyle={{backgroundColor: theme_color, height: 1}}
-                    tabBarTextStyle={{marginLeft: 6, marginRight: 6}}
-                    onChangeTab={(index) => {
-                        searchId = this.state.data[index.i].id
-                    }}
+            <SafeAreaView style={styles.safeArea}>
+                <View style={{flex: 1}}>
+                    {this.state.data.length > 0 && <ScrollableTabView
+                        style={{}}
+                        initialPage={0}
+                        renderTabBar={() => <ScrollableTabBar/>}
+                        tabBarActiveTextColor={theme_color}
+                        tabBarUnderlineStyle={{backgroundColor: theme_color, height: 1}}
+                        tabBarTextStyle={{marginLeft: 6, marginRight: 6}}
+                        onChangeTab={(index) => {
+                            searchId = this.state.data[index.i].id
+                        }}
 
-                >
+                    >
 
-                    {sreenView}
+                        {sreenView}
 
-                </ScrollableTabView>}
-                <SpinnerLoding/>
-            </View>
+                    </ScrollableTabView>}
+                    <SpinnerLoding/>
+                </View>
+            </SafeAreaView>
         );
     }
 }
 
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: 'white'
+    }
+});

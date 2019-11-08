@@ -3,7 +3,7 @@ import {Image, StyleSheet, View, Text, Alert, DeviceEventEmitter} from "react-na
 import deviceValue from "../../utils/DeviceValue";
 import FastImage from 'react-native-fast-image'
 import {CAGENT} from "../../utils/Config";
-import {ThemeEditTextTextColor} from "../../utils/AllColor";
+import {textTitleColor, ThemeEditTextTextColor} from "../../utils/AllColor";
 import http from "../../http/httpFetch";
 import Swiper from "react-native-swiper";
 import {MarqueeHorizontal, MarqueeVertical} from 'react-native-marquee-ab';
@@ -42,31 +42,31 @@ export default class HomeNoticeView extends Component<Props> {
         console.log('lllll轮播')
         console.log(deviceValue.imgUrl)
         this.setState({imageView: iView})
-      /*  getStoreData('@bannerUrl').then((bannerUrl) => {
-            if (bannerUrl.bannerUrl !== undefined) {
-                console.log("取值先666666222")
-                console.log(bannerUrl.bannerUrl.length)
-                let iView = []
-                for (var i = 0; i < bannerUrl.bannerUrl.length; i++) {
-                    let url = bannerUrl.bannerUrl[i]
-                    console.log("取值先666666222wwwwwww")
-                    console.log(bannerUrl.bannerUrl.length + "     ggg" + url)
-                    iView.push(<FastImage
-                        key={i}
-                        style={styles.slideFastImage}
-                        source={{
-                            uri: url,
-                            priority: FastImage.priority.high,
+        /*  getStoreData('@bannerUrl').then((bannerUrl) => {
+              if (bannerUrl.bannerUrl !== undefined) {
+                  console.log("取值先666666222")
+                  console.log(bannerUrl.bannerUrl.length)
+                  let iView = []
+                  for (var i = 0; i < bannerUrl.bannerUrl.length; i++) {
+                      let url = bannerUrl.bannerUrl[i]
+                      console.log("取值先666666222wwwwwww")
+                      console.log(bannerUrl.bannerUrl.length + "     ggg" + url)
+                      iView.push(<FastImage
+                          key={i}
+                          style={styles.slideFastImage}
+                          source={{
+                              uri: url,
+                              priority: FastImage.priority.high,
 
-                        }}
-                        resizeMode={FastImage.resizeMode.cover}
-                    />)
-                }
-                console.log('轮播图URL')
-                console.log(bannerUrl.bannerUrl)
-                this.setState({imageView: iView})
-            }
-        });*/
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
+                      />)
+                  }
+                  console.log('轮播图URL')
+                  console.log(bannerUrl.bannerUrl)
+                  this.setState({imageView: iView})
+              }
+          });*/
 
     }
 
@@ -174,14 +174,14 @@ export default class HomeNoticeView extends Component<Props> {
                        }}/>
                 {this.state.noticeData.length > 0 && <MarqueeVertical
                     textList={this.state.noticeData}
-                    width={deviceValue.windowWidth - 30}
+                    width={deviceValue.windowWidth - 30 - 40}
                     height={30}
-                    delay = {3000}
+                    delay={3000}
                     direction={'up'}
                     numberOfLines={1}
                     reverse={false}
                     bgContainerStyle={{backgroundColor: 'white'}}
-                    textStyle={{fontSize: 15, marginLeft: 12, color: ThemeEditTextTextColor}}
+                    textStyle={{fontSize: 12, marginLeft: 12, color: textTitleColor}}
                     style={{marginLeft: 12}}
                     onTextClick={(item) => {
                         if (this.state.noticeData.length > 0) {
@@ -194,12 +194,23 @@ export default class HomeNoticeView extends Component<Props> {
     }
 }
 const styles = StyleSheet.create({
-    wrapper: {height: deviceValue.windowWidth * 0.4},
+    wrapper: {height: deviceValue.windowWidth * 0.4,backgroundColor:'white'},
     slideFastImage: {
         width: deviceValue.windowWidth,
         height: deviceValue.windowWidth * 0.4,
     },
-    noticeView: {backgroundColor: 'white', height: 30, flexDirection: 'row', alignItems: 'center', flex: 1},
+    noticeView: {
+        backgroundColor: 'white',
+        height: 30,
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 9,
+        marginBottom: 9,
+        borderRadius: 16,
+    },
     paginationContainer: {
         paddingVertical: 8,
         position: 'relative', bottom: 20,
