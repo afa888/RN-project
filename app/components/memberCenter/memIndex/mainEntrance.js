@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     container:{
         width: DeviceValue.windowWidth -30,
         height:484,
-        marginTop:66,
+        marginTop:200,
         marginLeft:15,
         marginBottom:20,
         borderRadius:8,
