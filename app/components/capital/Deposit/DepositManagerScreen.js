@@ -16,7 +16,7 @@ import {TXAlert} from "../../../tools/TXAlert"
 import { NavigationActions } from 'react-navigation';
 import TXToastManager from "../../../tools/TXToastManager"
 import Picker from 'react-native-picker';
-import {backgroundViewColor} from "../../../utils/AllColor"
+import {backgroundViewColor,ThemeEditTextTextColor} from "../../../utils/AllColor"
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -32,6 +32,7 @@ export default class DepositManagerScreen extends Component<Props> {
           headerBackTitle:null,
           headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
           headerLeft: (
+
             <TouchableOpacity onPress={() => {
                     Picker.hide()
                     if (params.hasOwnProperty('isNotFromHome')) {
@@ -52,19 +53,45 @@ export default class DepositManagerScreen extends Component<Props> {
                 </TouchableOpacity>
           ),
           headerRight: (
-            <TouchableOpacity onPress={() => {
+            <View style={{width:60,flexDirection:'row',alignItems:'center'}}>
+                <TouchableOpacity onPress={() => {
                     Picker.hide()
                     navigation.navigate('FundRecord')
                 }}>
-                    <Text style={{paddingRight:10,fontSize:17,color:'#CFA359'}}>存款记录</Text>
+                    <View style={{alignItems:'center'}}>
+                        <Image source={require('../../../static/img/nav_icon_jilu_nor.png')}
+                           style={{
+                               width: 20,
+                               height: 20,
+                           }}/>
+                        <Text style={{fontSize:10,color:ThemeEditTextTextColor}}>记录</Text>
+                    </View>
+                    
                 </TouchableOpacity>
+                <View style={{width:5}}></View>
+                <TouchableOpacity onPress={() => {
+                    Picker.hide()
+                    navigation.navigate('优惠')
+                }}>
+                    <View style={{alignItems:'center'}}>
+                        <Image source={require('../../../static/img/nav_icon_kefu_nor.png')}
+                           style={{
+                               width: 20,
+                               height: 20,
+                           }}/>
+                        <Text style={{fontSize:10,color:ThemeEditTextTextColor}}>客服</Text>
+                    </View>
+                    
+                </TouchableOpacity>
+            </View>
+            
           ),
         };
       };
 
     constructor(props){
         super(props);
-        this.state = {isLoading: true,isRefreshing:false,selectedIndex:0,scanSelectedIndex:0,payTypeSelectedIndex:0,orderNum:'',payType:'bank',data:[],method:payTypeList[0],money:'',name:''};
+        this.state = {isLoading: true,isRefreshing:false,selectedIndex:0,scanSelectedIndex:0,payTypeSelectedIndex:0,orderNum:'',payType:'bank',data:[],method:payTypeList[0],money:'',name:'',handsel:0};
     }
 
     componentWillMount () {
@@ -296,7 +323,7 @@ export default class DepositManagerScreen extends Component<Props> {
                 name : this.state.name,
                 amount : this.state.money,
                 type : String(typeIndex + 1),
-                handsel : '0'
+                handsel : String(this.state.handsel)
             };
 
             http.post('deposit/outlineBankPay', prams, true).then(res => {
@@ -352,7 +379,6 @@ export default class DepositManagerScreen extends Component<Props> {
             this.setState({'payType':payMethod,method:payTypeList[0]});
         }else {
             this.setState({'payType':payMethod,method:payName});
-
         }
 
     }

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
 import Dimensions from 'Dimensions'
 import TXToastManager from "../../../tools/TXToastManager"
-import {backgroundViewColor} from "../../../utils/AllColor"
+import {backgroundViewColor,tipsSpecialTextColor,textThreeHightTitleColor} from "../../../utils/AllColor"
 
 //温馨提示
 export default class Tips extends Component<Props> {
@@ -13,13 +13,18 @@ export default class Tips extends Component<Props> {
     render () {
         return (
             <View style={{paddingTop:20,paddingLeft:10,flexDirection: 'column',justifyContent:'center',width:Dimensions.get('window').width}}>
-                    <Text style={{fontSize:12,color:'#D62F27',height:18}}>温馨提示</Text>
-                    <Text style={{fontSize:10,color:'#8B8B8B',height:15}}>为确保您的款项及时到账，请您留意以下内容</Text>
-                    <Text style={{fontSize:10,color:'#8B8B8B',height:15}}>1.在输入您的存款金额时确保您提交的金额在限额范围之内</Text>
+                    
+                    <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>为确保您的款项及时到账，请您留意以下：</Text>
+                    <View style={{flexDirection: 'row',height:15,width:Dimensions.get('window').width}}>
+                        <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>1，若您支付遇到困难，可</Text>
+                        <Text style={{fontSize:10,color:tipsSpecialTextColor,height:15}} onPress={this.props.onShowCustomer}>“点此” </Text>
+                        <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>查看存款帮助</Text>
+                    </View>
+                    <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>2，若您支付过充值遇到问题未完成支付，请重新下单；</Text>
                     <View style={{flexDirection: 'row',height:50,width:Dimensions.get('window').width}}>
-                        <Text style={{fontSize:10,color:'#8B8B8B',height:15}}>2.支付遇到困难，点击</Text>
-                        <Text style={{fontSize:10,color:'red',height:15}} onPress={this.props.onShowCustomer}>“联系客服” </Text>
-                        <Text style={{fontSize:10,color:'#8B8B8B',height:15}}>人员获得帮助</Text>
+                        <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>3，扔有问题无法解决？请联系</Text>
+                        <Text style={{fontSize:10,color:tipsSpecialTextColor,height:15}} onPress={this.props.onShowCustomer}>“在线客服” </Text>
+                        <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>获得帮助</Text>
                     </View>
                     <View style={{height:20,backgroundColor:backgroundViewColor}}></View>
                 </View>

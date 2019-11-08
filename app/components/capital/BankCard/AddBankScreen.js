@@ -3,6 +3,8 @@ import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,
 import Dimensions from 'Dimensions'
 import {NativeModules} from 'react-native';
 import { NavigationActions,StackActions } from 'react-navigation';
+import {backgroundViewColor,commonButtonBGColor,commonButtonTitleColor} from "../../../utils/AllColor"
+
 
 export default class AddBankCardScreen extends Component<Props> {
     static navigationOptions = {
@@ -40,7 +42,7 @@ export default class AddBankCardScreen extends Component<Props> {
         return (
             <View style={{paddingTop:50,alignItems: 'center', justifyContent: 'center' }}>
                 <TouchableOpacity  onPress={this._onAddNewBankCard}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 20,height:180,backgroundColor:'#ffffff'}}>
+                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:commonButtonBGColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 20,height:180,backgroundColor:backgroundViewColor}}>
                         <Image
                             source={require('../../../static/img/icon_mBank.png')}
                             style={{
@@ -48,7 +50,7 @@ export default class AddBankCardScreen extends Component<Props> {
                                            height: 60,
                                        }}
                         />
-                        <Text style={{color:'#CFA359',paddingTop:10}}>点击此处新增银行卡</Text>
+                        <Text style={{color:commonButtonBGColor,paddingTop:10}}>点击此处新增银行卡</Text>
                      </View>
                 </TouchableOpacity>
             </View>
