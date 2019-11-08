@@ -36,7 +36,7 @@ export default class BankCardInfoScreen extends Component<Props> {
     }
 
     _onShowCustomer = () => {
-      this.props.navigation.navigate('客服')
+      this.props.navigation.navigate('优惠')
     }
 
     componentDidMount () {

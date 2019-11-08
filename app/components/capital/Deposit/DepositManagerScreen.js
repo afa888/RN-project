@@ -16,6 +16,7 @@ import {TXAlert} from "../../../tools/TXAlert"
 import { NavigationActions } from 'react-navigation';
 import TXToastManager from "../../../tools/TXToastManager"
 import Picker from 'react-native-picker';
+import {backgroundViewColor} from "../../../utils/AllColor"
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -27,7 +28,7 @@ export default class DepositManagerScreen extends Component<Props> {
         const params = navigation.state.params || {};
 
         return {
-          title: '存款',
+          title: '充值',
           headerBackTitle:null,
           headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
           headerLeft: (
@@ -357,7 +358,7 @@ export default class DepositManagerScreen extends Component<Props> {
     }
 
      _onShowCustomer = () => {
-        this.props.navigation.navigate('客服')
+        this.props.navigation.navigate('优惠')
     }
 
     //不同支付类型显示不同操作方式
@@ -381,20 +382,21 @@ export default class DepositManagerScreen extends Component<Props> {
 
     renderData() {
         return (
-            <View style={{flex:1,height:Dimensions.get('window').height,backgroundColor:'#efeff4'}}>
+            <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:{backgroundViewColor}}}>
 
-                <View style={{alignItems: 'center',backgroundColor:'#efeff4'}}>
+                <View style={{alignItems: 'center',backgroundColor:{backgroundViewColor}}}>
                     <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                        <Text style={{paddingLeft:10}}>存款方式</Text>
+                        <Text style={{paddingLeft:10}}>支付方式</Text>
                     </View>
 
                     <FlatList
-                        numColumns={2}
-                        style={styles.flatListStyle}
+                        // numColumns={2}
+                        style={[styles.flatListStyle]}
                         data={this.state.data}
                         renderItem={this.renderItem.bind(this)}
                         keyExtractor={this._keyExtractor}
-                        ListFooterComponent={this.renderFooter}
+                        // ListFooterComponent={this.renderFooter}
+                        horizontal={true}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.isRefreshing}
@@ -405,7 +407,8 @@ export default class DepositManagerScreen extends Component<Props> {
                         }
                     />
                 </View>
-            </View>
+                {this.renderFooter()}
+            </ScrollView>
         );
     }
 
@@ -436,7 +439,7 @@ export default class DepositManagerScreen extends Component<Props> {
         const bdColor = index == this.state.selectedIndex ?  '#CFA359' : '#8B8B8B'
         return (
             <View style={{width: Dimensions.get('window').width / 2,
-                backgroundColor: '#efeff4',alignItems: 'center',
+                backgroundColor: {backgroundViewColor},alignItems: 'center',
                 height: 50}}>
                 <TouchableOpacity
                     onPress={() => this.clickItem(item,index)}>
@@ -502,7 +505,6 @@ const styles = StyleSheet.create({
     color:'red',
     fontSize:16,
     paddingTop:5,
-    backgroundColor:'#efeff4',
   }
 });
 
