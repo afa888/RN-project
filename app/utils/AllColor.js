@@ -21,6 +21,8 @@ export const commonButton2BGColor = '#EFEFF4' // 特殊选择button 背景
 
 export const commonButtonTitleColor = '#FFFFFF' //button 通用文字颜色
 
+export const tipsSpecialTextColor = '#DE4A38'
+
 export const textTitleColor = "#333333" //一级文字
 export const textHightTitleColor = "#111111" //最重要文字
 export const textThreeHightTitleColor = "#999999" //次要文字

@@ -6,7 +6,7 @@ import TXInput from "../../../tools/TXInput"
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Tips from './DepositTipsView'
 import Picker from 'react-native-picker';
-import {specialTextColor} from "../../../utils/AllColor"
+import {textTitleColor,commonButtonBGColor,commonButtonTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -23,14 +23,14 @@ export default class PayBank extends Component<Props> {
     };
 
     _onChooseBank = ()=> {
-        console.log('银行列表');
+        console.log('支付方式');
         Picker.init({
             pickerData: payTypeList,
-            pickerConfirmBtnColor:[55,55,55,1],
+            pickerConfirmBtnColor:[222,73,56,1],
             pickerCancelBtnColor:[88,88,88,1],
             pickerCancelBtnText:'',
             pickerConfirmBtnText:'确定',
-            pickerTitleText:'银行列表',
+            pickerTitleText:'支付方式',
             onPickerConfirm: data => {
                 console.log(data);
             },
@@ -45,19 +45,63 @@ export default class PayBank extends Component<Props> {
         Picker.show();
     };
 
+    //是否申请彩金
+    handleIndexChange = (applay) => {
+      this.props.onChange('handsel', applay)
+    }
+
     render () {
         return (
         <View style={{paddingTop:0}} >
             <TXInput label="付款方式" placeholder="网银转账" isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.props.params.method || ''}/>
             <View style={{height:10}}></View>
-            <TXInput label="付款人姓名" placeholder="请输入真实姓名" textAlign='right' onChange={(value) => this.props.onChange('name', value)} value={this.props.params.name || ''}/>
+            <TXInput label="真实姓名" placeholder="请输入真实姓名" textAlign='right' onChange={(value) => this.props.onChange('name', value)} value={this.props.params.name || ''}/>
+            <View style={[styles.inputViewStyle,{flexDirection:'row'}]}>
+                <Text style={{paddingTop:10,fontSize:14,color: '#514b46',height:30,width:Dimensions.get('window').width - 120}}>申请彩金</Text>
+                <View style={{paddingTop:10,flx:1,flexDirection:'row',justifyContent:'flex-end'}}>
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={this.handleIndexChange.bind(this, 0)}>
+                        <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
+                        }}>
+
+                        {this.props.params.handsel == 0 ? <Image source= {require('../../../static/img/recharge_icon_yes.png')}
+                                    style={{height:12,width:12}}
+                                /> : <Image source= {require('../../../static/img/recharge_icon_no.png')}
+                                    style={{height:12,width:12}}
+                        />}
+
+                        <Text style={{paddingLeft:5,color:textThreeHightTitleColor}}>是</Text>
+                        </View>
+
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={this.handleIndexChange.bind(this, 1)}>
+                        <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
+                        }}>
+
+                        {this.props.params.handsel == 1 ? <Image source= {require('../../../static/img/recharge_icon_yes.png')}
+                                    style={{height:12,width:12}}
+                                /> : <Image source= {require('../../../static/img/recharge_icon_no.png')}
+                                    style={{height:12,width:12}}
+                        />}
+
+                        <Text style={{paddingLeft:5,color:textThreeHightTitleColor}}>否</Text>
+                        </View>
+
+                    </TouchableOpacity>
+                </View>
+            </View>
+
             <View style={{height:10}}></View>
-            <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:specialTextColor}} keyboardType = 'numeric' placeholder="单笔限额100~2000000(元)" textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
+            <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder="单笔限额100~2000000(元)" textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
             <View style={{paddingTop:20,alignItems: 'center',height:60}}>
                     <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
 
-                        <Text style={{color:'#ffffff',fontSize:17}}>下一步</Text>
+                        <Text style={{color:commonButtonTitleColor,fontSize:17}}>下一步</Text>
                      </View>
                 </TouchableOpacity>
                 </View>
@@ -83,7 +127,15 @@ const styles = StyleSheet.create({
     fontSize:16,
     paddingTop:5,
     backgroundColor:'#efeff4',
-  }
+  },
+  inputViewStyle:{
+            paddingVertical: 10,
+            paddingHorizontal: 15,
+            borderColor: '#eae6e4',
+            marginVertical: 5,
+            borderBottomWidth: 0.5,
+            backgroundColor: '#fff'
+          }
 });
 
 

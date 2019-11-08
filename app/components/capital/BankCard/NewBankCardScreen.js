@@ -9,6 +9,8 @@ import httpBaseManager from '../../../http/httpBaseManager'
 import { NavigationActions } from 'react-navigation';
 import {TXAlert} from "../../../tools/TXAlert"
 import TXToastManager from "../../../tools/TXToastManager"
+import {backgroundViewColor,commonButtonBGColor,commonButtonTitleColor,tipsSpecialTextColor,ThemeEditTextTextColor} from "../../../utils/AllColor"
+
 
 let data = ['中国农业银行','中国银行','交通银行','中国建设银行','中国工商银行','中国邮政储蓄银行','招商银行','浦发银行','中国光大银行','中信银行','平安银行','中国民生银行','华夏银行','广发银行','北京银行','上海银行','兴业银行','其他银行'];
 
@@ -135,30 +137,23 @@ export default class NewBankCardScreen extends Component<Props> {
     };
 
     render() {
-        let bgColor;
-        if (this.state.cardType === '请选择银行种类') {
-            bgColor = '#CFA359';
-        }else {
-            bgColor = '#514b46';
-        }
         return (
             <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:'#efeff4'}}>
-                <View style={{paddingTop:10,height:40,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致</Text>
-                </View>
-                <TXInput label="真实姓名" placeholder="请输入持卡人姓名" textAlign='right' onChange={(value) => this._onChange('name', value)} value={this.state.name || ''}/>
+                
+                <TXInput label="银行" detailTextColor={ThemeEditTextTextColor} isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.state.cardType || ''}/>
                 <TXInput label="银行卡号" placeholder="请输入银行卡号" textAlign='right' onChange={(value) => this._onChange('cardNum', value)} value={this.state.cardNum || ''}/>
-                <TXInput label="银行种类" detailTextColor={bgColor} isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.state.cardType || ''}/>
-                <TXInput label="开户行地址" placeholder="请输入开户行地址" textAlign='right' onChange={(value) => this._onChange('address', value)} value={this.state.address || ''}/>
+                <TXInput label="真实姓名" placeholder="请输入持卡人姓名" textAlign='right' onChange={(value) => this._onChange('name', value)} value={this.state.name || ''}/>
+                <TXInput label="开户行" placeholder="请输入开户行名称" textAlign='right' onChange={(value) => this._onChange('address', value)} value={this.state.address || ''}/>
                 <TXInput label="资金密码" secureTextEntry={true} placeholder="4位资金密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
-                <View style={{paddingTop:20,height:50,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:15,fontSize:10}}>请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账</Text>
+                
+                <View style={{paddingTop:10,height:60,width:Dimensions.get('window').width}}>
+                    <Text style={{paddingLeft:10,fontSize:12,color:tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                     <TouchableOpacity  onPress={() => this._onBindCard()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
 
-                        <Text style={{color:'#ffffff',fontSize:17}}>立即绑定</Text>
+                        <Text style={{color:commonButtonTitleColor,fontSize:17}}>立即绑定</Text>
                      </View>
                 </TouchableOpacity>
                 </View>

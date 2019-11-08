@@ -99,7 +99,7 @@ class TXInput extends Component {
             onChangeText={this._onChangeText}
             onBlur={this._onBlur}
             onFocus={this._onFocus}
-            style={[{paddingTop: 0,paddingBottom: 0, textAlign:this.state.textAlign, flex: 1, fontSize: 14, color: '#332f2b' }, textInputStyle]}
+            style={[{paddingTop: 0,paddingBottom: 0, textAlign:this.state.textAlign, flex: 1, fontSize: 14, color: '#333333' }, textInputStyle]}
             placeholderTextColor={placeholderTextColor}
             value={String(this.state.value)}
             autoCorrect={false}
