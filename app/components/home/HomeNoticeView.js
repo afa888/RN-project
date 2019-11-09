@@ -136,7 +136,6 @@ export default class HomeNoticeView extends Component<Props> {
                     isSeamlessScroll={true}
                     indicatorGroupPosition={'center'}
                     indicatorContainerHeight={20}
-                    indicatorStyle={{indicatorWidth:12,indicatorHeight:2,indicatorColor:'red'}}
                 />}
 
             </View>

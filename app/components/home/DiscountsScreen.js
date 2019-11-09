@@ -24,17 +24,7 @@ export default class DiscountsScreen extends Component<Props> {
                 <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 最新优惠</Text></View>,
 
             headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Image source={require('../../static/img/titlebar_back_normal.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               margin: 12
-                           }}/>
-                </TouchableOpacity>
+              <View></View>
             ),
             headerRight: (
                 <TouchableOpacity onPress={() => {

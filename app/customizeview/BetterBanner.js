@@ -31,7 +31,7 @@ export default class BetterBanner extends PureComponent {
         isSeamlessScroll: false, // 无缝滚动
         adaptSeamlessScrollValue: false, // 无缝滚动显示异常时修改此值
         indicatorWidth: 10,
-        indicatorHeight: 6,
+        indicatorHeight: 3,
         indicatorColor: commonButton2BGColor,
         indicatorStyle: {},
         indicatorGap: 6, // 2个指示器之间的间隙

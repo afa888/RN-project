@@ -85,7 +85,7 @@ export default class HomeScreen extends Component<Props> {
                             width: 18,
                             height: 18,
                         }}/>
-                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
+                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
                 </View>
             </TouchableOpacity>
         </View>
