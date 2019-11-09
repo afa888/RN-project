@@ -131,12 +131,11 @@ export default class HomeScreen extends Component<Props> {
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
         }
-        this.setState({isDialogVisible: blo, noticeTitle: noticeList});
+       // this.setState({isDialogVisible: blo, noticeTitle: noticeList});
+        this.props.navigation.navigate('NoticeScreen',{data:noticeList})
     }
 
-    hideDialog = () => {
-        this.setState({isDialogVisible: false});
-    }
+
 
 
     // http://m.txbet1788.com/TXW/game/getPageTabRecommend?src=TXW&cagent=TXW&terminal=2
@@ -238,7 +237,7 @@ export default class HomeScreen extends Component<Props> {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
-                <ModalDialog
+           {/*     <ModalDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isDialogVisible}
                     _dialogLeftBtnAction={() => {
@@ -250,7 +249,7 @@ export default class HomeScreen extends Component<Props> {
                     _dialogCancle={() => {
                         this.hideDialog()
                     }}
-                />
+                />*/}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'black'}}
@@ -261,7 +260,7 @@ export default class HomeScreen extends Component<Props> {
                 <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
                     <View style={{flex: 1}}>
                         <HomeNoticeView showDialog={
-                            this.showDialog.bind(this)
+                           this.showDialog.bind(this)
                         }/>
 
                         <HomeMidView data={this.state.data.gameClassifyEntities}

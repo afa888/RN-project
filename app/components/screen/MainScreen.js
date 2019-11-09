@@ -8,6 +8,7 @@ import LoginScreen from '../auth/LoginScreen'
 
 import {createStackNavigator, createBottomTabNavigator, createAppContainer} from 'react-navigation';
 import HomeScreen from "../home/HomeScreen";
+import NoticeScreen from "../home/NoticeScreen";
 import GameScreen from "../game/GameScreen";
 import GameListScreen from "../game/GameListScreen";
 import SeachGameListScreen from "../game/SeachGameListScreen";
@@ -187,6 +188,7 @@ export default class MainScreen extends Component<Props> {
             LoginService: {screen: LoginScreen},
             CustomerServiceScreen:{screen:CustomerServiceScreen},
             DiscountDetail:{screen:DiscountsDitailScreen},
+            NoticeScreen:{screen:NoticeScreen},
             CommonWebviewScreen:{screen:CommonWebviewScreen},
             SecurityManagerScreen : {screen : SecurityManagerScreen},
             ChangeLoginPwdScreen : {screen : ChangeLoginPwdScreen},
