@@ -26,7 +26,7 @@ export default class DepositBankTransferScreen extends Component<Props> {
                                height: 20,
                                margin: 12
                            }}/>
-                </TouchableOpacity>
+            </TouchableOpacity>
           ),
         };
       };

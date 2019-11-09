@@ -1,6 +1,6 @@
 // 接口请求地址
- export const BASE_URL = 'http://m.txbet1788.com/TXW/';
-//export const BASE_URL = 'http://192.168.107.144:1101/JJF/';
+ // export const BASE_URL = 'http://m.txbet1788.com/TXW/';
+export const BASE_URL = 'http://192.168.107.144:1101/JJF/';
 export const BASE_H5_URL = 'http://m.txbet1788.com/';
 // 代理号
 export const CAGENT = 'TXW';

@@ -9,7 +9,8 @@ import httpBaseManager from '../../../http/httpBaseManager'
 import { NavigationActions } from 'react-navigation';
 import {TXAlert} from "../../../tools/TXAlert"
 import TXToastManager from "../../../tools/TXToastManager"
-import {backgroundViewColor,commonButtonBGColor,commonButtonTitleColor,tipsSpecialTextColor,ThemeEditTextTextColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {ThemeEditTextTextColor} from "../../../utils/AllColor"
 
 
 let data = ['中国农业银行','中国银行','交通银行','中国建设银行','中国工商银行','中国邮政储蓄银行','招商银行','浦发银行','中国光大银行','中信银行','平安银行','中国民生银行','华夏银行','广发银行','北京银行','上海银行','兴业银行','其他银行'];
@@ -147,13 +148,13 @@ export default class NewBankCardScreen extends Component<Props> {
                 <TXInput label="资金密码" secureTextEntry={true} placeholder="4位资金密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
                 
                 <View style={{paddingTop:10,height:60,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10,fontSize:12,color:tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
+                    <Text style={{paddingLeft:10,fontSize:12,color:MainTheme.tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                     <TouchableOpacity  onPress={() => this._onBindCard()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
-                        <Text style={{color:commonButtonTitleColor,fontSize:17}}>立即绑定</Text>
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即绑定</Text>
                      </View>
                 </TouchableOpacity>
                 </View>
