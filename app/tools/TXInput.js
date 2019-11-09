@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
+import MainTheme from '../utils/AllColor';
 
 const styles = StyleSheet.create({
   center: {
@@ -24,11 +25,11 @@ class TXInput extends Component {
     autoCapitalize: PropTypes.oneOf(['characters', 'words', 'sentences', 'none']),
     label: PropTypes.string,
     placeholder: PropTypes.string,
-    required:PropTypes.bool,
-    showDetail:PropTypes.bool,
-    detailTextColor:PropTypes.string,
-    buttonFontSize:PropTypes.number,
-    forbiddenDot:PropTypes.bool,
+    required: PropTypes.bool,
+    showDetail: PropTypes.bool,
+    detailTextColor: PropTypes.string,
+    buttonFontSize: PropTypes.number,
+    forbiddenDot: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -38,18 +39,19 @@ class TXInput extends Component {
     readonly: false,
     label: '文本输入框',
     placeholder: '请输入',
-    required:false,
-    showDetail:false,
-    detailTextColor:'#514b46',
-    buttonFontSize:14,
-    forbiddenDot:false,
+    required: false,
+    showDetail: false,
+    detailTextColor: '#514b46',
+    buttonFontSize: 14,
+    forbiddenDot: false,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       value: props.value || '',
-      textAlign: 'right'
+      textAlign: 'right',
+      isEditting: false,
     };
   }
 
@@ -60,52 +62,54 @@ class TXInput extends Component {
   }
 
   _onChangeText = (val) => {
-    const {forbiddenDot} = this.props;
+    const { forbiddenDot } = this.props;
     if (forbiddenDot) {
       //禁止输入小数点
-      let newVar = val.replace('.','');
+      let newVar = val.replace('.', '');
       this.setState({ value: newVar });
       this.props.onChange && this.props.onChange(newVar.replace(/(^\s*)|(\s*$)/g, ''));
-    }else {
+    } else {
       this.setState({ value: val });
       this.props.onChange && this.props.onChange(val.replace(/(^\s*)|(\s*$)/g, ''));
     }
-    
+
   };
 
   _onBlur = (e) => {
     const { onBlur } = this.props;
     onBlur && onBlur(e);
+    this.setState({ isEditting: false });
   };
 
   _onFocus = (e) => {
     const { onFocus } = this.props;
     onFocus && onFocus(e);
+    this.setState({ isEditting: true });
   };
-  _onClickButton = () =>{
+  _onClickButton = () => {
     this.props.onClick && this.props.onClick();
   }
 
   _renderInputContent = () => {
-    const {detailTextColor, textInputStyle, placeholderTextColor, autoCapitalize, isUpdate, showDetail, suffix } = this.props;
+    const { detailTextColor, textInputStyle, placeholderTextColor, autoCapitalize, isUpdate, showDetail, suffix } = this.props;
     return (
-      isUpdate==true ?
+      isUpdate == true ?
         <View
-          style={[{ flexDirection: 'row', flex: 1, height: '100%'}, styles.center]}
+          style={[{ flexDirection: 'row', flex: 1, height: '100%' }, styles.center]}
         >
           <TextInput
             {...this.props}
-            contextMenuHidden = {true}
+            contextMenuHidden={true}
             onChangeText={this._onChangeText}
             onBlur={this._onBlur}
             onFocus={this._onFocus}
-            style={[{paddingTop: 0,paddingBottom: 0, textAlign:this.state.textAlign, flex: 1, fontSize: 14, color: '#333333' }, textInputStyle]}
-            placeholderTextColor={placeholderTextColor}
+            style={[{ paddingTop: 0, paddingBottom: 0, textAlign: this.state.textAlign, flex: 1, fontSize: 14, color: MainTheme.DarkGrayColor }, textInputStyle]}
+            placeholderTextColor={placeholderTextColor || MainTheme.LightGrayColor}
             value={String(this.state.value)}
             autoCorrect={false}
             autoCapitalize={autoCapitalize}
             underlineColorAndroid="transparent"
-            returnKeyType = 'done'
+            returnKeyType='done'
           />
           <Text style={{ marginRight: 10 }}>
             {(suffix && suffix.length > 3) ? '' : suffix}
@@ -113,25 +117,25 @@ class TXInput extends Component {
         </View>
         :
         <View
-          style={[{ flexDirection: 'row', flex: 1, height: '100%' ,fontSize:5}, styles.center]}
+          style={[{ flexDirection: 'row', flex: 1, height: '100%', fontSize: 5 }, styles.center]}
         >
           <Text
             style={{ textAlign: this.state.textAlign, flex: 1 }}
           >
           </Text>
-          
+
           <Text style={{ marginRight: 10 }}>
             {(suffix && suffix.length > 3) ? '' : suffix}
           </Text>
-          <TouchableOpacity  onPress={()=>this._onClickButton()}  activeOpacity={0.2} focusedOpacity={0.5}>
-              <View style=  {{justifyContent:'center',alignItems:'center'}}>
-    
-                <Text style={{color:detailTextColor,fontSize:15}}>{this.state.value}</Text>
-              </View>
-              
+          <TouchableOpacity onPress={() => this._onClickButton()} activeOpacity={0.2} focusedOpacity={0.5}>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+
+              <Text style={{ color: detailTextColor, fontSize: 15 }}>{this.state.value}</Text>
+            </View>
+
           </TouchableOpacity>
-          { showDetail ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#8B8B8B' }}>  >  </Text> : <View style={{width:20}}></View> }
-          
+          {showDetail ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#8B8B8B' }}>  >  </Text> : <View style={{ width: 20 }}></View>}
+
         </View>
     );
   };
@@ -147,20 +151,22 @@ class TXInput extends Component {
           onChangeText={this._onChangeText}
           onBlur={this._onBlur}
           onFocus={this._onFocus}
-          style={[{paddingTop: 0,paddingBottom: 0,height: 60, marginHorizontal: 10, textAlign: 'left', flex: 1, fontSize:12},
+          style={[{ paddingTop: 0, paddingBottom: 0, height: 60, marginHorizontal: 10, textAlign: 'left', flex: 1, fontSize: 12 },
             textInputStyle,
           ]}
           placeholderTextColor={placeholderTextColor}
           value={String(this.state.value)}
           autoCorrect={false}
-          returnKeyType = 'done'
+          returnKeyType='done'
           autoCapitalize={autoCapitalize}
           underlineColorAndroid="transparent"
-          textAlignVertical = 'center'
+          textAlignVertical='center'
         /> :
         <Text
-          style={[{ marginVertical: 5, height: 60, marginHorizontal: 10, textAlign: 'left', flex: 1,
-            backgroundColor: '#f7f6f5', }, textInputStyle]}
+          style={[{
+            marginVertical: 5, height: 60, marginHorizontal: 10, textAlign: 'left', flex: 1,
+            backgroundColor: '#f7f6f5',
+          }, textInputStyle]}
         >{this.state.value}
         </Text>
     );
@@ -183,9 +189,9 @@ class TXInput extends Component {
           }}
         >
           <Text style={[{ fontSize: 15 }, labelTextStyle]}>
-            {label}{ required ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#F00' }}>*</Text> : null }
+            {label}{required ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#F00' }}>*</Text> : null}
           </Text>
-          { this._renderTextAreaContent() }
+          {this._renderTextAreaContent()}
         </View>
       );
     }
@@ -193,11 +199,13 @@ class TXInput extends Component {
       <View
         style={[{
           height: 45,
-          width: '100%',
+          // width: '100%',
           backgroundColor: '#fff',
           flexDirection: 'row',
-          borderColor: '#eae6e4',
+          borderColor: this.state.isEditting ? MainTheme.SpecialColor : MainTheme.LightGrayColor,
           borderBottomWidth: 0.5,
+          marginRight: 10,
+          marginLeft:10,
         }, styles.center]}
       >
         <Text style={[
@@ -206,16 +214,16 @@ class TXInput extends Component {
             flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            marginLeft: 15,
+            marginLeft:5,
             fontSize: 14,
-            color: '#514b46'
+            color: MainTheme.TextTitleColor,
           },
           labelTextStyle,
         ]}
         >{label}
-          { required ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#F00' }}>*</Text> : null }
+          {required ? <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#F00' }}>*</Text> : null}
         </Text>
-        { this._renderInputContent() }
+        {this._renderInputContent()}
       </View>
     );
   }

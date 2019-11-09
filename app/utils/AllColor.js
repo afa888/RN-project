@@ -20,8 +20,9 @@ export const textThreeHightTitleColor = "#999999" //次要文字
  * @author Nail
 **/
 export class MainTheme {
+    // 强调色
     static SpecialColor = '#DE4A38';
-    static GrayColor = '#CCCCCC';
+
     static specialTextColor = '#CFA359';
 
 	static backgroundViewColor = '#FFFFFF'; //页面默认背景
@@ -33,6 +34,18 @@ export class MainTheme {
 	static commonButtonTitleColor = '#FFFFFF'; //button 通用文字颜色
 
 	static tipsSpecialTextColor = '#DE4A38';
+    // 浅灰色
+    static LightGrayColor = '#CCCCCC';
+    // 灰色值
+    static GrayColor = '#999999';
+    // 深灰色
+    static DarkGrayColor = '#333333';
+    // 普通文本颜色
+    static TextTitleColor = textTitleColor;
+    // 视图的背景色
+    static BackgroundColor = backgroundViewColor;
+    // 提交按钮的文本的颜色
+    static SubmitTextColor = '#FFFFFF';
 };
 
 export default MainTheme;

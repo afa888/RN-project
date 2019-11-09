@@ -120,9 +120,16 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         TXToastManager.show('暂未实现，敬请期待');
     }
 
+    // 自动转账选项发生变化
     onChangeAutoTransferOption = (value) => {
         this.setState({ autoTransfer: value });
         TXToastManager.show('暂未实现，敬请期待');
+    }
+
+    // 显示自动转账的帮助信息
+    onShowAutoTransferHelp = () => {
+        TXToastManager.show("开启后，进入游戏时将会自动将钱包余额带入游戏，"
+            + "\n若希望手动充值游戏，请关闭此选项。", 3000);
     }
 
     // 列表点击事件响应
@@ -136,8 +143,10 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                 this.props.navigation.navigate('HelpScreen');
                 break;
             case '在线客服':
+
                 break;
             case '关于':
+
                 break;
             default:
                 break;
@@ -163,7 +172,6 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             },
         ]);
     }
-
 
     /**
      * 用户头像
@@ -191,7 +199,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         if (IS_INFINITE_AGENCY_ENABLE) {
             return (
                 <View>
-                    <Text style={styles.mainText}>{userName}</Text>
+                    <Text style={styles.loginName}>{userName}</Text>
                     <Text style={styles.userInfo}>代理等级：{this.state.agencyLevel}</Text>
                     <Text style={styles.userInfo}>当前积分：{integral}</Text>
                     <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
@@ -201,7 +209,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         else {
             return (
                 <View>
-                    <Text style={styles.mainText}>{userName},欢迎您！</Text>
+                    <Text style={styles.loginName}>{userName},欢迎您！</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={styles.userInfo}>认证状态：</Text>
                         <Image source={phoneVerify ? require('../../../static/img/iphone_pass.png') : require('../../../static/img/iphone_nov.png')}
@@ -318,9 +326,12 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         );
     }
 
+    /**
+     * 创建其它的设置项列表
+     */
     createOtherSettings() {
         return (
-            <FlatList renderItem={this.createOthSettingsItem}
+            <FlatList renderItem={this.createOtherSettingsItem}
                 data={['自动转账', '安全设置', '帮助中心', '在线客服', '版本', '关于']}
                 style={styles.otherSettingsContainer}
                 keyExtractor={({ item }) => item}
@@ -328,13 +339,17 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         );
     }
 
-    createOthSettingsItem = ({ item, index }) => {
+    /**
+     * 创建其它的设置的列表项
+     */
+    createOtherSettingsItem = ({ item, index }) => {
         switch (index) {
             case 0:
-                return (
+                return ( // 自动转账设置
                     <TouchableOpacity style={styles.otherSettingsAutoTransferContainer}>
-                        <Text style={{ textAlign: 'center' }}>{item}</Text>
-                        <TouchableOpacity style={styles.otherSettingsAutoTransferMark}>
+                        <Text style={{ ...styles.otherSettingsTitle, textAlign: 'center' }}>{item}</Text>
+                        <TouchableOpacity style={styles.otherSettingsAutoTransferMark}
+                            onPress={this.onShowAutoTransferHelp}>
                             <Text style={styles.otherSettingsAutoTransferQuestion}>?</Text>
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />
@@ -346,7 +361,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     </TouchableOpacity>
                 );
             case 4:
-                return (
+                return ( // APP版本号
                     <TouchableOpacity style={styles.otherSettingsVersionContainer}>
                         <Text style={styles.otherSettingsTitle}>{item}</Text>
                         <Text style={styles.otherSettingsVersionDetail}>v1.0.2</Text>
@@ -385,13 +400,14 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                         </ImageBackground>
                         {/* 快捷功能 */}
                         {this.createShortcuts()}
-
                         {/* <MidBalanceShow wallet={wallet} totalBalance={totalBalance} router={this.props.navigation} /> */}
                     </View>
+                    {/* 资金记录、投注记录、无线代理 */}
                     {this.createRecordItems()}
-                    {/* <MainEntrance route={this.props.navigation} /> */}
+                    {/* 自动转账、安全设置等等 */}
                     {this.createOtherSettings()}
-
+                    {/* <MainEntrance route={this.props.navigation} /> */}
+                    {/* 退出登录按钮 */}
                     <TouchableOpacity style={styles.logoutContainer} onPress={this.onLogout}>
                         <Text style={styles.logoutText}>退出登录</Text>
                     </TouchableOpacity>
@@ -415,7 +431,7 @@ const styles = StyleSheet.create({
         height: 22,
     },
 
-    mainText: {
+    loginName: {
         color: "#fff",
         lineHeight: 24,
         fontSize: 20,
@@ -551,7 +567,7 @@ const styles = StyleSheet.create({
     },
 
     logoutText: {
-        color: '#FFFFFF',
+        color: MainTheme.SubmitTextColor,
         fontSize: 16,
     },
 

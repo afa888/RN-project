@@ -3,13 +3,13 @@ import {Image, StyleSheet, View, Text, Alert, DeviceEventEmitter} from "react-na
 import deviceValue from "../../utils/DeviceValue";
 import FastImage from 'react-native-fast-image'
 import {CAGENT} from "../../utils/Config";
-import {textTitleColor, ThemeEditTextTextColor} from "../../utils/AllColor";
+import {textTitleColor, theme_color, ThemeEditTextTextColor, commonButton2BGColor} from "../../utils/AllColor";
 import http from "../../http/httpFetch";
-import Swiper from "react-native-swiper";
 import {MarqueeHorizontal, MarqueeVertical} from 'react-native-marquee-ab';
 import {getStoreData} from "../../http/AsyncStorage";
 import SplashScreen from "react-native-splash-screen";
-
+import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
+import BetterBanner from '../../customizeview/BetterBanner'
 
 export default class HomeNoticeView extends Component<Props> {
     constructor(props) {
@@ -27,8 +27,13 @@ export default class HomeNoticeView extends Component<Props> {
 
     initView = () => {
         let iView = []
+        let iImag = [];
         for (var i = 0; i < deviceValue.imgUrl.length; i++) {
-            iView.push(<FastImage
+            if (i !== deviceValue.imgUrl.length - 1) {
+                iImag.push({uri: deviceValue.imgUrl[i]},)
+            }
+
+            iView.push(<View style={styles.slideFastView}><FastImage
                 key={i}
                 style={styles.slideFastImage}
                 source={{
@@ -37,8 +42,9 @@ export default class HomeNoticeView extends Component<Props> {
 
                 }}
                 resizeMode={FastImage.resizeMode.cover}
-            />)
+            /></View>)
         }
+        this.setState({imageView: iImag})
         console.log('lllll轮播')
         console.log(deviceValue.imgUrl)
         this.setState({imageView: iView})
@@ -100,21 +106,6 @@ export default class HomeNoticeView extends Component<Props> {
         });
     }
 
-    renderItem({item, index}) {
-        return (
-            <View style={styles.slideFastImage}>
-                <FastImage
-                    style={styles.slideFastImage}
-                    source={{
-                        uri: item,
-                        priority: FastImage.priority.high,
-
-                    }}
-                    resizeMode={FastImage.resizeMode.cover}
-                />
-            </View>
-        );
-    }
 
     renderNoticeItem({item, index}) {
         return (
@@ -128,40 +119,25 @@ export default class HomeNoticeView extends Component<Props> {
     render() {
 
         return (<View>
-            <View style={{height: deviceValue.windowWidth * 0.4}}>
-                {this.state.imageView.length > 0 && <Swiper style={styles.wrapper}
-                                                            showsButtons={false}
-                                                            autoplay={true}
-                                                            showsPagination={true}
-                                                            autoplayTimeout={4}
-                                                            loadMinimal={true}
-                                                            removeClippedSubviews={false}
-                                                            dot={<View style={{
-                                                                backgroundColor: 'rgba(0,0,0,.5)',
-                                                                width: 8,
-                                                                height: 8,
-                                                                borderRadius: 4,
-                                                                marginLeft: 3,
-                                                                marginRight: 3,
-                                                                marginTop: 3,
-                                                                marginBottom: 3,
-                                                            }}/>}
-                                                            activeDot={<View style={{
-                                                                backgroundColor: 'gray',
-                                                                width: 8,
-                                                                height: 8,
-                                                                borderRadius: 4,
-                                                                marginLeft: 3,
-                                                                marginRight: 3,
-                                                                marginTop: 3,
-                                                                marginBottom: 3
-                                                            }}/>}
-                                                            paginationStyle={{
-                                                                bottom: 3,
-                                                            }}
-                >
-                    {this.state.imageView}
-                </Swiper>}
+            <View style={{
+                width: deviceValue.windowWidth,
+                height: (deviceValue.windowWidth - 30) * (301 / 750) + 20 + 10,
+                backgroundColor: 'white',
+                flexDirection: 'column',
+                alignItems: 'center',
+                paddingTop: 10
+            }}>
+                {this.state.imageView.length > 0 && <BetterBanner
+                    style={{width: deviceValue.windowWidth - 30, marginRight: 15, marginLeft: 15,}}
+                    bannerHeight={(deviceValue.windowWidth - 30) * (301 / 750) + 20}
+                    bannerComponents={this.state.imageView}
+                    onPress={(index) => {
+                    }}
+                    isSeamlessScroll={true}
+                    indicatorGroupPosition={'center'}
+                    indicatorContainerHeight={20}
+                />}
+
             </View>
 
             <View style={styles.noticeView}>
@@ -194,10 +170,26 @@ export default class HomeNoticeView extends Component<Props> {
     }
 }
 const styles = StyleSheet.create({
-    wrapper: {height: deviceValue.windowWidth * 0.4,backgroundColor:'white'},
+    wrapper: {
+        width: deviceValue.windowWidth - 30,
+        height: (deviceValue.windowWidth - 30) * (301 / 750),
+        marginRight: 15,
+        marginLeft: 15
+
+    },
     slideFastImage: {
-        width: deviceValue.windowWidth,
-        height: deviceValue.windowWidth * 0.4,
+
+        width: deviceValue.windowWidth - 30,
+        height: (deviceValue.windowWidth - 30) * (301 / 750),
+        borderRadius: 6,
+    },
+    slideFastView: {
+        width: deviceValue.windowWidth - 30,
+        height: (deviceValue.windowWidth - 30) * (301 / 750),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 15,
+        marginRight: 15,
     },
     noticeView: {
         backgroundColor: 'white',
