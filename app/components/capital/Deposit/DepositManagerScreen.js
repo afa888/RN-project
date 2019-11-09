@@ -16,7 +16,8 @@ import {TXAlert} from "../../../tools/TXAlert"
 import { NavigationActions } from 'react-navigation';
 import TXToastManager from "../../../tools/TXToastManager"
 import Picker from 'react-native-picker';
-import {backgroundViewColor,ThemeEditTextTextColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {ThemeEditTextTextColor} from "../../../utils/AllColor"
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -412,9 +413,9 @@ export default class DepositManagerScreen extends Component<Props> {
 
     renderData() {
         return (
-            <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:{backgroundViewColor}}}>
+            <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:MainTheme.backgroundViewColor}}>
 
-                <View style={{alignItems: 'center',backgroundColor:{backgroundViewColor}}}>
+                <View style={{alignItems: 'center',backgroundColor:MainTheme.backgroundViewColor}}>
                     <View style={{paddingTop:15,height:35,width:Dimensions.get('window').width}}>
                         <Text style={{paddingLeft:10}}>支付方式</Text>
                     </View>
@@ -515,7 +516,7 @@ export default class DepositManagerScreen extends Component<Props> {
         var data={src:imgUrl}
         return (
             <View style={{width: 110,
-                backgroundColor: {backgroundViewColor},alignItems: 'center',
+                backgroundColor: MainTheme.backgroundViewColor,alignItems: 'center',
                 height: 60}}>
                 <TouchableOpacity
                     onPress={() => this.clickItem(item,index)}>
