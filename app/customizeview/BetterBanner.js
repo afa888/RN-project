@@ -175,14 +175,20 @@ export default class BetterBanner extends PureComponent {
     }
 
     setActiveIndicatorX(x) {
-        x = this.props.isSeamlessScroll ? (x - this.activeIndicatorX) : x;
-        x = Platform.OS === 'ios' ? x - this.props.indicatorGap / 2 : x;
-        this.activeIndicator.setNativeProps({style: {left: x}})
+        if(this.activeIndicator!==null){
+            x = this.props.isSeamlessScroll ? (x - this.activeIndicatorX) : x;
+            x = Platform.OS === 'ios' ? x - this.props.indicatorGap / 2 : x;
+            this.activeIndicator.setNativeProps({style: {left: x}})
+        }
+
     }
 
     setBannerTitleText(y) {
-        if (this.props.bannerTitles.length === 0) return;
-        this.bannerTitleContent.setNativeProps({style: {marginTop: -y}})
+        if(this.bannerTitleContent!==null){
+            if (this.props.bannerTitles.length === 0) return;
+            this.bannerTitleContent.setNativeProps({style: {marginTop: -y}})
+        }
+
     }
 
     onScroll(event) {
