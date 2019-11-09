@@ -116,7 +116,7 @@ export default class PhoneRegister extends Component<Props> {
                         top: 18,
                         width: 80,
                         height: 25,
-                        backgroundColor: codeSending ? '#b1b1b1' : MainTheme.SpecialColor,
+                        backgroundColor: codeSending ? MainTheme.GrayColor : MainTheme.SpecialColor,
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 3
@@ -124,7 +124,7 @@ export default class PhoneRegister extends Component<Props> {
                         {codeSending ?
                             <CountDown _openSendCode={() => this.changeSendingStatus()} /> :
                             <Text
-                                style={{ color: '#fff', fontSize: 9 }}
+                                style={{ color: MainTheme.SubmitTextColor, fontSize: 9 }}
                                 onPress={() => this.sendImgCode()}
                             >发送验证码</Text>
                         }
@@ -150,13 +150,13 @@ export default class PhoneRegister extends Component<Props> {
                         onPress={() => this.register()}
                         style={styles.reg_button}
                     >
-                        <Text style={{ color: 'white' }}>立即注册</Text>
+                        <Text style={{ color: MainTheme.SubmitTextColor }}>立即注册</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => this.gotoLogin()}
                         style={styles.login_button}
                     >
-                        <Text style={{ color: '#999999' }}>已有账号</Text>
+                        <Text style={{ color: MainTheme.GrayColor }}>已有账号</Text>
                     </TouchableOpacity>
                 </View>
             </View>

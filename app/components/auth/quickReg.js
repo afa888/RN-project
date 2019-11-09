@@ -159,70 +159,18 @@ export default class QuickRegister extends Component<Props> {
                         onPress={() => this.register()}
                         style={styles.reg_button}
                     >
-                        <Text style={{ color: 'white' }}>立即注册</Text>
+                        <Text style={{ color: MainTheme.SubmitTextColor }}>立即注册</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => this.gotoLogin()}
                         style={styles.login_button}
                     >
-                        <Text style={{ color: '#999999' }}>已有账号</Text>
+                        <Text style={{ color: MainTheme.GrayColor }}>已有账号</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         )
     }
-}
-
-function createStyle() {
-    let style = StyleSheet.create({});
-
-    style.regItem = {
-        height: 50,
-        flexDirection: 'row',
-        alignItems: 'center',
-    };
-
-    style.count_img = {
-        resizeMode: 'contain',
-        width: 20,
-        height: 22,
-    };
-
-    style.count_text = {
-        height: 40,
-        width: 320,
-        marginLeft: 5,
-        borderBottomWidth: 0.8,
-        borderBottomColor: MainTheme.GrayColor,
-    };
-
-    style.count_text_hilighted = {
-        borderBottomColor: MainTheme.SpecialColor,
-    }
-
-    style.reg_button = {
-        height: 46,
-        width: 320,
-        backgroundColor: MainTheme.SpecialColor,
-        marginTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 3
-    };
-
-    style.login_button = {
-        height: 46,
-        width: 320,
-        backgroundColor: '#EEEEEE',
-        marginTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 3,
-        borderWidth: 0.1,
-        borderColor: '#999999',
-    };
-
-    return style;
 }
 
 const styles = StyleSheet.create({
