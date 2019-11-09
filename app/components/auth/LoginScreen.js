@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     count_text: { height: 40, width: 300, marginLeft: 0 },
 
     login_button_title: {
-        color: 'white'
+        color: MainTheme.SubmitTextColor,
     },
 
     register_button: {
