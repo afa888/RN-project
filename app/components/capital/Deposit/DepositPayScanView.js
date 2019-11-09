@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
 import Dimensions from 'Dimensions'
-import { ImageBackground,Swiper,FlatList,ScrollView,RefreshControl} from 'react-native';
+import {TouchableWithoutFeedback,ImageBackground,Swiper,FlatList,ScrollView,RefreshControl} from 'react-native';
 import TXInput from "../../../tools/TXInput"
 import FastImage from 'react-native-fast-image'
 import Picker from 'react-native-picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Tips from './DepositTipsView'
 import TXToastManager from "../../../tools/TXToastManager"
+import {backgroundViewColor,commonButtonBGColor,commonButton2BGColor,
+        commonButtonTitleColor,textTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
+
 
 //扫码
 export default class PayScan extends Component<Props> {
@@ -19,6 +22,42 @@ export default class PayScan extends Component<Props> {
     handleIndexChange = (index) => {
       this.props.onChange('scanSelectedIndex', index)
     }
+
+    // handleIndexChange = (index) => {
+    //   this.props.onChange('money', '')
+    //   this.props.onChange('payTypeSelectedIndex', index)
+    // }
+
+    //此函数用于为给定的item生成一个不重复的key
+  //若不指定此函数，则默认抽取item.key作为key值。若item.key也不存在，则使用数组下标index。
+  _keyExtractor = (item, index) => index;
+  _keyTypeExtractor = (item, index) => 100 + index;
+
+  _renderTypeItem = ({item, index}) => {
+
+    let choosed = this.props.params.scanSelectedIndex == index;
+    let bgcolor =  choosed ? commonButtonBGColor : commonButton2BGColor;
+    let textColor = choosed ? commonButtonTitleColor : textTitleColor;
+    return (
+        <View style={{padding:5}}>
+            <View style={{width: 80,
+                backgroundColor: bgcolor,justifyContent:'center',
+                height: 25}}>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={this.handleIndexChange.bind(this, index)}>
+                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'
+                    }}>
+                    <Text style={{color:textColor}}>{String(item)}</Text>
+                    </View>
+
+                </TouchableOpacity>
+            </View>
+        </View>
+
+
+    );
+  }
 
     render () {
         var titleArr = [];
@@ -38,22 +77,33 @@ export default class PayScan extends Component<Props> {
 
         var imgUrl = this.props.params.currentPayModel.cagentPayerPOList[this.props.params.scanSelectedIndex].accountimg;
         return (
-            <View style={{alignItems:'center'}}>
-                <View style={{flexDirection: 'row',height:20,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10,fontSize:10,color:'#8B8B8B',height:15}}>只能扫描支付哦, 如有疑问请联系</Text>
-                    <Text style={{fontSize:10,color:'red',height:15}} onPress={this.props.onShowCustomer}>“在线客服” </Text>
+            <View style={{flex:1,justifyContent:'center'}}>
+                <View style={{paddingTop:0,height:25,width:Dimensions.get('window').width}}>
+                        <Text style={{paddingLeft:10}}>支付渠道</Text>
+                    </View>
 
-                </View>
+                    <FlatList
+                        style={styles.flatListStyle}
+                        data={titleArr}
+                        listKey = {'type'}
+                        keyExtractor={this._keyTypeExtractor}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                          //是一个可选的优化，用于避免动态测量内容尺寸的开销，不过前提是你可以提前知道内容的高度。
+                          //如果你的行高是固定的，getItemLayout用起来就既高效又简单.
+                          //注意如果你指定了SeparatorComponent，请把分隔线的尺寸也考虑到offset的计算之中
+                        getItemLayout={(data, index) => ( {length: 44, offset: (44 + 1) * index, index} )}
+                        renderItem={this._renderTypeItem}
+                    />
 
-                <View style={{paddingTop:10,width:300}}>
-                    <SegmentedControlTab
-                        values={titleArr}
-                        selectedIndex={this.props.params.scanSelectedIndex}
-                        onTabPress={this.handleIndexChange}
-                        />
-
-                    <View style={{alignItems:'center',paddingTop:20}}>
-                        <FastImage
+                    <View style={{flexDirection:'column',alignItems:'center',paddingTop:20}}>
+                        
+                        <TouchableWithoutFeedback
+                            onLongPress={() => {
+                                alert('长按')
+                            }} 
+                        >
+                            <FastImage
                                     style={{
                                         width: 150,
                                         height: 150,
@@ -61,21 +111,28 @@ export default class PayScan extends Component<Props> {
                                     source={{
                                         uri: imgUrl,
                                     }}
+                                
                             />
+                        </TouchableWithoutFeedback>
+                        
+                        <View style={{width:Dimensions.get('window').width,alignItems:'center',height:30,backgroundColor:backgroundViewColor}}>
+                            <Text style={{fontSize:12,color:textThreeHightTitleColor,marginTop:10,alignItems:'center'}}>长按可保存二维码</Text>
+                        </View>
+
                     </View>
-                </View>
+                
 
                 <View style={{height:10}}>
                 </View>
-                <TXInput label="充值金额"  forbiddenDot={true} keyboardType = 'numeric' placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
+                <TXInput label="金额"  forbiddenDot={true} keyboardType = 'numeric' placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
                 <View style={{height:10}}>
                 </View>
                 <TXInput label="订单号" placeholder="请输入订单号后四位" maxLength={4} textAlign='right' onChange={(value) => this.props.onChange('orderNum', value)} value={this.props.params.orderNum || ''}/>
                 <View style={{paddingTop:20,alignItems: 'center',height:60}}>
                         <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                         <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
+                         <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
 
-                            <Text style={{color:'#ffffff',fontSize:17}}>下一步</Text>
+                            <Text style={{color:commonButtonTitleColor,fontSize:17}}>下一步</Text>
                          </View>
                     </TouchableOpacity>
                     </View>
@@ -98,8 +155,7 @@ const styles = StyleSheet.create({
   flatListStyle:{
     color:'red',
     fontSize:16,
-    paddingTop:5,
-    backgroundColor:'#efeff4',
+    paddingTop:5
   }
 });
 
