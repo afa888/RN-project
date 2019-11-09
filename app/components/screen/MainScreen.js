@@ -8,6 +8,7 @@ import LoginScreen from '../auth/LoginScreen'
 
 import {createStackNavigator, createBottomTabNavigator, createAppContainer} from 'react-navigation';
 import HomeScreen from "../home/HomeScreen";
+import NoticeScreen from "../home/NoticeScreen";
 import GameScreen from "../game/GameScreen";
 import GameListScreen from "../game/GameListScreen";
 import SeachGameListScreen from "../game/SeachGameListScreen";
@@ -53,8 +54,8 @@ const DepositStack = createStackNavigator({
     Deposit: {screen: DepositManagerScreen},
 });
 
-const CustomerServiceStack = createStackNavigator({
-    CustomerService: {screen: CustomerServiceScreen},
+const DiscountsScreenStack = createStackNavigator({
+    DiscountsScreen: {screen: DiscountsScreen},
 });
 
 const LoginStack = createStackNavigator({
@@ -69,14 +70,14 @@ const LoginBeforeTabs = {
     首页: {screen: HomeStack},
     分类: {screen: CategoryStack},
     注册: {screen: RegisterStack, navigationOptions: {tabBarVisible: false}},
-    优惠: {screen: CustomerServiceStack},
+    优惠: {screen: DiscountsScreenStack},
     登录: {screen: LoginStack, navigationOptions: {tabBarVisible: false}}
 };
 const LoginAfterTabs = {
     首页: {screen: HomeStack},
     分类: {screen: CategoryStack},
     存款: {screen: DepositStack, navigationOptions: {tabBarVisible: false,color:theme_color},color: theme_color},
-    优惠: {screen: CustomerServiceStack},
+    优惠: {screen: DiscountsScreenStack},
     会员中心: {screen: MemberCenterIndexStack}
 };
 export default class MainScreen extends Component<Props> {
@@ -185,8 +186,9 @@ export default class MainScreen extends Component<Props> {
             WithdrawalScreen: {screen: WithdrawalScreen},
             DepositPayResultScreen : {screen : DepositPayResultScreen},
             LoginService: {screen: LoginScreen},
-            Discount:{screen:DiscountsScreen},
+            CustomerServiceScreen:{screen:CustomerServiceScreen},
             DiscountDetail:{screen:DiscountsDitailScreen},
+            NoticeScreen:{screen:NoticeScreen},
             CommonWebviewScreen:{screen:CommonWebviewScreen},
             SecurityManagerScreen : {screen : SecurityManagerScreen},
             ChangeLoginPwdScreen : {screen : ChangeLoginPwdScreen},
