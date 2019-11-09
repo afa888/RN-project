@@ -122,7 +122,9 @@ export default class BetterBanner extends PureComponent {
     }
 
     scrollTo(x, showAnim = true) {
-        this.scrollView.scrollTo({x: x, animated: showAnim});
+        if (this.scrollView !== null) {
+            this.scrollView.scrollTo({x: x, animated: showAnim});
+        }
     }
 
     getBannerView() {
@@ -179,7 +181,7 @@ export default class BetterBanner extends PureComponent {
     }
 
     setBannerTitleText(y) {
-        if(this.props.bannerTitles.length === 0) return;
+        if (this.props.bannerTitles.length === 0) return;
         this.bannerTitleContent.setNativeProps({style: {marginTop: -y}})
     }
 
@@ -322,7 +324,7 @@ export default class BetterBanner extends PureComponent {
             alignSelf: 'flex-end',
         };
 
-        if(bannerTitles.length === 0) {
+        if (bannerTitles.length === 0) {
             if (indicatorGroupPosition === "left") {
 
                 p_style.alignSelf = 'flex-start'
@@ -348,8 +350,8 @@ export default class BetterBanner extends PureComponent {
         const {bannerHeight, indicatorGroupSideOffset, indicatorContainerHeight, indicatorContainerBackgroundColor} = this.props
         return (
             this.currentBannerData.length === 0
-                ? <View style={[styles.container,styles.noDataContainer, {height: bannerHeight}]}>
-                    <Text style={{color: '#fff',fontSize: 24,marginBottom:10}}>There is no banner data</Text>
+                ? <View style={[styles.container, styles.noDataContainer, {height: bannerHeight}]}>
+                    <Text style={{color: '#fff', fontSize: 24, marginBottom: 10}}>There is no banner data</Text>
                     <Text style={{color: '#fff', fontSize: 14}}>Please add</Text>
                     <Text style={{color: '#fff', fontSize: 14}}>bannerComponents or bannerImages</Text>
                 </View>
@@ -399,9 +401,9 @@ const styles = StyleSheet.create({
         width: width,
     },
     noDataContainer: {
-        backgroundColor:'#1997fc',
-        alignItems:'center',
-        justifyContent:'center'
+        backgroundColor: '#1997fc',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     bannerContent: {
         width: width,
