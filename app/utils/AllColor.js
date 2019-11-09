@@ -43,7 +43,7 @@ export class MainTheme {
     // 普通文本颜色
     static TextTitleColor = textTitleColor;
     // 视图的背景色
-    static BackgroundColor = backgroundViewColor;
+    static BackgroundColor = '#FFFFFF';
     // 提交按钮的文本的颜色
     static SubmitTextColor = '#FFFFFF';
 };
