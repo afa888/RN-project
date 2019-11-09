@@ -1,6 +1,6 @@
 import {FlatList, Image, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import React, {Component} from "react";
-import {theme_color} from "../../utils/AllColor";
+import {textTitleColor, theme_color} from "../../utils/AllColor";
 import deviceValue from "../../utils/DeviceValue";
 import FastImage from 'react-native-fast-image'
 
@@ -54,10 +54,11 @@ export default class HomeMidView extends Component<Props> {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                paddingLeft: 12,
-                paddingRight: 12
+                paddingLeft: 15,
+                paddingRight: 15
             }}>
-                <Text style={{fontWeight: 'bold',}}>平台推荐</Text>
+                <View style={{backgroundColor:theme_color,height:20,width:5}}/>
+                <Text style={{fontWeight: 'bold',marginLeft:5,color:textTitleColor}}>平台推荐</Text>
 
                 <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}>精彩荟萃，激情无限</Text>
                 <TouchableOpacity onPress={ ()=>{this.props.goMoreGame('navigate')}  }>

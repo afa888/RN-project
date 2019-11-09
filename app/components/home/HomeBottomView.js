@@ -1,6 +1,6 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import React, {Component} from "react";
-import {theme_color} from "../../utils/AllColor";
+import {textTitleColor, theme_color} from "../../utils/AllColor";
 import deviceValue from "../../utils/DeviceValue";
 import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
@@ -47,10 +47,11 @@ export default class HomeBottomView extends Component<Props> {
                 justifyContent: 'space-between',
                 marginTop: 12,
                 alignItems: 'center',
-                paddingLeft: 12,
-                paddingRight: 12
+                paddingLeft: 15,
+                paddingRight: 15
             }}>
-                <Text style={{fontWeight: 'bold',}}>精选大促</Text>
+                <View style={{backgroundColor:theme_color,height:20,width:5}}/>
+                <Text style={{fontWeight: 'bold',marginLeft:5,color:textTitleColor}}>精选大促</Text>
 
                 <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}>各种优惠为您撑腰</Text>
                 <TouchableOpacity onPress={() => {
