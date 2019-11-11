@@ -36,7 +36,9 @@ import PersonSetting from "../memberCenter/personSetting/PersonSetting"
 import ContactSetting from "../memberCenter/personSetting/ContactSetting"
 import AssetDetailScreen from "../memberCenter/AssetDetailScreen"
 import HelpScreen from "../memberCenter/help/helpScreen";
-import {theme_color} from "../../utils/AllColor";
+import AboutPage from '../memberCenter/help/AboutPage';
+    
+import { theme_color } from "../../utils/AllColor";
 
 const HomeStack = createStackNavigator({
     Home: {screen: HomeScreen,},
@@ -200,7 +202,8 @@ export default class MainScreen extends Component<Props> {
             PersonSetting:{screen:PersonSetting},
             ContactSetting:{screen:ContactSetting},
             AssetDetailScreen:{screen:AssetDetailScreen},
-            HelpScreen:{screen:HelpScreen}
+            HelpScreen: { screen: HelpScreen },
+            AboutPage: { screen: AboutPage},
         },
         {
             initialRouteName: this.state.initRoute,

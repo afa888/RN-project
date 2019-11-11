@@ -146,7 +146,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
                 break;
             case '关于':
-
+                this.props.navigation.navigate('AboutPage');
                 break;
             default:
                 break;
