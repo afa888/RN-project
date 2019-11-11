@@ -8,8 +8,8 @@ import Picker from 'react-native-picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Tips from './DepositTipsView'
 import TXToastManager from "../../../tools/TXToastManager"
-import {backgroundViewColor,commonButtonBGColor,commonButton2BGColor,
-        commonButtonTitleColor,textTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {textTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
 
 
 //扫码
@@ -36,8 +36,8 @@ export default class PayScan extends Component<Props> {
   _renderTypeItem = ({item, index}) => {
 
     let choosed = this.props.params.scanSelectedIndex == index;
-    let bgcolor =  choosed ? commonButtonBGColor : commonButton2BGColor;
-    let textColor = choosed ? commonButtonTitleColor : textTitleColor;
+    let bgcolor =  choosed ? MainTheme.commonButtonBGColor : MainTheme.commonButton2BGColor;
+    let textColor = choosed ? MainTheme.commonButtonTitleColor : MainTheme.textTitleColor;
     return (
         <View style={{padding:5}}>
             <View style={{width: 80,
@@ -115,7 +115,7 @@ export default class PayScan extends Component<Props> {
                             />
                         </TouchableWithoutFeedback>
                         
-                        <View style={{width:Dimensions.get('window').width,alignItems:'center',height:30,backgroundColor:backgroundViewColor}}>
+                        <View style={{width:Dimensions.get('window').width,alignItems:'center',height:30,backgroundColor:MainTheme.backgroundViewColor}}>
                             <Text style={{fontSize:12,color:textThreeHightTitleColor,marginTop:10,alignItems:'center'}}>长按可保存二维码</Text>
                         </View>
 
@@ -130,9 +130,9 @@ export default class PayScan extends Component<Props> {
                 <TXInput label="订单号" placeholder="请输入订单号后四位" maxLength={4} textAlign='right' onChange={(value) => this.props.onChange('orderNum', value)} value={this.props.params.orderNum || ''}/>
                 <View style={{paddingTop:20,alignItems: 'center',height:60}}>
                         <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                         <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
+                         <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
-                            <Text style={{color:commonButtonTitleColor,fontSize:17}}>下一步</Text>
+                            <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>下一步</Text>
                          </View>
                     </TouchableOpacity>
                     </View>

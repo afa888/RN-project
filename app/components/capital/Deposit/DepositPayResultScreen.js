@@ -5,6 +5,7 @@ import TXInput from "../../../tools/TXInput"
 import QRCode from 'react-native-qrcode';
 import {getStoreData} from "../../../http/AsyncStorage";
 import { WebView } from 'react-native-webview';
+import MainTheme from "../../../utils/AllColor"
 
 let timeCount = 59*60+59
 
@@ -61,7 +62,7 @@ export default class DepositPayResultScreen extends Component<Props> {
         }
         else if(resType == '2'){
              return(
-                <View style={{backgroundColor:'#000000',height:Dimensions.get('window').height}}>
+                <View style={{backgroundColor:MainTheme.backgroundColor,height:Dimensions.get('window').height}}>
                   <View style={{marginTop:20,alignItems:'center'}}>
                     <QRCode
                       value={params.data}
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     Text_style: {
         fontSize:15,
         paddingLeft:10,
-        color:'#FFFFFF',
+        color:MainTheme.backgroundColor,
     },
     Text_RStyle: {
       fontSize:15,
@@ -120,6 +121,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingVertical: 0,
-        backgroundColor:'#efeff4'
+        backgroundColor:MainTheme.backgroundColor
     }
 });

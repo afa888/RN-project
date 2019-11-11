@@ -16,17 +16,9 @@ export default class PlatformTransfer extends Component<Props> {
         const params = navigation.state.params || {};
 
         return {
-          title: '平台转账',
+          title: '转账',
           headerBackTitle:null,
           headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
-          headerRight: (
-            <TouchableOpacity onPress={() => {
-                    Picker.hide()
-                    navigation.navigate('DepositManagerScreen',{isNotFromHome:true})
-                }}>
-                    <Text style={{paddingRight:10,fontSize:17,color:'#CFA359'}}>先去存款</Text>
-                </TouchableOpacity>
-          ),
           headerLeft: (
             <TouchableOpacity onPress={() => {
                     Picker.hide()

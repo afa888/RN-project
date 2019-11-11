@@ -7,8 +7,8 @@ import {mergeStoreData} from "../../../http/AsyncStorage";
 import { NavigationActions } from 'react-navigation';
 import {TXAlert} from "../../../tools/TXAlert"
 import TXToastManager from "../../../tools/TXToastManager"
-import {backgroundViewColor,textThreeHightTitleColor,tipsSpecialTextColor,
-    commonButtonBGColor,commonButtonTitleColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {textThreeHightTitleColor} from "../../../utils/AllColor"
 
 export default class SettingCapitalPwdScreen extends Component<Props> {
 
@@ -85,7 +85,7 @@ export default class SettingCapitalPwdScreen extends Component<Props> {
 
     render() {
         return (
-            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:backgroundViewColor}}>
+            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:MainTheme.backgroundViewColor}}>
                 <View style={{paddingTop:10,height:2,width:Dimensions.get('window').width}}>
 
                 </View>
@@ -93,13 +93,13 @@ export default class SettingCapitalPwdScreen extends Component<Props> {
                 <TXInput label="确认新密码" forbiddenDot={true} keyboardType = 'numeric'  secureTextEntry={true} maxLength={4} placeholder="请再次填写新密码" textAlign='right' onChange={(value) => this._onChange('rePassword', value)} value={this.state.rePassword || ''}/>
                 <View style={{paddingLeft:14,paddingTop:15,flexDirection: 'row',alignItems: 'center',justifyContent:'flex-start',height:30,width:Dimensions.get('window').width}}>
                     <Text style={{fontSize:10,color:textThreeHightTitleColor}}>注:提款密码限制为</Text>
-                    <Text style={{fontSize:10,color:tipsSpecialTextColor}}>4位数字</Text>
+                    <Text style={{fontSize:10,color:MainTheme.tipsSpecialTextColor}}>4位数字</Text>
                 </View>
                 <View style={{paddingTop:20,alignItems: 'center'}}>
                     <TouchableOpacity  onPress={() => this._onSettingPWD()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:commonButtonBGColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
+                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.commonButtonBGColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
-                        <Text style={{color:commonButtonTitleColor,fontSize:17}}>设置</Text>
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>设置</Text>
                      </View>
                 </TouchableOpacity>
                 </View>

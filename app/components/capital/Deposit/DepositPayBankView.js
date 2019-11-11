@@ -6,7 +6,8 @@ import TXInput from "../../../tools/TXInput"
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Tips from './DepositTipsView'
 import Picker from 'react-native-picker';
-import {textTitleColor,commonButtonBGColor,commonButtonTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {textTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -99,9 +100,9 @@ export default class PayBank extends Component<Props> {
             <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder="单笔限额100~2000000(元)" textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
             <View style={{paddingTop:20,alignItems: 'center',height:60}}>
                     <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:commonButtonBGColor}}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
-                        <Text style={{color:commonButtonTitleColor,fontSize:17}}>下一步</Text>
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>下一步</Text>
                      </View>
                 </TouchableOpacity>
                 </View>
