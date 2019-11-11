@@ -14,9 +14,9 @@ export default class HelpScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.setState({
-            url: BASE_H5_URL + 'aboutOne',
-        });
+        this.state = {
+            url: BASE_H5_URL + 'help',
+        };
     }
 
     /**
@@ -26,7 +26,6 @@ export default class HelpScreen extends Component {
     _handleMessage() {
         this.props.navigation.dispatch(NavigationActions.back());
     }
-
 
     render() {//aboutOne
         return (
