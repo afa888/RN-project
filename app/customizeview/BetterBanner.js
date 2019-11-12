@@ -13,7 +13,7 @@ import {
     Platform,
     TouchableOpacity
 } from 'react-native';
-import {textTitleColor, theme_color, ThemeEditTextTextColor, commonButton2BGColor} from "../utils/AllColor";
+import {textTitleColor, theme_color, ThemeEditTextTextColor, MainTheme} from "../utils/AllColor";
 
 const {width} = Dimensions.get('window');
 
@@ -32,7 +32,7 @@ export default class BetterBanner extends PureComponent {
         adaptSeamlessScrollValue: false, // 无缝滚动显示异常时修改此值
         indicatorWidth: 10,
         indicatorHeight: 3,
-        indicatorColor: commonButton2BGColor,
+        indicatorColor: MainTheme.LightGrayColor,
         indicatorStyle: {},
         indicatorGap: 6, // 2个指示器之间的间隙
         activeIndicatorColor: theme_color,
@@ -216,8 +216,11 @@ export default class BetterBanner extends PureComponent {
         if (this.isIndicatorScrollEnd()) {
             return;
         }
-        this.setActiveIndicatorX(indicatorX);
-
+        console.log("indicatorX== "+indicatorX)
+        if(!isNaN(indicatorX)){
+            console.log("indicatorX2== "+indicatorX)
+            this.setActiveIndicatorX(indicatorX);
+        }
     }
 
     onTouchStart() {

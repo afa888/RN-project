@@ -36,60 +36,68 @@ import CodePush from 'react-native-code-push'
 export default class HomeScreen extends Component<Props> {
 
 
-    static navigationOptions = {
-        headerTitle: <View style={{flex: 1, alignItems: "center"}}>
-            <Image source={require('../../static/img/banner.png')}
-                   style={{
-                       flex: 1,
-                       resizeMode: 'cover',
-                       width: 150,
-                       height: 20,
-                   }}/>
-        </View>,
-        headerRight: <View
-            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 12}}>
-            <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-
-            }}>
-                <View style={{
-                    flexDirection: 'column',
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle: <View style={{flex: 1, alignItems: "center"}}>
+                <Image source={require('../../static/img/banner.png')}
+                       style={{
+                           flex: 1,
+                           resizeMode: 'cover',
+                           width: 150,
+                           height: 20,
+                       }}/>
+            </View>,
+            headerRight: <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    width: 28,
-                    height: 48,
-                    justifyContent: 'center'
+                    marginRight: 12
                 }}>
-                    <Image
-                        source={require('../../static/img/nav_icon_email_nor.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 18,
-                            height: 18,
-                        }}/>
-                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
 
-            }}>
-                <View style={{
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    width: 28,
-                    height: 48,
-                    justifyContent: 'center'
                 }}>
-                    <Image
-                        source={require('../../static/img/nav_icon_kefu_nor.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 18,
-                            height: 18,
-                        }}/>
-                    <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
+                    <View style={{
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        width: 28,
+                        height: 48,
+                        justifyContent: 'center'
+                    }}>
+                        <Image
+                            source={require('../../static/img/nav_icon_email_nor.png')}
+                            style={{
+                                resizeMode: 'contain',
+                                width: 18,
+                                height: 18,
+                            }}/>
+                        <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+                    navigation.navigate('CustomerService')
 
+                }}>
+                    <View style={{
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        width: 28,
+                        height: 48,
+                        justifyContent: 'center'
+                    }}>
+                        <Image
+                            source={require('../../static/img/nav_icon_kefu_nor.png')}
+                            style={{
+                                resizeMode: 'contain',
+                                width: 18,
+                                height: 18,
+                            }}/>
+                        <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        }
     }
 
     componentWillMount() {
@@ -131,11 +139,9 @@ export default class HomeScreen extends Component<Props> {
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
         }
-       // this.setState({isDialogVisible: blo, noticeTitle: noticeList});
-        this.props.navigation.navigate('NoticeScreen',{data:noticeList})
+        // this.setState({isDialogVisible: blo, noticeTitle: noticeList});
+        this.props.navigation.navigate('NoticeScreen', {data: noticeList})
     }
-
-
 
 
     // http://m.txbet1788.com/TXW/game/getPageTabRecommend?src=TXW&cagent=TXW&terminal=2
@@ -237,7 +243,7 @@ export default class HomeScreen extends Component<Props> {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
-           {/*     <ModalDialog
+                {/*     <ModalDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isDialogVisible}
                     _dialogLeftBtnAction={() => {
@@ -260,7 +266,7 @@ export default class HomeScreen extends Component<Props> {
                 <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
                     <View style={{flex: 1}}>
                         <HomeNoticeView showDialog={
-                           this.showDialog.bind(this)
+                            this.showDialog.bind(this)
                         }/>
 
                         <HomeMidView data={this.state.data.gameClassifyEntities}
