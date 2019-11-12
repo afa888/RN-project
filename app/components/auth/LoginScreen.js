@@ -8,6 +8,7 @@ import TXToastManager from "../../tools/TXToastManager";
 import { RememberUserKey, UserNameKey, UserPwdKey } from "../../http/AsyncStorage";
 import AsyncStorage from '@react-native-community/async-storage';
 import MainTheme from "../../utils/AllColor";
+import { TXSwitch } from "../../customizeview/TXSwitch";
 
 export default class LoginScreen extends Component<Props> {
     static navigationOptions = {
@@ -169,27 +170,51 @@ export default class LoginScreen extends Component<Props> {
                                 onFocus={() => this.setState({ isPwdFocused: true })}
                                 onChangeText={(password) => this.setState({ password: password.trim() })}
                             />
-                            <Switch
-                                style={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: 5,
-                                }}
-                                thumbColor={'white'}
-                                ios_backgroundColor={MainTheme.GrayColor}
-                                trackColor={{ false: MainTheme.GrayColor, true: MainTheme.SpecialColor }}
-                                value={this.state.passWordShow}
-                                onValueChange={(value) => this.setState({ passWordShow: value })}
-                            />
+                            <View style={{ position: 'absolute', right: 0, top: 5, }}>
+                                <TXSwitch
+                                    value={passWordShow}
+                                    onValueChange={(val) => this.setState({ passWordShow: val })}
+                                    disabled={false}
+                                    activeText={'123'}
+                                    inActiveText={'***'}
+                                    circleSize={24}
+                                    barHeight={25}
+                                    backgroundActive={MainTheme.SpecialColor}
+                                    backgroundInactive={MainTheme.LightGrayColor}
+                                    changeValueImmediately={true}
+                                    renderInsideCircle={() => <View style={styles.switch_pwd_ball} />}
+                                    innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
+                                    renderActiveText={true}
+                                    renderInActiveText={true}
+                                    switchLeftPx={5}
+                                    switchRightPx={5}
+                                    switchWidthMultiplier={2.2}
+                                    switchBorderRadius={12.5}
+                                />
+                            </View>
                         </View>
                         <View style={this.state.isPwdFocused ? styles.divide_view_highlighted : styles.divide_view} />
                         <View style={styles.remember_pwd_container}>
                             <Text style={styles.remember_pwd_title}>记住密码</Text>
-                            <Switch style={{}}
+                            <TXSwitch
                                 value={this.state.rememberPwd}
-                                ios_backgroundColor={MainTheme.GrayColor}
-                                trackColor={{ false: MainTheme.GrayColor, true: MainTheme.SpecialColor }}
-                                onValueChange={(value) => this.setState({ rememberPwd: value })}
+                                onValueChange={(val) => this.setState({ rememberPwd: val })}
+                                disabled={false}
+                                activeText={'√'}
+                                inActiveText={'X'}
+                                circleSize={15}
+                                barHeight={15}
+                                backgroundActive={MainTheme.SpecialColor}
+                                backgroundInactive={MainTheme.LightGrayColor}
+                                changeValueImmediately={true}
+                                renderInsideCircle={() => <View style={styles.switch_remember_pwd_ball} />}
+                                innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
+                                renderActiveText={true}
+                                renderInActiveText={true}
+                                switchLeftPx={5}
+                                switchRightPx={5}
+                                switchWidthMultiplier={2.2}
+                                switchBorderRadius={7.5}
                             />
                         </View>
                         <TouchableOpacity
@@ -205,8 +230,6 @@ export default class LoginScreen extends Component<Props> {
                             </Text>
                         </TouchableOpacity>
                     </View>
-
-
                 </View>
             </SafeAreaView>
         );
@@ -233,7 +256,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginTop: 20,
     },
-    
+
     pass_hide_img: {
         resizeMode: 'cover',
         width: 26,
@@ -283,6 +306,24 @@ const styles = StyleSheet.create({
         color: '#999999',
         fontSize: 15,
         flex: 1,
+    },
+
+    switch_pwd_ball: {
+        height: 25,
+        width: 25,
+        borderRadius: 12.5,
+        borderWidth: 0.5,
+        borderColor: MainTheme.LightGrayColor,
+        backgroundColor: MainTheme.BackgroundColor, 
+    },
+
+    switch_remember_pwd_ball: {
+        height: 15,
+        width: 15,
+        borderRadius: 7.5,
+        borderWidth: 0.5,
+        borderColor: MainTheme.LightGrayColor,
+        backgroundColor: MainTheme.BackgroundColor,
     },
 
     divide_view: {
