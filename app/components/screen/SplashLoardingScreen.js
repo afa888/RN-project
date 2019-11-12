@@ -35,8 +35,8 @@ import httpBaseManager from "../../http/httpBaseManager";
 let codePushOptions = {
     //设置检查更新的频率
     //ON_APP_RESUME APP恢复到前台的时候
-    //ON_APP_START APP开启的时候
-    //MANUAL 手动检查
+    //ON_APP_START APP开启的时候自动更新
+    //MANUAL 手动检查然后点击提示框更新
     checkFrequency: CodePush.CheckFrequency.MANUAL
 };
 

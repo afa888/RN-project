@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
-
 import {
     ScrollView, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet,
 } from "react-native";
+import { WebView } from 'react-native-webview';
+import { BASE_H5_URL } from "../../../utils/Config";
 import MainTheme from '../../../utils/AllColor';
+
+/**
+ * 是否使用原生的关于页面
+ * true：ReactNative， false：H5页面
+ */
+const USING_NATIVE_ABOUT_PAGE = true;
 
 export default class AboutPage extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
-        return {
-            title: '关于',
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
-            headerLeft: (
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={styles.backItem} />
-                </TouchableOpacity>
-            )
+        if (USING_NATIVE_ABOUT_PAGE) {
+            return {
+                title: '关于',
+                headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
+                headerLeft: (
+                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                        <Image source={require('../../../static/img/titlebar_back_normal.png')}
+                            style={styles.backItem} />
+                    </TouchableOpacity>
+                )
+            };
+        } else return {
+            header: null,  //隐藏顶部导航栏
         };
     };
 
@@ -23,6 +34,9 @@ export default class AboutPage extends Component<Props> {
         super(props);
 
         this.state = {
+            // H5关于页面的地址
+            aboutUrl: BASE_H5_URL + 'aboutOne',
+            // Native关于页面的文本
             content: '\t业精于专，功成于勤！天下网络集团，专业系统提供商、支付快充系统及API游戏供应商。 ' +
                 '我司秉承诚信、专业、勤奋、责任的企业文化，坚持技术创新、稳健务实，300+技术开发工程师致力' +
                 '于产品的创新与提升，协助客户从品牌价值出发，立足网络，将产品定位于国际市场，' +
@@ -33,16 +47,50 @@ export default class AboutPage extends Component<Props> {
 
     }
 
+    createContentView = () => {
+        if (USING_NATIVE_ABOUT_PAGE) {
+            return this.createNativeAboutCtrl();
+        }
+        else {
+            return this.createH5AboutPage();
+        }
+    }
+
+    createNativeAboutCtrl = () => {
+        return (
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image style={styles.logoImage}
+                    source={require('../../../static/img/UserCenter/userCenter_about_logo.png')} />
+                <Image style={styles.centerImage}
+                    source={require('../../../static/img/UserCenter/userCenter_about_content.png')} />
+                <Text style={styles.bottomText}>{this.state.content}</Text>
+            </ScrollView>
+        );
+    }
+
+    createH5AboutPage = () => {
+        return (
+            <WebView
+                automaticallyAdjustContentInsets={false}
+                source={{ uri: this.state.aboutUrl }}
+                javaScriptEnabled={true}
+                onMessage={this._handleMessage.bind(this)}
+            />
+        );
+    }
+
+    /**
+    * 接受 H5 window.ReactNativeWebView.postMessage('') 传递过来的事件
+    * @private
+    */
+    _handleMessage() {
+        this.props.navigation.dispatch(NavigationActions.back());
+    }
+
     render() {
         return (
-            <SafeAreaView style={{flex:1}}>
-                <ScrollView contentContainerStyle={styles.container}>
-                    <Image style={styles.logoImage}
-                        source={require('../../../static/img/UserCenter/userCenter_about_logo.png')} />
-                    <Image style={styles.centerImage}
-                        source={require('../../../static/img/UserCenter/userCenter_about_content.png')} />
-                    <Text style={styles.bottomText}>{this.state.content}</Text>
-                </ScrollView>
+            <SafeAreaView style={{ flex: 1 }}>
+                {this.createContentView()}
             </SafeAreaView>
         );
     }
@@ -77,7 +125,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         color: MainTheme.DarkGrayColor,
         fontSize: 12,
-        lineHeight:20,
+        lineHeight: 20,
     },
 
 });
