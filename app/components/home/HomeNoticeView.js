@@ -218,27 +218,28 @@ const styles = StyleSheet.create({
 
 
 /*
-android   TxwApp-Android
+android   TxwNewApp-Android
 ┌────────────┬──────────────────────────────────────────────────────────────────┐
 │ Name       │ Deployment Key                                                   │
 ├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Production │ Xwfz7ALB9oJaP7G8A7bFYPeYQHo-da47032d-cfef-49c4-b776-6f80bc1dca31 │
+│ Production │ 59DX_8H9j0WuIGP7c5603AdtKqzZda47032d-cfef-49c4-b776-6f80bc1dca31 │
 ├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Staging    │ 5rCSFvlkRjP2-j2xxDZCUPPzsjIOda47032d-cfef-49c4-b776-6f80bc1dca31 │
-
-
-
-ios   TxwApp-Ios
-┌────────────┬──────────────────────────────────────────────────────────────────┐
-│ Name       │ Deployment Key                                                   │
-├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Production │ NbX0t2wa8f1gWrVzktpD4rDpa-Akda47032d-cfef-49c4-b776-6f80bc1dca31 │
-├────────────┼──────────────────────────────────────────────────────────────────┤
-│ Staging    │ NoVa5UDgVQItvFCsI413AjcLVgQ6da47032d-cfef-49c4-b776-6f80bc1dca31 │
+│ Staging    │ KhevFYxB713Xuvor6LmrqDqFJ_q_da47032d-cfef-49c4-b776-6f80bc1dca31 │
 └────────────┴──────────────────────────────────────────────────────────────────┘
 
-*/
 
-/*code-push release-react TxwApp-Android android -t 1.0.0 -d Production --des '右侧菜单' -m true
-code-push release-react TxwApp-Ios ios -t 1.0.0 -d Production --des '右侧菜单' -m true
+
+ios   TxwNewApp-Ios
+┌────────────┬──────────────────────────────────────────────────────────────────┐
+│ Name       │ Deployment Key                                                   │
+├────────────┼──────────────────────────────────────────────────────────────────┤
+│ Production │ 17GnIG6fkdKZkOPO6zmBK0nlZzhJda47032d-cfef-49c4-b776-6f80bc1dca31 │
+├────────────┼──────────────────────────────────────────────────────────────────┤
+│ Staging    │ wAZ-yQkQFfHRo07Q4SYH20KoYbYyda47032d-cfef-49c4-b776-6f80bc1dca31 │
+└────────────┴──────────────────────────────────────────────────────────────────┘
+
+
+*/
+/*code-push release-react TxwNewApp-Android android -t 1.0.0 -d Production --des '右侧菜单' -m true
+code-push release-react TxwNewApp-Ios ios -t 1.0.0 -d Production --des '右侧菜单' -m true
 */
