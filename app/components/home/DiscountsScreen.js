@@ -12,7 +12,8 @@ export default class DiscountsScreen extends Component<Props> {
         super(props);
         this.state = {
             data: [],
-            index: 0
+            index: 0,
+            gridData: []
         };
     }
 
@@ -71,17 +72,22 @@ export default class DiscountsScreen extends Component<Props> {
             type: 2,
         };
         let dicountList = [];
+        let gridcount = []
         http.post('mobleWebcomConfig.do', prams).then(res => {
             console.log(res);
             if (res.status === 10000) {
                 if (res.data !== undefined && res.data.length > 0) {
                     for (var i = 0; i < res.data.length; i++) {
-                        if (res.data[i].src1 === 'TXW') {
-                            dicountList.push(res.data[i])
+                        if (i !== 0) {
+                            if (res.data[i].src1 === 'TXW') {
+                                dicountList.push(res.data[i])
+                            }
+                        } else {
+                            gridcount.push(res.data[0])
+                            this.setState({gridData: gridcount})
                         }
                     }
-                    console.log('dicountList')
-                    console.log(dicountList)
+
                     this.setState({data: dicountList})
                 }
 
@@ -96,22 +102,23 @@ export default class DiscountsScreen extends Component<Props> {
                 this.props.navigation.navigate('DiscountDetail', {url: item.img2})
             }}>
                 <View style={{
-                    backgroundColor: category_tab_checked_bg_color, width: deviceValue.windowWidth,
-                    height: deviceValue.windowWidth / 1.5,
+                    backgroundColor: category_tab_checked_bg_color,
+                    width:deviceValue.windowWidth  / 2,
+                    height: (deviceValue.windowWidth / 2) * (450 / 750),
                 }}>
                     <ImageBackground style={{
-                        margin: 6,
+                        margin: 4,
                         flex: 1,
-                        width: deviceValue.windowWidth,
-                        height: (deviceValue.windowWidth - 12) * (450 / 750),
+                        width: (deviceValue.windowWidth - 16) / 2,
+                        height: (deviceValue.windowWidth - 24-8) / 2 * (450 / 750),
                     }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
                         <FastImage
                             style={{
-                                width: deviceValue.windowWidth - 12,
-                                height: (deviceValue.windowWidth - 12) * (450 / 750),
-                                flex: 1
+                                flex: 1,
+                                width: (deviceValue.windowWidth - 16) / 2,
+                                height: (deviceValue.windowWidth - 24-8) / 2 * (450 / 750),
                             }}
                             source={{
                                 uri: item.img1.startsWith('//') ? "http:" + item.img1 : item.img1,
@@ -126,20 +133,55 @@ export default class DiscountsScreen extends Component<Props> {
 
         )
     }
+    flatlistHeader = () => {
+        if (this.state.gridData.length > 0) {
+            return <TouchableOpacity onPress={() => {
+                this.props.navigation.navigate('DiscountDetail', {url: this.state.gridData[0].img2})
+            }}><View style={{
+                backgroundColor: category_tab_checked_bg_color,
+                width: (deviceValue.windowWidth - 12),
+                height: (deviceValue.windowWidth - 12) * (450 / 750),
+            }}><ImageBackground style={{
+                margin: 6,
+                flex: 1,
+                width: deviceValue.windowWidth,
+                height: (deviceValue.windowWidth - 12) * (450 / 750),
+            }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
+
+
+                <FastImage
+                    style={{
+                        width: deviceValue.windowWidth - 12,
+                        height: (deviceValue.windowWidth - 12) * (450 / 750),
+                        flex: 1
+                    }}
+                    source={{
+                        uri: this.state.gridData[0].img1.startsWith('//') ? "http:" + this.state.gridData[0].img1 : this.state.gridData[0].img1,
+                        priority: FastImage.priority.normal,
+
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                />
+            </ImageBackground></View></TouchableOpacity>
+        } else {
+            return null
+        }
+    }
 
     render() {
-
-
         return (
-            <View style={{flex: 1}}>
-                <FlatList
-                    style={{backgroundColor: category_tab_checked_bg_color, paddingBottom: 30}}
-                    data={this.state.data}
-                    keyExtractor={item => item.img1}
-                    enableEmptySections={true}//数据可以为空
-                    renderItem={this.rightItem}
-                />
-            </View>
+            <FlatList
+                style={{backgroundColor: 'white', paddingBottom: 30}}
+                data={this.state.data}
+                keyExtractor={item => item.img1}
+                //添加头尾布局
+                ListHeaderComponent={this.flatlistHeader}
+                enableEmptySections={true}//数据可以为空
+                renderItem={this.rightItem}
+
+                numColumns={2}
+            />
+
         );
     }
 }
