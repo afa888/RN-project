@@ -23,7 +23,7 @@ export class MainTheme {
     // 强调色
     static SpecialColor = '#DE4A38';
 
-    static specialTextColor = '#CFA359';
+    static specialTextColor = '#DF4B39';
 
 	static backgroundViewColor = '#FFFFFF'; //页面默认背景
 
@@ -36,6 +36,8 @@ export class MainTheme {
 	static tipsSpecialTextColor = '#DE4A38';
     // 浅灰色
     static LightGrayColor = '#CCCCCC';
+    // 下划线 色值
+    static lineBottomColor = '#eae6e4'
     // 灰色值
     static GrayColor = '#999999';
     // 深灰色
@@ -46,6 +48,8 @@ export class MainTheme {
     static BackgroundColor = '#FFFFFF';
     // 提交按钮的文本的颜色
     static SubmitTextColor = '#FFFFFF';
+
+    static theme_color = '#de4938';
 };
 
 export default MainTheme;
