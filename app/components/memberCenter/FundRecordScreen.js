@@ -778,6 +778,10 @@ export default class FundRecordScreen extends Component<Props> {
         this.setState({ isDialogVisible: blo });
     }
 
+    hideDialog = () => {
+        this.setState({ isDialogVisible: false });
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
