@@ -143,7 +143,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                 this.props.navigation.navigate('HelpScreen');
                 break;
             case '在线客服':
-
+                this.props.navigation.navigate('CustomerService');
                 break;
             case '关于':
                 this.props.navigation.navigate('AboutPage');
