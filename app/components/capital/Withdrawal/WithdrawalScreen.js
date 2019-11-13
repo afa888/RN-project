@@ -9,6 +9,7 @@ import { NavigationActions } from 'react-navigation';
 import httpBaseManager from '../../../http/httpBaseManager'
 import {TXAlert} from "../../../tools/TXAlert"
 import TXToastManager from "../../../tools/TXToastManager"
+import MainTheme from "../../../utils/AllColor"
 
 export default class WithdrawalScreen extends Component<Props> {
 
@@ -149,17 +150,13 @@ export default class WithdrawalScreen extends Component<Props> {
             <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={{flex:1}}>
 
-                <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:'#efeff4'}}>
-                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>银行卡信息</Text>
-                </View>
-                <View style={{alignItems: 'center',paddingTop:20,height:181,width:Dimensions.get('window').width,backgroundColor:'#fff'}}>
-                    <ImageBackground style={{paddingLeft:15,paddingTop:48,width: 240, height: 141}}
-                        source={require('../../../static/img/icon_banlk.png')}>
+                <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:MainTheme.backgroundColor}}>
+                
+                <View style={{alignItems: 'center',paddingTop:20,height:100,width:Dimensions.get('window').width,backgroundColor:'#fff'}}>
+                    <View style={{backgroundColor:MainTheme.theme_color,paddingLeft:15,paddingTop:20,width: 240, height: 100}}>
                         <Text style={{color:'#ffffff',fontSize:16,fontWeight:'bold'}}>{this.state.bank}</Text>
                         <Text style={{color:'#ffffff',paddingTop:15,fontSize:12}}>{this.state.cardNum}</Text>
-                        <Text style={{color:'#535353',paddingTop:10,fontSize:12}}>钱包余额：{this.state.wallet}元</Text>
-                    </ImageBackground>
+                    </View>
                 </View>
 
 
