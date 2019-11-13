@@ -198,6 +198,7 @@ export default class HomeScreen extends Component<Props> {
             terminal: DeviceValue.terminal,
         };
         http.get('game/getPageTab', prams).then(res => {
+            console.log("平台推荐");
             console.log(res);
             if (res.status === 10000) {
                 let categoryList = []
