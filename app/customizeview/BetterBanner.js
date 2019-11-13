@@ -204,6 +204,7 @@ export default class BetterBanner extends PureComponent {
         let indicatorX = 0;
         let bannerContentY = 0;
         //指示器滚动效果--自动滚动
+        console.log("initActiveIndicatorX== "+initActiveIndicatorX+"    this.nextPage=    "+this.nextPage+"    this.activeIndicatorX=      "+this.activeIndicatorX)
         if (this.isAutoScroll) {
             indicatorX = this.initActiveIndicatorX + this.nextPage * this.activeIndicatorX;
             bannerContentY = this.nextPage * 32
