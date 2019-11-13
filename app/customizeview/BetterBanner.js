@@ -175,7 +175,7 @@ export default class BetterBanner extends PureComponent {
     }
 
     setActiveIndicatorX(x) {
-        if(this.activeIndicator!==null){
+        if (this.activeIndicator !== null) {
             x = this.props.isSeamlessScroll ? (x - this.activeIndicatorX) : x;
             x = Platform.OS === 'ios' ? x - this.props.indicatorGap / 2 : x;
             this.activeIndicator.setNativeProps({style: {left: x}})
@@ -184,7 +184,7 @@ export default class BetterBanner extends PureComponent {
     }
 
     setBannerTitleText(y) {
-        if(this.bannerTitleContent!==null){
+        if (this.bannerTitleContent !== null) {
             if (this.props.bannerTitles.length === 0) return;
             this.bannerTitleContent.setNativeProps({style: {marginTop: -y}})
         }
@@ -192,35 +192,37 @@ export default class BetterBanner extends PureComponent {
     }
 
     onScroll(event) {
-        if (this.isInitScroll) {
-            this.isInitScroll = false;
-            return;
-        }
-        this.offsetX = event.nativeEvent.contentOffset.x;
-        this.nextPage = Math.round(this.offsetX / width);
-        this.nextPagePixel = this.offsetX / width;
+        if (this.initActiveIndicatorX !== undefined || this.initActiveIndicatorX !== null) {
+            if (this.isInitScroll) {
+                this.isInitScroll = false;
+                return;
+            }
+            this.offsetX = event.nativeEvent.contentOffset.x;
+            this.nextPage = Math.round(this.offsetX / width);
+            this.nextPagePixel = this.offsetX / width;
 
 
-        let indicatorX = 0;
-        let bannerContentY = 0;
-        //指示器滚动效果--自动滚动
-        console.log("initActiveIndicatorX== "+initActiveIndicatorX+"    this.nextPage=    "+this.nextPage+"    this.activeIndicatorX=      "+this.activeIndicatorX)
-        if (this.isAutoScroll) {
-            indicatorX = this.initActiveIndicatorX + this.nextPage * this.activeIndicatorX;
-            bannerContentY = this.nextPage * 32
-        } else {
-            //指示器滚动效果--手动滑动
-            indicatorX = this.initActiveIndicatorX + this.nextPagePixel * this.activeIndicatorX;
-            bannerContentY = this.nextPagePixel * 32
-        }
-        this.setBannerTitleText(bannerContentY);
-        if (this.isIndicatorScrollEnd()) {
-            return;
-        }
-        console.log("indicatorX== "+indicatorX)
-        if(!isNaN(indicatorX)){
-            console.log("indicatorX2== "+indicatorX)
-            this.setActiveIndicatorX(indicatorX);
+            let indicatorX = 0;
+            let bannerContentY = 0;
+            //指示器滚动效果--自动滚动
+           // console.log(" indicatorX  initActiveIndicatorX== " + this.initActiveIndicatorX + "    this.nextPage=    " + this.nextPage + "    this.activeIndicatorX=      " + this.activeIndicatorX)
+            if (this.isAutoScroll) {
+                indicatorX = this.initActiveIndicatorX + this.nextPage * this.activeIndicatorX;
+                bannerContentY = this.nextPage * 32
+            } else {
+                //指示器滚动效果--手动滑动
+                indicatorX = this.initActiveIndicatorX + this.nextPagePixel * this.activeIndicatorX;
+                bannerContentY = this.nextPagePixel * 32
+            }
+            this.setBannerTitleText(bannerContentY);
+            if (this.isIndicatorScrollEnd()) {
+                return;
+            }
+            console.log("indicatorX== " + indicatorX)
+            if (!isNaN(indicatorX)) {
+                console.log("indicatorX2== " + indicatorX)
+                this.setActiveIndicatorX(indicatorX);
+            }
         }
     }
 
@@ -245,6 +247,9 @@ export default class BetterBanner extends PureComponent {
     }
 
     startAutoScroll() {
+        if (this.initActiveIndicatorX != null) {
+
+        }
         if (this.currentBannerData.length < 2) {
             return;
         }
@@ -292,7 +297,8 @@ export default class BetterBanner extends PureComponent {
             // 测算左边距长度
             onLayout={() => this.activeIndicator.measure((x, y, width, height, pageX, pageY) => {
                 if (!this.initActiveIndicatorX) {
-                    this.initActiveIndicatorX = x;
+                    this.initActiveIndicatorX = 0;//这里有点瞎搞。但是来回切换的时候rn会给我一个undefind,然后用到它的地方就好报错
+                   // console.log(" indicatorX    renderActiveIndicator initActiveIndicatorX   " + this.initActiveIndicatorX)
                 }
             })}
         />);
