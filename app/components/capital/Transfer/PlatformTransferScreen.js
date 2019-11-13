@@ -10,6 +10,8 @@ import httpBaseManager from '../../../http/httpBaseManager'
 import { transferMoneyFamat } from "../../../utils/Htools"
 import Picker from 'react-native-picker';
 import {specialTextColor} from "../../../utils/AllColor"
+import MainTheme from "../../../utils/AllColor"
+import {ThemeEditTextTextColor} from "../../../utils/AllColor"
 
 export default class PlatformTransfer extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
@@ -38,14 +40,14 @@ export default class PlatformTransfer extends Component<Props> {
 
     constructor(props){
         super(props);
-        this.state = {platFrom:'',platTo:'',money:'',gameList:[],platTitle:[]};
+        this.state = {platFrom:'',platFromMoney:'',platTo:'',platToMoney:'',money:'',gameList:[],platTitle:[]};
     }
 
     componentDidMount () {
         //监听键盘弹起
         this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow.bind(this))
         //获取游戏列表
-        this._gameList();
+        this._gameList('true');
     }
 
     componentWillUnmount() {
@@ -56,8 +58,12 @@ export default class PlatformTransfer extends Component<Props> {
         Picker.hide()
     }
 
-    _gameList () {
-        http.get('transfer/transferGameList', null,true).then((res) => {
+    _gameList = (needNetStatus) => {
+        let status = true;
+        if (needNetStatus === 'false') {
+            status = false;
+        }
+        http.get('transfer/transferGameList', null,status).then((res) => {
             if (res && res.status === 10000) {
                 let oData = res.data;
                 this._handleTransferGameList(oData);
@@ -129,11 +135,15 @@ export default class PlatformTransfer extends Component<Props> {
                     //插入主账户信息
                     modelArr.splice(0,0,{icon:'logoicon',title:'钱包余额',subTitle:balance,
                     btType:'WALLET',selected:false});
-                    let from = '钱包余额(￥' + balance + ')';
-                    titleArr.splice(0,0,from);//第一个位置插入一条数据
+                    let from = '钱包余额';
+                    let fromMoney = '￥' + balance;
+
+                    let fromAll = '钱包余额(￥' + balance + ')';
+                    titleArr.splice(0,0,fromAll);//第一个位置插入一条数据
                     let modelItem = modelArr[1];
-                    let to = modelItem.title + '(￥' + modelItem.subTitle + ')';
-                    this.setState({gameList:modelArr,platFrom:from,platTo:to,platTitle:titleArr});
+                    let to = modelItem.title;
+                    let toMoney ='￥' + modelItem.subTitle;
+                    this.setState({gameList:modelArr,platFrom:from,platFromMoney:fromMoney,platTo:to,platToMoney:toMoney,platTitle:titleArr});
                 });
             }else {
                 getStoreData('userInfoState').then(userInfo => {
@@ -162,6 +172,15 @@ export default class PlatformTransfer extends Component<Props> {
         this._onChoosePlat('to');
     }
 
+    _onChangePlatFromTo = () => {
+        let from = this.state.platFrom;
+        let fromMoney = this.state.platFromMoney;
+        let to = this.state.platTo;
+        let toMoney = this.state.platToMoney;
+
+        this.setState({platFrom:to,platFromMoney:toMoney,platTo:from,platToMoney:fromMoney});
+    }
+
     _onChoosePlat = (type) => {
         Keyboard.dismiss();
         if (this.state.gameList.length >0) {
@@ -188,9 +207,15 @@ export default class PlatformTransfer extends Component<Props> {
                         }
 
                         let modelItem = this.state.gameList[toIndex];
-                        to = modelItem.title + '(￥' + modelItem.subTitle + ')';
+                        to = modelItem.title;
+                        let toMoney = '￥' + modelItem.subTitle;
 
-                        this.setState({platFrom:data['0'],platTo:to});
+                        let fromAll = data['0'];
+                        let fromTitle = fromAll.substring(0,fromAll.indexOf('(￥'));
+                        let fromMoney = fromAll.substring(fromAll.indexOf('(￥')+1);
+                        fromMoney = fromMoney.substring(0,fromMoney.length - 1);
+
+                        this.setState({platFrom:fromTitle,platFromMoney:fromMoney,platTo:to,platToMoney:toMoney});
 
                     }else {
                         let to = data['0'];
@@ -204,9 +229,15 @@ export default class PlatformTransfer extends Component<Props> {
                         }
 
                         let modelItem = this.state.gameList[fromIndex];
-                        from = modelItem.title + '(￥' + modelItem.subTitle + ')';
+                        from = modelItem.title;
+                        let fromMoney = '￥' + modelItem.subTitle;
 
-                        this.setState({platFrom:from,platTo:data['0']});
+                        let toAll = data['0'];
+                        let toTitle = toAll.substring(0,toAll.indexOf('(￥'));
+                        let toMoney = toAll.substring(toAll.indexOf('(￥')+1);
+                        toMoney = toMoney.substring(0,toMoney.length - 1);
+
+                        this.setState({platFrom:from,platFromMoney:fromMoney,platTo:toTitle,platToMoney:toMoney});
                     }
 
                 },
@@ -226,6 +257,26 @@ export default class PlatformTransfer extends Component<Props> {
         this.setState({ [label]: value });
     };
 
+    /**
+     * 一键回收
+     */
+    _receiveAll(){
+        http.post('transfer/oneclickrecycling',null,true).then(res => {
+            if(res.status === 10000){
+                this._gameList('false');//重新获取资金数据
+                // 更新本地缓存
+                mergeStoreData('userInfoState',
+                    { balance: wallet }).then(() => {
+                    DeviceEventEmitter.emit('bindSuccess','更新钱包余额');
+                });
+            }
+            TXToastManager.show(res.msg);
+        })
+    }
+
+    /**
+     * 转账
+     */
     _onCommitTransfer (){
         if (this.state.platFrom.length == 0) {
             Alert.alert('请选择转出平台');
@@ -243,10 +294,12 @@ export default class PlatformTransfer extends Component<Props> {
             let modelIndex;
             if (this.state.platTo.indexOf('钱包余额') != -1) {
                 url = 'transfer/TransferFrom';//转账到平台
-                modelIndex = this.state.platTitle.indexOf(this.state.platFrom);
+                let fromAll = this.state.platFrom + '(' + this.state.platFromMoney + ')';
+                modelIndex = this.state.platTitle.indexOf(fromAll);
             }else {
                 url = 'transfer/TransferTo';//转账到游戏
-                modelIndex = this.state.platTitle.indexOf(this.state.platTo);
+                let toAll = this.state.platTo + '(' + this.state.platToMoney + ')';
+                modelIndex = this.state.platTitle.indexOf(toAll);
             }
             let modelItem = this.state.gameList[modelIndex];
             var inputMoney = this.state.money.replace(/a/g, ' ');//替换输入空格
@@ -274,14 +327,21 @@ export default class PlatformTransfer extends Component<Props> {
                         mainModel.subTitle = toBalance;
                         gameListArr.splice(transIndex2,1,mainModel);
 
-                        let from = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
-                        let To = mainModel.title + '(￥' + mainModel.subTitle + ')';
+                        let fromAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
+                        let ToAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
 
 
-                        titleArr.splice(transIndex1,1,from);
-                        titleArr.splice(transIndex2,1,To);
+                        let from = modelTransItem.title;
+                        let fromMoney ='￥' + modelTransItem.subTitle;
+
+                        let To = mainModel.title ;
+
+                        let ToMoney = '￥' + mainModel.subTitle;
+
+                        titleArr.splice(transIndex1,1,fromAll);
+                        titleArr.splice(transIndex2,1,ToAll);
                         //保存数据变化 并 清空输入金额
-                        this.setState({money:'',gameList:gameListArr,platFrom:from,platTo:To,platTitle:titleArr});
+                        this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
 
                     }else {
                         //转账到游戏
@@ -298,13 +358,19 @@ export default class PlatformTransfer extends Component<Props> {
                         mainModel.subTitle = toBalance;
                         gameListArr.splice(transIndex1,1,mainModel);
 
-                        let from = mainModel.title + '(￥' + mainModel.subTitle + ')';
-                        let To = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
+                        let fromAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
+                        let ToAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
 
-                        titleArr.splice(transIndex1,1,from);
-                        titleArr.splice(transIndex2,1,To);
+
+                        let from = mainModel.title ;
+                        let fromMoney = '￥' + mainModel.subTitle;
+                        let To = modelTransItem.title;
+                        let ToMoney = '￥' + modelTransItem.subTitle;
+
+                        titleArr.splice(transIndex1,1,fromAll);
+                        titleArr.splice(transIndex2,1,ToAll);
                         //保存数据变化 并 清空输入金额
-                        this.setState({money:'',gameList:gameListArr,platFrom:from,platTo:To,platTitle:titleArr});
+                        this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
                     }
 
                     TXAlert('转账成功！');
@@ -323,27 +389,84 @@ export default class PlatformTransfer extends Component<Props> {
 
     render() {
         return (
-            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:'#efeff4'}}>
-                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>平台选择</Text>
+            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:MainTheme.backgroundColor}}>
+                <View style={{paddingTop:10,height:20,width:Dimensions.get('window').width}}>
+                    
                 </View>
-                <TXInput label="转出平台" isUpdate={false} onClick={this._onChoosePlatFrom.bind(this)} showDetail={true} buttonFontSize={10} textAlign='right' onChange={(value) => this._onChange('platFrom', value)} value={this.state.platFrom || ''}/>
-                <TXInput label="转入平台" isUpdate={false} onClick={this._onChoosePlatTo.bind(this)} showDetail={true} textAlign='right' onChange={(value) => this._onChange('platTo', value)} value={this.state.platTo || ''}/>
-                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>转账金额</Text>
-                </View>
-                <TXInput label="￥" forbiddenDot={true} onFocus={(e)=>{Picker.hide()}} labelTextStyle={{color:specialTextColor}} keyboardType = 'numeric' placeholder="请至少输入1元整数" textAlign='right' onChange={(value) => this._onChange('money', value)} value={this.state.money || ''}/>
-                <View style={{paddingTop:20,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onCommitTransfer()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
+                <View style={{height:35,width:Dimensions.get('window').width,flexDirection:'row',alignItems:'center'}}>
+                    
+                    <TouchableOpacity onPress={() => {
+                        this._onChoosePlatFrom();
+                    }}>
+                        <View style={{paddingTop:10,height:35,marginLeft:10,borderBottomWidth: 0.5,borderBottomColor: MainTheme.lineBottomColor,width:Dimensions.get('window').width / 2 -27.5}}>
+                            <Text>{this.state.platFrom}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        this._onChangePlatFromTo();
+                    }}>
+                        <Image source={require('../../../static/img/icon_hz.png')}
+                               style={{
+                                   resizeMode: 'contain',
+                                   width: 35,
+                                   height: 35,
+                               }}/>
+                    </TouchableOpacity>
 
-                        <Text style={{color:'#ffffff',fontSize:17}}>确认转账</Text>
-                     </View>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        this._onChoosePlatTo();
+                    }}>
+                        <View style={{paddingTop:10,height:35,marginRight:10,borderBottomWidth: 0.5,borderBottomColor: MainTheme.lineBottomColor,width:Dimensions.get('window').width / 2 -37.5}}>
+                            <Text style={{textAlign:'right'}}>{this.state.platTo}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    
                 </View>
-                <View style={{paddingTop:15,paddingLeft:10,flexDirection: 'column',justifyContent:'center',height:50,width:Dimensions.get('window').width}}>
-                    <Text style={{fontSize:12,color:'#D62F27'}}>温馨提示</Text>
-                    <Text style={{fontSize:10,color:'#8B8B8B'}}>平台转账只允许输入整数金额</Text>
+                <View style={{marginTop:10,height:25,width:Dimensions.get('window').width,flexDirection:'row',alignItems:'center'}}>
+                    
+                    <View style={{height:25,marginLeft:10,width:Dimensions.get('window').width / 2 - 10}}>
+                        <Text style={{color:MainTheme.DarkGrayColor}}>{this.state.platFromMoney}</Text>
+                    </View>
+
+                    <View style={{height:25,marginRight:10,width:Dimensions.get('window').width / 2 -20}}>
+                        <Text style={{color:MainTheme.DarkGrayColor,textAlign:'right'}}>{this.state.platToMoney}</Text>
+                    </View>
+                    
+                </View>
+                <TXInput label="￥" forbiddenDot={true} onFocus={(e)=>{Picker.hide()}} labelTextStyle={{fontSize:17,color:specialTextColor}} keyboardType = 'numeric' placeholder="请至少输入1元整数" textAlign='right' onChange={(value) => this._onChange('money', value)} value={this.state.money || ''}/>
+                <View style={{paddingTop:10,paddingLeft:10,flexDirection: 'row',justifyContent:'flex-start',height:50,width:Dimensions.get('window').width}}>
+                    <View style={{flexDirection: 'row',width:Dimensions.get('window').width / 2}}>
+                        <Text style={{fontSize:12,color:'#8B8B8B'}}>平台转账必须为</Text>
+                        <Text style={{fontSize:12,color:'#D62F27'}}>整数</Text>
+                    </View>
+                    <View style={{flexDirection: 'row',justifyContent:'flex-end',width:Dimensions.get('window').width / 2 - 20}}>
+                        <TouchableOpacity onPress={() => {
+                            let transMoney = this.state.platFromMoney;
+                            transMoney = transMoney.substring(1);
+                            this.setState({money:transMoney});
+                        }}>
+                            <View style={{paddingRight:10}}>
+                                <Text style={{fontSize:12,color:MainTheme.commonButtonBGColor}}>全部</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{paddingTop:5,alignItems: 'center'}}>
+                    <TouchableOpacity  onPress={() => this._onCommitTransfer()}  activeOpacity={0.2} focusedOpacity={0.5}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
+
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即转账</Text>
+                     </View>
+                    </TouchableOpacity>
+                </View>
+                
+                <View style={{paddingTop:10,alignItems: 'center'}}>
+                    <TouchableOpacity  onPress={() => this._receiveAll()}  activeOpacity={0.2} focusedOpacity={0.5}>
+                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
+
+                        <Text style={{color:MainTheme.specialTextColor,fontSize:17}}>一键回收</Text>
+                     </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
