@@ -123,7 +123,7 @@ export default class HomeScreen extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            isDialogVisible: false,
+            isRedBagVisible: true,
             data: {},
             dataImagUrl: [],
             dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
@@ -139,7 +139,7 @@ export default class HomeScreen extends Component<Props> {
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
         }
-        // this.setState({isDialogVisible: blo, noticeTitle: noticeList});
+        // this.setState({isRedBagVisible: blo, noticeTitle: noticeList});
         this.props.navigation.navigate('NoticeScreen', {data: noticeList})
     }
 
@@ -239,14 +239,16 @@ export default class HomeScreen extends Component<Props> {
     gotoDiscoutDetail = (url) => {
         this.props.navigation.navigate('DiscountDetail', {url: url})
     }
-
+    hideDialog = () => {
+        this.setState({isRedBagVisible: false});
+    }
 
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
-                {/*     <ModalDialog
+                <ModalDialog
                     _dialogContent={this.state.noticeTitle}
-                    _dialogVisible={this.state.isDialogVisible}
+                    _dialogVisible={this.state.isRedBagVisible}
                     _dialogLeftBtnAction={() => {
                         this.hideDialog()
                     }}
@@ -256,7 +258,7 @@ export default class HomeScreen extends Component<Props> {
                     _dialogCancle={() => {
                         this.hideDialog()
                     }}
-                />*/}
+                />
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'black'}}

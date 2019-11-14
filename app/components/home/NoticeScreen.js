@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {FlatList, Image, ImageBackground, RefreshControl, Text, TouchableOpacity, View} from "react-native";
-import {category_tab_checked_bg_color, theme_color} from "../../utils/AllColor";
+import {category_group_divide_line_color, theme_color} from "../../utils/AllColor";
 import deviceValue from "../../utils/DeviceValue";
 import FastImage from 'react-native-fast-image'
 import {CAGENT} from "../../utils/Config";

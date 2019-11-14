@@ -5,10 +5,11 @@ import {
     TouchableHighlight,
     View,
     StyleSheet,
-    BackAndroid, TouchableOpacity, Image, ScrollView
+    BackAndroid, TouchableOpacity, Image, ScrollView, ImageBackground
 } from 'react-native';
 import {NavigationActions} from "react-navigation";
 import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
+
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
 let SCREEN_HEIGHT = Dimensions.get('window').height;//高
@@ -40,41 +41,39 @@ export default class ModalDialog extends Component<Props> {
                 }} //如果是Android设备 必须有此方法
             >
                 <View style={styles.bg}>
-                    <View style={styles.dialog}>
+                    <ImageBackground style={styles.dialog}
+                                     source={require('../static/img/hb_background.webp')}
+                                     resizeMode='contain'>
                         <View style={styles.dialogTitleView}>
-                            <Text style={styles.dialogTitle}>
-                                {this.props._dialogTitle}
-                            </Text>
+
+
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 16,
+                                marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
+                            }}>活动倒计时</Text>
+                            <Text style={{color: 'white', fontSize: 16}}>1天99小时14分20秒</Text>
                             <TouchableOpacity onPress={this.props._dialogCancle}>
-                                <Image source={require('../static/img/login_x.png')}
+                                <Image source={require('../static/img/hb_click.png')}
                                        style={{
                                            resizeMode: 'contain',
-                                           width: 15,
-                                           height: 15,
-                                           margin: 12
+                                           width: SCREEN_WIDTH * 0.2,
+                                           height: SCREEN_WIDTH * 0.2 * (76 / 314),
                                        }}/>
                             </TouchableOpacity>
-                        </View>
-                        <View style={styles.dialogContentView}>
-                            <ScrollView style={{flex: 1}}>
-                            <Text style={styles.dialogContent}>
-                                {this.props._dialogContent}
-                            </Text>
-                            </ScrollView>
+
                         </View>
 
-                        <View style={styles.dialogBtnView}>
-                            <Text></Text>
 
-                            <TouchableHighlight style={styles.dialogBtnViewItem}
-                                                onPress={this.props._dialogRightBtnAction}>
-                                <Text style={styles.rightButton}>
-                                    {this.props._dialogRightBtnTitle}
-                                </Text>
-                            </TouchableHighlight>
-                        </View>
-
-                    </View>
+                    </ImageBackground>
+                    <TouchableOpacity onPress={this.props._dialogCancle}>
+                        <Image source={require('../static/img/hb_back.png')}
+                               style={{
+                                   resizeMode: 'contain',
+                                   width: 25,
+                                   height: 25,
+                               }}/>
+                    </TouchableOpacity>
                 </View>
             </Modal>
         );
@@ -88,27 +87,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(52,52,52,0.5)',  //rgba  a0-1  其余都是16进制数
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column'
     },
     dialog: {
         width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.35,
-        backgroundColor: 'white',
+        height: SCREEN_WIDTH * 0.8 * (791 / 750),
         borderRadius: 8,
     },
     dialogTitleView: {
         width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.04,
-        justifyContent: 'space-between',
-        flexDirection:'row',
+        height: SCREEN_WIDTH * 0.8 * (791 / 750),
+        flexDirection: 'column',
         alignItems: 'center',
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8
     },
     dialogTitle: {
         textAlign: 'center',
         fontSize: 14,
         color: '#000000',
-        marginLeft:12,
+        marginLeft: 12,
     },
     dialogContentView: {
         width: SCREEN_WIDTH * 0.8,
@@ -126,18 +122,18 @@ const styles = StyleSheet.create({
         height: SCREEN_HEIGHT * 0.04,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
+        alignItems: 'center',
 
 
     },
     dialogBtnViewItem: {
-        width:60,
+        width: 60,
         height: SCREEN_HEIGHT * 0.03,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme_color,
-        borderRadius:3,
-        marginRight:8
+        borderRadius: 3,
+        marginRight: 8
     },
     leftButton: {
         fontSize: 18,
