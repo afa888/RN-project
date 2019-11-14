@@ -216,9 +216,7 @@ export default class BetterBanner extends PureComponent {
         if (this.isIndicatorScrollEnd()) {
             return;
         }
-        console.log("indicatorX== "+indicatorX)
         if(!isNaN(indicatorX)){
-            console.log("indicatorX2== "+indicatorX)
             this.setActiveIndicatorX(indicatorX);
         }
     }
