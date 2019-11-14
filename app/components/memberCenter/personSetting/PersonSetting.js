@@ -18,20 +18,14 @@ const PERSON_SETTING_BG_COLOR = '#F2F2F2';
 export default class PersonSetting extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '用户信息',
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
+            headerTitle: (
+                MainTheme.renderCommonTitle('用户信息')
+            ),
             headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
-                </TouchableOpacity>
+                MainTheme.renderCommonBack(navigation)
+            ),
+            headerRight: (
+                <View />
             )
         };
     };

@@ -13,18 +13,14 @@ export default class ContactSetting extends Component<Props>{
     static navigationOptions = ({ navigation }) => {
         const { title } = navigation.state.params;
         return {
-            title: title,
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
+            headerTitle: (
+                MainTheme.renderCommonTitle(title)
+            ),
             headerLeft: (
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
-                </TouchableOpacity>
+                MainTheme.renderCommonBack(navigation)
+            ),
+            headerRight: (
+                <View />
             )
         };
     };
