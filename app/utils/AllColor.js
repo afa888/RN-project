@@ -1,4 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
 
 
 export const category_tab_checked_bg_color = "#f2f2f2";
@@ -23,15 +30,15 @@ export class MainTheme {
 
     static specialTextColor = '#DF4B39';
 
-	static backgroundViewColor = '#FFFFFF'; //页面默认背景
+    static backgroundViewColor = '#FFFFFF'; //页面默认背景
 
-	static commonButtonBGColor = '#E94335';  //按钮button默认背景
+    static commonButtonBGColor = '#E94335';  //按钮button默认背景
 
-	static commonButton2BGColor = '#EFEFF4'; // 特殊选择button 背景
+    static commonButton2BGColor = '#EFEFF4'; // 特殊选择button 背景
 
-	static commonButtonTitleColor = '#FFFFFF'; //button 通用文字颜色
+    static commonButtonTitleColor = '#FFFFFF'; //button 通用文字颜色
 
-	static tipsSpecialTextColor = '#DE4A38';
+    static tipsSpecialTextColor = '#DE4A38';
     // 浅灰色
     static LightGrayColor = '#CCCCCC';
     // 下划线 色值
@@ -52,6 +59,59 @@ export class MainTheme {
     static FundGreenColor = '#33CC00';
     // 通用分隔线颜色
     static DivideLineColor = '#DDD';
+
+
+    /* ============================= 以下为一些通用控件的定义 ============================= */
+
+    /**
+     *  生成普通页面的标题
+     *  使用方式：headerTitle: MainTheme.renderCommonTitle('title'),
+     */
+    static renderCommonTitle = (title) => {
+        return (
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={MainTheme.GlobalStyles.PageTitle}>{title}</Text>
+            </View>
+        );
+    }
+
+    /**
+     * 生成普通页面的返回按钮
+     * 使用方式：headerLeft: MainTheme.renderCommonBack(navigation),
+     */
+    static renderCommonBack = (navigation) => {
+        return (
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ width: 60, height: 20, alignItems: 'center' }}
+                    onPress={() => { navigation.goBack() }}>
+                    <Image source={require('../static/img/titlebar_back_normal.png')}
+                        style={MainTheme.GlobalStyles.PageBackImage} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    /* ============================= 以下为一些通用样式的定义 ============================= */
+
+    /**
+     *  定义一些全局的通用样式
+     */
+    static GlobalStyles = StyleSheet.create({
+        // 页面的标题文本的样式
+        PageTitle: {
+            fontSize: 18,
+            color: MainTheme.DarkGrayColor,
+            fontWeight: 'bold',
+            textAlign:'center',
+        },
+        // 页面的返回按钮的Image样式
+        PageBackImage: {
+            resizeMode: 'contain',
+            width: 25,
+            height: 20,
+            marginLeft: 12,
+        },
+    });
 };
 
 export default MainTheme;
