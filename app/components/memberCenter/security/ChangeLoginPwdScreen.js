@@ -15,23 +15,16 @@ import DeviceValue from "../../../utils/DeviceValue";
 export default class ChangeLoginPwdScreen extends Component<Props> {
 
     static navigationOptions = ({ navigation }) => {
-
         return {
-            title: '修改登录密码',
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
-            headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.dispatch(NavigationActions.back());
-                }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
-                </TouchableOpacity>
+            headerTitle: (
+                MainTheme.renderCommonTitle('修改登录密码')
             ),
+            headerLeft: (
+                MainTheme.renderCommonBack(navigation)
+            ),
+            headerRight: (
+                <View />
+            )
         };
     };
 
@@ -86,6 +79,7 @@ export default class ChangeLoginPwdScreen extends Component<Props> {
 
     callOnlineSupport = () => {
         console.log("调用在线客服");
+        this.props.navigation.navigate('CustomerService');
     };
 
     render() {

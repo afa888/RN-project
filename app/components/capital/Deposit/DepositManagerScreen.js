@@ -72,7 +72,7 @@ export default class DepositManagerScreen extends Component<Props> {
                 <View style={{width:5}}></View>
                 <TouchableOpacity onPress={() => {
                     Picker.hide()
-                    navigation.navigate('优惠')
+                    navigation.navigate('CustomerService')
                 }}>
                     <View style={{alignItems:'center'}}>
                         <Image source={require('../../../static/img/nav_icon_kefu_nor.png')}
@@ -385,7 +385,7 @@ export default class DepositManagerScreen extends Component<Props> {
     }
 
      _onShowCustomer = () => {
-        this.props.navigation.navigate('优惠')
+        this.props.navigation.navigate('CustomerService')
     }
 
     //不同支付类型显示不同操作方式

@@ -93,25 +93,11 @@ export default class FundRecordScreen extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
         const { params } = navigation.state;
         return {
-            headerTitle: <View
-                style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}>资金记录</Text></View>,
-
+            headerTitle: (
+                MainTheme.renderCommonTitle('资金记录')
+            ),
             headerLeft: (
-                <View
-                    style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity style={{ width: 60, height: 20, alignItems: 'center' }} onPress={() => {
-                        navigation.goBack()
-                    }}>
-                        <Image source={require('../../static/img/titlebar_back_normal.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                width: 25,
-                                height: 20,
-                                marginLeft: 12
-                            }} />
-                    </TouchableOpacity>
-                </View>
+                MainTheme.renderCommonBack(navigation)
             ),
             headerRight: <View
                 style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -386,7 +372,12 @@ export default class FundRecordScreen extends Component<Props> {
 
     /*分割线*/
     separatorComponent = () => {
-        return <View style={{ height: 0.5, backgroundColor: MainTheme.LightGrayColor }} />
+        return <View style={{
+            marginLeft: 15,
+            marginRight: 15,
+            height: 0.5,
+            backgroundColor: MainTheme.DivideLineColor
+        }} />
     }
     /**
      * 根据记录的type产生对应的标题
@@ -430,7 +421,7 @@ export default class FundRecordScreen extends Component<Props> {
             return MainTheme.DarkGrayColor;
         }
         else if (item.amount.startsWith('-')) {
-            return 'green';
+            return MainTheme.FundGreenColor;
         }
         return MainTheme.SpecialColor;
     }

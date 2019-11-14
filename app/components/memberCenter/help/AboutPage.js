@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    ScrollView, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet,
+    View, ScrollView, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet,
 } from "react-native";
 import { WebView } from 'react-native-webview';
 import { BASE_H5_URL } from "../../../utils/Config";
@@ -16,13 +16,14 @@ export default class AboutPage extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
         if (USING_NATIVE_ABOUT_PAGE) {
             return {
-                title: '关于',
-                headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
+                headerTitle: (
+                    MainTheme.renderCommonTitle('关于')
+                ),
                 headerLeft: (
-                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                        <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                            style={styles.backItem} />
-                    </TouchableOpacity>
+                    MainTheme.renderCommonBack(navigation)
+                ),
+                headerRight: (
+                    <View />
                 )
             };
         } else return {
