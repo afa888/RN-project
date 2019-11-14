@@ -3,17 +3,15 @@ import React, { Component } from 'react';
 
 export const category_tab_checked_bg_color = "#f2f2f2";
 
-export const category_group_divide_line_color = "#F2F2F2"
+export const category_group_divide_line_color = "#F2F2F2";
 
-export const theme_color = '#de4938'
+export const theme_color = '#de4938';
 
 export const ThemeEditTextTextColor = '#666666';
 
-export const funRecordGreen = '#06d82d';
-
-export const textTitleColor = "#333333" //一级文字
-export const textHightTitleColor = "#111111" //最重要文字
-export const textThreeHightTitleColor = "#999999" //次要文字
+export const textTitleColor = "#333333"; //一级文字
+export const textHightTitleColor = "#111111"; //最重要文字
+export const textThreeHightTitleColor = "#999999"; //次要文字
 
 /**
  * 定义全局主题相关属性
@@ -21,7 +19,7 @@ export const textThreeHightTitleColor = "#999999" //次要文字
 **/
 export class MainTheme {
     // 强调色
-    static SpecialColor = '#DE4A38';
+    static SpecialColor = theme_color;
 
     static specialTextColor = '#DF4B39';
 
@@ -50,6 +48,10 @@ export class MainTheme {
     static SubmitTextColor = '#FFFFFF';
 
     static theme_color = '#de4938';
+    // 资金记录及投注记录页面等，盈利时的字体颜色
+    static FundGreenColor = '#33CC00';
+    // 通用分隔线颜色
+    static DivideLineColor = '#DDD';
 };
 
 export default MainTheme;

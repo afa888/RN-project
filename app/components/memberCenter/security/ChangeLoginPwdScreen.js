@@ -86,6 +86,7 @@ export default class ChangeLoginPwdScreen extends Component<Props> {
 
     callOnlineSupport = () => {
         console.log("调用在线客服");
+        this.props.navigation.navigate('CustomerService');
     };
 
     render() {

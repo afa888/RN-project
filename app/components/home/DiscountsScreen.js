@@ -37,7 +37,7 @@ export default class DiscountsScreen extends Component<Props> {
                         marginRight: 12
                     }}>
                     <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-
+                        navigation.navigate('CustomerService')
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -103,14 +103,14 @@ export default class DiscountsScreen extends Component<Props> {
             }}>
                 <View style={{
                     backgroundColor: category_tab_checked_bg_color,
-                    width:deviceValue.windowWidth  / 2,
+                    width: deviceValue.windowWidth / 2,
                     height: (deviceValue.windowWidth / 2) * (450 / 750),
                 }}>
                     <ImageBackground style={{
                         margin: 4,
                         flex: 1,
                         width: (deviceValue.windowWidth - 16) / 2,
-                        height: (deviceValue.windowWidth - 24-8) / 2 * (450 / 750),
+                        height: (deviceValue.windowWidth - 24 - 8) / 2 * (450 / 750),
                     }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
@@ -118,7 +118,7 @@ export default class DiscountsScreen extends Component<Props> {
                             style={{
                                 flex: 1,
                                 width: (deviceValue.windowWidth - 16) / 2,
-                                height: (deviceValue.windowWidth - 24-8) / 2 * (450 / 750),
+                                height: (deviceValue.windowWidth - 24 - 8) / 2 * (450 / 750),
                             }}
                             source={{
                                 uri: item.img1.startsWith('//') ? "http:" + item.img1 : item.img1,
