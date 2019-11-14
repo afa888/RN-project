@@ -205,7 +205,7 @@ export default class WithdrawalScreen extends Component<Props> {
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款金额</Text>
                                     </View>
                                     <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
-                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>￥500.00</Text>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>￥{this.state.money}</Text>
                                     </View>
                                 </View>
 
@@ -214,7 +214,7 @@ export default class WithdrawalScreen extends Component<Props> {
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款至银行</Text>
                                     </View>
                                     <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
-                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>中国农业银行</Text>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>{this.state.bank}</Text>
                                     </View>
                                 </View>
 
@@ -223,7 +223,7 @@ export default class WithdrawalScreen extends Component<Props> {
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款卡号</Text>
                                     </View>
                                     <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
-                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>6232424234243242342</Text>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>{this.state.cardNum}</Text>
                                     </View>
                                 </View>
                             </View>
