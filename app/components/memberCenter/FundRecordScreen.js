@@ -386,7 +386,12 @@ export default class FundRecordScreen extends Component<Props> {
 
     /*分割线*/
     separatorComponent = () => {
-        return <View style={{ height: 0.5, backgroundColor: MainTheme.LightGrayColor }} />
+        return <View style={{
+            marginLeft: 15,
+            marginRight: 15,
+            height: 0.5,
+            backgroundColor: MainTheme.DivideLineColor
+        }} />
     }
     /**
      * 根据记录的type产生对应的标题
@@ -430,7 +435,7 @@ export default class FundRecordScreen extends Component<Props> {
             return MainTheme.DarkGrayColor;
         }
         else if (item.amount.startsWith('-')) {
-            return 'green';
+            return MainTheme.FundGreenColor;
         }
         return MainTheme.SpecialColor;
     }

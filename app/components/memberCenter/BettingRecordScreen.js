@@ -11,13 +11,7 @@ import {
     Alert,
     View
 } from "react-native";
-import {
-    category_group_divide_line_color,
-    category_tab_checked_bg_color,
-    theme_color,
-    funRecordGreen,
-    MainTheme,
-} from "../../utils/AllColor";
+import MainTheme from "../../utils/AllColor";
 import deviceValue from "../../utils/DeviceValue";
 import FastImage from 'react-native-fast-image'
 import { CAGENT } from "../../utils/Config";
@@ -369,7 +363,7 @@ export default class BettingRecordScreen extends Component<Props> {
             marginLeft: 15,
             marginRight: 15,
             height: 0.5,
-            backgroundColor: MainTheme.LightGrayColor
+            backgroundColor: MainTheme.DivideLineColor
         }} />
     }
 
@@ -549,7 +543,7 @@ export default class BettingRecordScreen extends Component<Props> {
             { title: '输赢', account: this.state.netTotal, }
         ];
 
-        let netTotalColor = this.state.netTotal.startsWith('-') ? MainTheme.SpecialColor : 'green';
+        let netTotalColor = this.state.netTotal.startsWith('-') ? MainTheme.SpecialColor : MainTheme.FundGreenColor;
 
         return (
             <View style={styles.userBetTotalContainer}>
@@ -666,7 +660,7 @@ export default class BettingRecordScreen extends Component<Props> {
 
                 <FlatList
                     numColumns={1}
-                    style={{ backgroundColor: 'white' }}
+                    style={{ backgroundColor:MainTheme.BackgroundColor }}
                     data={this.state.data}
                     ListFooterComponent={this.renderFooter}//尾巴
                     keyExtractor={item => item.key}//这里要是使用重复的key出现莫名其妙的错误
@@ -744,7 +738,7 @@ const styles = StyleSheet.create({
     },
 
     timeSelectText: {
-        color: MainTheme.SubmitTextColor,
+        color: MainTheme.commonButtonTitleColor,
         fontSize: 12,
         fontWeight: 'bold',
         padding: 6,
@@ -753,7 +747,7 @@ const styles = StyleSheet.create({
     },
 
     timeDividerView: {
-        backgroundColor: category_group_divide_line_color,
+        backgroundColor: MainTheme.DivideLineColor,
         height: 1,
         width: deviceValue.windowWidth
     },
@@ -810,7 +804,7 @@ const styles = StyleSheet.create({
     betRecordAmountWin: {
         marginRight: 6,
         fontSize: 18,
-        color: 'green',
+        color: MainTheme.FundGreenColor,
     },
 
     betRecordDetailPanel: {
