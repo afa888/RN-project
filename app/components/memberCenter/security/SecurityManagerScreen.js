@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
 
     backItem: {
         position: 'absolute',
-        top: 50,
+        top: Platform.OS == 'android' ? 10 : 50,
         left: 10,
     },
 
