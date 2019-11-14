@@ -164,7 +164,7 @@ export default class WithdrawalScreen extends Component<Props> {
     }
 
     _onShowCustomer  = () => {
-         this.props.navigation.navigate('优惠')
+         this.props.navigation.navigate('CustomerService')
     }
 
 
