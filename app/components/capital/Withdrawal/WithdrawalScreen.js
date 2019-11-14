@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
-import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
+import {Platform,TouchableOpacity, StyleSheet, Text, 
+    View, Button, Alert, Image,StatusBar,
+    Modal,
+    TouchableHighlight,
+    TextInput
+} from 'react-native';
 import Dimensions from 'Dimensions'
 import { ImageBackground , ScrollView} from 'react-native';
 import TXInput from "../../../tools/TXInput"
@@ -10,6 +15,12 @@ import httpBaseManager from '../../../http/httpBaseManager'
 import {TXAlert} from "../../../tools/TXAlert"
 import TXToastManager from "../../../tools/TXToastManager"
 import MainTheme from "../../../utils/AllColor"
+import DeviceValue from '../../../utils/DeviceValue'
+import Password from 'react-native-password-pay'
+var TimerMixin = require('react-timer-mixin');
+
+let screenWidth = Dimensions.get('window').width;
+let dialogWidth = screenWidth-80;
 
 export default class WithdrawalScreen extends Component<Props> {
 
@@ -37,7 +48,7 @@ export default class WithdrawalScreen extends Component<Props> {
 
     constructor(props){
         super(props);
-        this.state = {bank:'',cardNum:'',wallet:'0.00',money:'',cardid:'',password:'',markingQuantity:'',userQuantity:'',withdrawConfig:'',withdrawFee:'',withdrawManageFee:''};
+        this.state = {modalVisible: false,bank:'',cardNum:'',wallet:'0.00',money:'',cardid:'',password:'',markingQuantity:'',userQuantity:'',withdrawConfig:'',withdrawFee:'',withdrawManageFee:''};
     }
 
     componentDidMount () {
@@ -61,6 +72,12 @@ export default class WithdrawalScreen extends Component<Props> {
         });
         //获取手续费
         this.checkDrawMoney();
+    }
+
+    componentWillUnmount() {
+        // 如果存在this.timer，则使用clearTimeout清空。
+        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+        this.timer && clearTimeout(this.timer);
     }
 
     checkDrawMoney () {
@@ -119,13 +136,7 @@ export default class WithdrawalScreen extends Component<Props> {
 
     _onCommitWithdrawal = () => {
         var showMeg;
-        if(this.state.money.length == 0){
-            Alert.alert('请输入取款金额为100~500000元');
-        }else if(parseInt(this.state.money)<100 || parseInt(this.state.money)>500000){
-            Alert.alert('请输入取款金额为100~500000元');
-        }else if(this.state.password.length != 4){
-            Alert.alert('请输入4位提款密码');
-        }else if(parseInt(this.state.markingQuantity) > parseInt(this.state.userQuantity) && (parseInt(this.state.withdrawFee) > 0 || parseInt(this.state.withdrawManageFee)>0 )){
+        if(parseInt(this.state.markingQuantity) > parseInt(this.state.userQuantity) && (parseInt(this.state.withdrawFee) > 0 || parseInt(this.state.withdrawManageFee)>0 )){
             showMeg = '未完成打码量，提款将收取' + this.state.withdrawConfig + '%的费率，且今日提款次数过多，提款将收取' + this.state.withdrawFee + '%的手续费和' + this.state.withdrawManageFee +'元的行政费，是否继续提款?';
             this._onDrawFeeAlert(showMeg);
         }else if(parseInt(this.state.markingQuantity) > parseInt(this.state.userQuantity)){
@@ -141,48 +152,175 @@ export default class WithdrawalScreen extends Component<Props> {
         }
     };
 
+    _onCheckWithdrawal = () => {
+        if(this.state.money.length == 0){
+            Alert.alert('请输入取款金额为100~500000元');
+        }else if(parseInt(this.state.money)<100 || parseInt(this.state.money)>500000){
+            Alert.alert('请输入取款金额为100~500000元');
+        }else {
+            this.setModalVisible(true);
+        }
+        
+    }
+
     _onShowCustomer  = () => {
          this.props.navigation.navigate('优惠')
     }
 
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
+    onClose() {
+        this.setState({modalVisible: false});
+    }
+
     render() {
+        let denominator = parseInt(this.state.markingQuantity);
+        let element = parseInt(this.state.userQuantity);
+        let proportion;
+        if (denominator == 0 || isNaN(denominator)) {
+            proportion = 0.99999;
+        }
+        else if(denominator <= element) {
+            proportion = 0.99999;
+        }else {
+            proportion = (element * 1.0) / (denominator * 1.0);
+        }
         return (
             <ScrollView contentContainerStyle={styles.contentContainer}>
+
+            <Modal
+                    animationType={"slide"}
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {this.setModalVisible(false)}}
+                >
+                    <TouchableOpacity style={{flex:1}} onPress={this.onClose.bind(this)}>
+                    <View style={styles.container}>
+                        <View style={styles.innerContainer}>
+                            <View style={{borderTopLeftRadius: 10,borderTopRightRadius: 10,height:128,width:DeviceValue.windowWidth - 40,backgroundColor:MainTheme.theme_color}}>
+                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                    <View style={{marginLeft:10,width:100}}>
+                                        <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款金额</Text>
+                                    </View>
+                                    <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>￥{this.state.money}</Text>
+                                    </View>
+                                </View>
+
+                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                    <View style={{marginLeft:10,width:100}}>
+                                        <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款至银行</Text>
+                                    </View>
+                                    <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>{this.state.bank}</Text>
+                                    </View>
+                                </View>
+
+                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                    <View style={{marginLeft:10,width:100}}>
+                                        <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款卡号</Text>
+                                    </View>
+                                    <View style={{marginRight:10,width:DeviceValue.windowWidth - 160,alignItems:'flex-end'}}>
+                                        <Text  style={{color:MainTheme.SubmitTextColor,fontSize:14}}>{this.state.cardNum}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{borderBottomLeftRadius: 10,borderBottomRightRadius: 10,height:140,width:DeviceValue.windowWidth - 40,backgroundColor:MainTheme.backgroundColor}}>
+                                <View style={{marginTop:10,paddingLeft:10,backgroundColor:MainTheme.backgroundColor,width:120}}>
+                                    <Text style={{color:MainTheme.DarkGrayColor}}>输入提款密码</Text>
+                                </View>
+                                <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+
+                                    <View style={{width:180,height:45}}>
+                                     <Password maxLength={4}
+                                               onChange={(value)=> {
+                                                   console.log('输入的密码：',value)
+                                                   if (value.length == 4) {
+                                                    this.onClose();
+                                                    this.setState({password:value});
+                                                    this.timer = setTimeout(
+                                                      () => { this._onCommitWithdrawal(); },
+                                                      500
+                                                    );
+                                                    
+                                                   }
+                                               }}
+                                     />
+                                    </View>
+                                </View>
+                                <View style={{paddingTop:10,justifyContent:'center',flexDirection: 'row',height:50}}>
+                                    <Text style={{fontSize:10,color:'#8B8B8B'}}>忘记密码，请联系</Text>
+                                    <Text style={{fontSize:10,color:'red'}} onPress={this._onShowCustomer}> 在线客服 </Text>
+                                </View>
+                                
+                            </View>
+                        </View>
+                    </View>
+                    </TouchableOpacity>
+                </Modal>
+
             <View style={{flex:1}}>
 
                 <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:MainTheme.backgroundColor}}>
                 
-                <View style={{alignItems: 'center',paddingTop:20,height:100,width:Dimensions.get('window').width,backgroundColor:'#fff'}}>
-                    <View style={{backgroundColor:MainTheme.theme_color,paddingLeft:15,paddingTop:20,width: 240, height: 100}}>
-                        <Text style={{color:'#ffffff',fontSize:16,fontWeight:'bold'}}>{this.state.bank}</Text>
-                        <Text style={{color:'#ffffff',paddingTop:15,fontSize:12}}>{this.state.cardNum}</Text>
+                <View style ={{backgroundColor:MainTheme.backgroundColor,width:Dimensions.get('window').width,padding:20,height:140}}>
+                    <View style={{borderRadius:10,borderWidth:0.5,borderColor:MainTheme.theme_color,alignItems: 'center',paddingTop:20,height:100,width:Dimensions.get('window').width - 40,backgroundColor:MainTheme.theme_color}}>
+                        <View style={{paddingLeft:15,paddingTop:5,width: 240, height: 80}}>
+                            <Text style={{color:'#ffffff',fontSize:16,fontWeight:'bold'}}>{this.state.bank}</Text>
+                            <Text style={{color:'#ffffff',paddingTop:20,fontSize:16}}>{this.state.cardNum}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
+                    <Text style={{paddingLeft:20,color:MainTheme.DarkGrayColor}}>打码量</Text>
+                </View>
+                
+                <View style={{height:70,width:Dimensions.get('window').width,paddingLeft:20,paddingRight:20,flexDirection:'column'}}>
+                    <View style={{height:30,flexDirection:'row'}}>
+                        <View style={{height:30,width:(DeviceValue.windowWidth * proportion) - 83}}></View>
+                        <ImageBackground style={{ flex: 1,width:58,height:30}} resizeMode='cover'
+                            source={require('../../../static/img/drawing_icon_dm02.png')} >
+                            <View style={{paddingBottom:7,width:58,height:30,alignItems:'center',justifyContent:'center'}}>
+                            <Text style={{color:MainTheme.commonButtonTitleColor}}>{this.state.markingQuantity}</Text>
+                            </View>
+                        </ImageBackground>
+                    </View>
+                    <View style={{height:10,flexDirection:'row'}}>
+                        <View style={{flex:0,height:10,width:(DeviceValue.windowWidth - 40) * proportion,backgroundColor:'red'}}></View>
+                        <View style={{height:10,width:(DeviceValue.windowWidth - 40) * (1 - proportion),backgroundColor:MainTheme.DarkGrayColor}}></View>
+                    </View>
+                    <View style={{height:30,flexDirection:'row'}}>
+                        <View style={{width:(DeviceValue.windowWidth - 40) * proportion - 20}}></View>
+                        <ImageBackground style={{flex: 1,width:58,height:30}} resizeMode='cover'
+                            source={require('../../../static/img/drawing_icon_dm01.png')} >
+                            <View style={{paddingTop:7,width:58,height:30,alignItems:'center',justifyContent:'center'}}>
+                                <Text style={{color:MainTheme.commonButtonTitleColor}}>{this.state.userQuantity}</Text>
+                            </View>
+                            
+                        </ImageBackground>
                     </View>
                 </View>
 
 
-                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>打码量信息</Text>
-                </View>
-                <TXInput label="要求打码量" isUpdate={false} buttonFontSize={10} textAlign='right' onChange={(value) => this._onChange('markingQuantity', value)} value={this.state.markingQuantity+'  ' || ''}/>
-                <TXInput label="完成打码量" isUpdate={false} textAlign='right' onChange={(value) => this._onChange('userQuantity', value)} value={this.state.userQuantity+'  ' || ''}/>
-                <View style={{paddingTop:10,height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10}}>取款信息</Text>
-                </View>
-                <TXInput label="取款金额" forbiddenDot={true} keyboardType = 'numeric'  placeholder="单笔限额100~500000(元)" textAlign='right' onChange={(value) => this._onChange('money', value)} value={this.state.money || ''}/>
-                <TXInput label="取款密码"  placeholder="请输入取款密码" textAlign='right' secureTextEntry={true} maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
-                <View style={{paddingTop:20,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onCommitWithdrawal()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
 
-                        <Text style={{color:'#ffffff',fontSize:17}}>下一步</Text>
+                <TXInput label="钱包余额"  labelTextStyle={{color:MainTheme.textTitleColor}}  isUpdate={false} textAlign='right'  value={this.state.wallet || ''}/>
+
+                <TXInput label="￥" labelTextStyle={{color:MainTheme.textTitleColor,fontSize:20}} forbiddenDot={true} keyboardType = 'numeric'  placeholder="请输入提款金额" textAlign='right' onChange={(value) => this._onChange('money', value)} value={this.state.money || ''}/>
+                <View style={{paddingTop:15,paddingLeft:10,flexDirection: 'column',justifyContent:'center',height:35,width:Dimensions.get('window').width}}>
+                    <Text style={{fontSize:12,color:MainTheme.GrayColor}}>单笔限额100-50000元</Text>
+                </View>
+                <View style={{paddingTop:20,alignItems: 'center'}}>
+                    <TouchableOpacity  onPress={() => this._onCheckWithdrawal()}  activeOpacity={0.2} focusedOpacity={0.5}>
+                     <View style=  {{borderRadius:10,backgroundColor:MainTheme.commonButtonBGColor,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40}}>
+
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即提款</Text>
                      </View>
                 </TouchableOpacity>
                 </View>
-                <View style={{paddingTop:15,paddingLeft:10,flexDirection: 'column',justifyContent:'center',height:35,width:Dimensions.get('window').width}}>
-                    <Text style={{fontSize:12,color:'#D62F27'}}>温馨提示</Text>
-                </View>
-
-                <View style={{paddingLeft:10,flexDirection: 'row',height:50,width:Dimensions.get('window').width}}>
+                <View style={{paddingTop:20,paddingLeft:10,flexDirection: 'row',height:50,width:Dimensions.get('window').width}}>
                     <Text style={{fontSize:10,color:'#8B8B8B'}}>若您在取款过程中遇到困难，请您随时联系我们的</Text>
                     <Text style={{fontSize:10,color:'red'}} onPress={this._onShowCustomer}> 在线客服 </Text>
                     <Text style={{fontSize:10,color:'#8B8B8B'}}>来获取帮助</Text>
@@ -198,6 +336,31 @@ export default class WithdrawalScreen extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: 20,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    innerContainer: {
+        borderRadius: 10,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+
+    },
+    btnContainer:{
+        width:dialogWidth,
+        borderTopWidth:1,
+        borderTopColor:'#777',
+        alignItems:'center'
+    },
+    inputtext:{
+        width:dialogWidth-20,
+        margin:10,
+    },
+    hidemodalTxt: {
+        marginTop:10,
+    },
   contentContainer: {
     paddingVertical: 0
   }
