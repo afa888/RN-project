@@ -5,15 +5,35 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT,WEBNUM} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import TXToastManager from "../../tools/TXToastManager"
+import { NavigationActions,StackActions } from 'react-navigation';
+import deviceValue from "../../utils/DeviceValue"
+import MainTheme from "../../utils/AllColor"
 
 import loadingImage from '../../static/img/zx.gif'
 
 export default class CustomerServiceScreen extends Component<Props> {
-    static navigationOptions = {
-        title: '优惠',
-        headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
-        headerBackTitle:null,
-    };
+    
+    static navigationOptions = ({ navigation }) => {
+
+        return {
+            title: '在线客服',
+            headerTitleStyle:{flex:1, textAlign: 'center'},//解决android 标题不居中问题
+            headerLeft: (
+                    <TouchableOpacity onPress={() => {
+                            navigation.dispatch(NavigationActions.back());
+                        }}>
+                            <Image source={require('../../static/img/titlebar_back_normal.png')}
+                                   style={{
+                                       resizeMode: 'contain',
+                                       width: 20,
+                                       height: 20,
+                                       margin: 12
+                                   }}/>
+                        </TouchableOpacity>
+                ),
+            headerBackTitle:null,
+        };
+      };
 
     constructor(props) {
         super(props);
@@ -29,7 +49,7 @@ export default class CustomerServiceScreen extends Component<Props> {
         http.post('webContactInfo',params,true).then(res => {
             if(res.status === 10000){
                 let oData = res.data;//联系方式数组
-                oData.splice(0,0,{'name':'联系方式'});//手动添加第一行
+                // oData.splice(0,0,{'name':'联系方式'});//手动添加第一行
 
                 this.setState({dataList:oData,isLoading: false,
                         isRefreshing:false});
@@ -105,6 +125,7 @@ export default class CustomerServiceScreen extends Component<Props> {
         }
     }
 
+
     //列表的每一行
     renderItem({item,index}) {
 
@@ -144,9 +165,7 @@ export default class CustomerServiceScreen extends Component<Props> {
 
         return (
             <View style={{alignItems:'center',height: 50,backgroundColor:'#FFFFFF'}}>
-                {index == 0 ?
-                    <View style={{paddingTop:10}}><Text style={{fontSize:20}}>{item.name}</Text></View>
-                    :
+                {
                     <TouchableOpacity
                         onPress={() => this.clickItem(item,index)}>
                         <View style={{paddingLeft:30,width:Dimensions.get('window').width - 80,height:35,flexDirection:'row',alignItems:'center'
@@ -168,9 +187,13 @@ export default class CustomerServiceScreen extends Component<Props> {
 
     renderData() {
         let height = this.state.dataList.length * 50 ;
-        let top = (Dimensions.get('window').height -  height) / 2 - 80;
+        let top = 20;
         return (
-            <View style={{paddingTop:top,flex: 1,alignItems:'center',justifyContent:'center',backgroundColor:'#efeff4'}}>
+            <View style={{paddingTop:top,flex: 1,alignItems:'center',justifyContent:'center',backgroundColor:MainTheme.backgroundColor}}>
+                <View style={{paddingBottom:20,height:168,width:deviceValue.windowWidth,justifyContent:'center',alignItems:'center'}}>
+                    <Image style={{width:148,height:148}}
+                        source={require('../../static/img/icon_service.png')} />
+                </View>
                 <FlatList
                         numColumns={1}
                         style={[styles.flatListStyle,{height:height,width:Dimensions.get('window').width - 80}]}
@@ -213,7 +236,7 @@ const styles = StyleSheet.create({
     flatListStyle:{
         color:'red',
         fontSize:16,
-        backgroundColor:'#efeff4',
+        backgroundColor:MainTheme.backgroundColor,
     },
     iconImage:{
         width:20,
