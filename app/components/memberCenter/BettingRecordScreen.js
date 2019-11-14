@@ -69,24 +69,10 @@ export default class BettingRecordScreen extends Component<Props> {
         const { params } = navigation.state;
         return {
             headerTitle: (
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}>投注记录</Text>
-                </View>
+                MainTheme.renderCommonTitle('投注记录')
             ),
-
             headerLeft: (
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity style={{ width: 60, height: 20, alignItems: 'center' }}
-                        onPress={() => { navigation.goBack() }}>
-                        <Image source={require('../../static/img/titlebar_back_normal.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                width: 25,
-                                height: 20,
-                                marginLeft: 12
-                            }} />
-                    </TouchableOpacity>
-                </View>
+                MainTheme.renderCommonBack(navigation)
             ),
             headerRight: (
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>

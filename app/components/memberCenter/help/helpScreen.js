@@ -32,8 +32,8 @@ export default class HelpScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <WebView
                     automaticallyAdjustContentInsets={false}
-                    // source={{uri: 'http://192.168.104.2:480/help'}}
-                    source={{ uri: this.state.url }}
+                    source={{uri: 'http://192.168.104.2:480/help'}}
+                    // source={{ uri: this.state.url }}
                     javaScriptEnabled={true}
                     onMessage={this._handleMessage.bind(this)}
                 />

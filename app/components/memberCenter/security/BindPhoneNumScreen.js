@@ -15,25 +15,17 @@ import MainTheme from '../../../utils/AllColor';
 
 let timeCount = 60
 export default class BindPhoneNumScreen extends Component<Props> {
-
     static navigationOptions = ({ navigation }) => {
-
         return {
-            title: '绑定手机',
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
-            headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.dispatch(NavigationActions.back());
-                }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
-                </TouchableOpacity>
+            headerTitle: (
+                MainTheme.renderCommonTitle('绑定手机')
             ),
+            headerLeft: (
+                MainTheme.renderCommonBack(navigation)
+            ),
+            headerRight: (
+                <View />
+            )
         };
     };
 

@@ -14,23 +14,16 @@ import DeviceValue from "../../../utils/DeviceValue";
 export default class ChangeCapitalPwdScreen extends Component<Props> {
 
     static navigationOptions = ({ navigation }) => {
-
         return {
-            title: '设定提款密码',
-            headerTitleStyle: { flex: 1, textAlign: 'center' },//解决android 标题不居中问题
-            headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.dispatch(NavigationActions.back());
-                }}>
-                    <Image source={require('../../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
-                </TouchableOpacity>
+            headerTitle: (
+                MainTheme.renderCommonTitle('设定提款密码')
             ),
+            headerLeft: (
+                MainTheme.renderCommonBack(navigation)
+            ),
+            headerRight: (
+                <View />
+            )
         };
     };
 
