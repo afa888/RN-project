@@ -42,7 +42,7 @@ export default class ModalDialog extends Component<Props> {
             >
                 <View style={styles.bg}>
                     <ImageBackground style={styles.dialog}
-                                     source={require('../static/img/hb_background.webp')}
+                                     source={require('../static/img/hb_background.png')}
                                      resizeMode='contain'>
                         <View style={styles.dialogTitleView}>
                             <Image source={require('../static/img/text_dsps.png')}
