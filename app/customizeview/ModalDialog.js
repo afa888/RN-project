@@ -42,19 +42,20 @@ export default class ModalDialog extends Component<Props> {
             >
                 <View style={styles.bg}>
                     <ImageBackground style={styles.dialog}
-                                     source={require('../static/img/hb_background.webp')}
+                                     source={require('../static/img/hb_background.png')}
                                      resizeMode='contain'>
                         <View style={styles.dialogTitleView}>
+                            <Image source={require('../static/img/text_dsps.png')}
+                                   style={{
+                                       resizeMode: 'contain',
+                                       width: SCREEN_WIDTH * 0.2,
+                                       height: SCREEN_WIDTH * 0.2 * (76 / 314),
+                                       marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
 
-
-                            <Text style={{
-                                color: 'white',
-                                fontSize: 16,
-                                marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
-                            }}>活动倒计时</Text>
-                            <Text style={{color: 'white', fontSize: 16}}>1天99小时14分20秒</Text>
+                                   }}/>
+                            {<Text style={{color: 'white', fontSize: 16}}>1天99小时14分20秒</Text>}
                             <TouchableOpacity onPress={this.props._dialogCancle}>
-                                <Image source={require('../static/img/hb_click.png')}
+                                <Image source={require('../static/img/btn_djqhb.png')}
                                        style={{
                                            resizeMode: 'contain',
                                            width: SCREEN_WIDTH * 0.2,
@@ -63,8 +64,6 @@ export default class ModalDialog extends Component<Props> {
                             </TouchableOpacity>
 
                         </View>
-
-
                     </ImageBackground>
                     <TouchableOpacity onPress={this.props._dialogCancle}>
                         <Image source={require('../static/img/hb_back.png')}

@@ -111,6 +111,7 @@ export default class HomeScreen extends Component<Props> {
         });
         this.httpCategoryRefresh()
         this.httpGridGame()
+        this.httpRedBag()
         console.log("99999")
         console.log(this.state.dicountUrl)
     }
@@ -129,18 +130,22 @@ export default class HomeScreen extends Component<Props> {
             dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
                 "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/2.jpg",
                 "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/3.jpg",],
-            noticeTitle: []
+            noticeTitle: [],
+            redData: {}
         }
 
     }
 
-    showDialog = (blo, notice) => {
+    noticeScreen = (blo, notice) => {
         let noticeList = []
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
         }
-        // this.setState({isRedBagVisible: blo, noticeTitle: noticeList});
+
         this.props.navigation.navigate('NoticeScreen', {data: noticeList})
+    }
+    showRedBag = () => {
+        this.setState({isRedBagVisible: true});
     }
 
 
@@ -231,6 +236,22 @@ export default class HomeScreen extends Component<Props> {
         });
     }
 
+    httpRedBag = () => {
+        let prams = {};
+        http.get('LuckyDraw/getStatus.do', prams).then(res => {
+            console.log("红包")
+            console.log(res);
+            if (res.status === 10000) {
+                this.setState({redData: res.data})
+                if (res.data.status !== "faild") {
+                    this.showRedBag();
+                }
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
 
     gotoDiscout = () => {
         this.props.navigation.navigate('Discount')
@@ -249,6 +270,7 @@ export default class HomeScreen extends Component<Props> {
                 <ModalDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
+
                     _dialogLeftBtnAction={() => {
                         this.hideDialog()
                     }}
@@ -269,7 +291,7 @@ export default class HomeScreen extends Component<Props> {
                 <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
                     <View style={{flex: 1}}>
                         <HomeNoticeView showDialog={
-                            this.showDialog.bind(this)
+                            this.noticeScreen.bind(this)
                         }/>
 
                         <HomeMidView data={this.state.data.gameClassifyEntities}
