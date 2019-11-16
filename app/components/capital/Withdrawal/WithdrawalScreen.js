@@ -200,7 +200,7 @@ export default class WithdrawalScreen extends Component<Props> {
                     <View style={styles.container}>
                         <View style={styles.innerContainer}>
                             <View style={{borderTopLeftRadius: 10,borderTopRightRadius: 10,height:128,width:DeviceValue.windowWidth - 40,backgroundColor:MainTheme.theme_color}}>
-                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                <View style={{marginTop:20,flexDirection:'row',justifyContent:'center'}}>
                                     <View style={{marginLeft:10,width:100}}>
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款金额</Text>
                                     </View>
@@ -209,7 +209,7 @@ export default class WithdrawalScreen extends Component<Props> {
                                     </View>
                                 </View>
 
-                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                <View style={{marginTop:20,flexDirection:'row',justifyContent:'center'}}>
                                     <View style={{marginLeft:10,width:100}}>
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款至银行</Text>
                                     </View>
@@ -218,7 +218,7 @@ export default class WithdrawalScreen extends Component<Props> {
                                     </View>
                                 </View>
 
-                                <View style={{marginTop:10,flexDirection:'row',justifyContent:'center'}}>
+                                <View style={{marginTop:20,flexDirection:'row',justifyContent:'center'}}>
                                     <View style={{marginLeft:10,width:100}}>
                                         <Text style={{color:MainTheme.SubmitTextColor,fontSize:14}}>提款卡号</Text>
                                     </View>
@@ -338,8 +338,8 @@ export default class WithdrawalScreen extends Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         padding: 20,
+        paddingTop:120,
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
     },
     innerContainer: {

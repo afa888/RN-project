@@ -14,48 +14,14 @@ let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
 let SCREEN_HEIGHT = Dimensions.get('window').height;//高
 
-let timeData
+
 export default class ModalDialog extends Component<Props> {
 
     // 构造
     constructor(props) {
         super(props);
-        this.state = {
-            time: "",
-        }
-    }
-    componentWillMount() {
-
-    //   timeData =  new Date(this.props.dialogData.diff*1000)
-       // console(timeData.getDay()+" 天   ")
-       // console(timeData.getDay()+" 天   "+timeData.getHours()+" 小时"+timeData.getMinutes()+" 分"+timeData.getMilliseconds()+"秒")
     }
 
-    componentDidMount() {
-       // console(this.props.dialogData.diff+"啦啦啦")
-        this.timeOut()
-    }
-
-    timeOut = () => {
-        this.timer = setTimeout(() => {
-            console.log("把一个定时器的引用挂在this上");
-
-            this.timeOut()
-        }, 1000);
-    }
-
-    componentWillUnmount() {
-        // 请注意Un"m"ount的m是小写
-
-        // 如果存在this.timer，则使用clearTimeout清空。
-        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
-        this.timer && clearTimeout(this.timer);
-    }
-
-    hideRedBag = () => {
-        this.props._dialogCancle()
-         this.timer && clearTimeout(this.timer);
-    }
 
     static defaultProps = {
         _dialogTitle: '公告',
@@ -76,41 +42,31 @@ export default class ModalDialog extends Component<Props> {
             >
                 <View style={styles.bg}>
                     <ImageBackground style={styles.dialog}
-                                     source={require('../static/img/hb_background.png')}
+                                     source={require('../static/img/hb_background.webp')}
                                      resizeMode='contain'>
                         <View style={styles.dialogTitleView}>
-                            <Image source={require('../static/img/text_dsps.png')}
-                                   style={{
-                                       resizeMode: 'contain',
-                                       width: SCREEN_WIDTH * 0.2,
-                                       height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                       marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
 
-                                   }}/>
-                            {this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" &&
-                            <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
-                            <TouchableOpacity onPress={() => {
-                                this.hideRedBag()
-                            }}>
-                                <Image source={require('../static/img/btn_djqhb.png')}
-                                       style={this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ? {
+
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 16,
+                                marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
+                            }}>活动倒计时</Text>
+                            <Text style={{color: 'white', fontSize: 16}}>1天99小时14分20秒</Text>
+                            <TouchableOpacity onPress={this.props._dialogCancle}>
+                                <Image source={require('../static/img/hb_click.png')}
+                                       style={{
                                            resizeMode: 'contain',
                                            width: SCREEN_WIDTH * 0.2,
                                            height: SCREEN_WIDTH * 0.2 * (76 / 314),
-
-                                       } : {
-                                           resizeMode: 'contain',
-                                           width: SCREEN_WIDTH * 0.2,
-                                           height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                           marginTop: 10
                                        }}/>
                             </TouchableOpacity>
 
                         </View>
+
+
                     </ImageBackground>
-                    <TouchableOpacity onPress={() => {
-                        this.hideRedBag()
-                    }}>
+                    <TouchableOpacity onPress={this.props._dialogCancle}>
                         <Image source={require('../static/img/hb_back.png')}
                                style={{
                                    resizeMode: 'contain',
