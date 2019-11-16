@@ -5,10 +5,14 @@ import {
     TouchableHighlight,
     View,
     StyleSheet,
-    BackAndroid, TouchableOpacity, Image, ScrollView, ImageBackground
+    BackAndroid, TouchableOpacity, Image, ScrollView, ImageBackground, DeviceEventEmitter
 } from 'react-native';
 import {NavigationActions} from "react-navigation";
 import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
+import http from "../http/httpFetch";
+import {getStoreData} from "../http/AsyncStorage";
+import {BASE_URL,WEBNUM} from "../utils/Config"
+import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
@@ -84,6 +88,7 @@ export default class RedBagDialog extends Component<Props> {
             if (timeNumber === 0) {
                 this.timer && clearTimeout(this.timer);
                 this.setState({isVisibleTime: false})
+                return
             }
             this.formartData(timeNumber)
             this.timeOut()
@@ -96,6 +101,19 @@ export default class RedBagDialog extends Component<Props> {
         // 如果存在this.timer，则使用clearTimeout清空。
         // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
         this.timer && clearTimeout(this.timer);
+    }
+
+    clickRedBag = () => {
+        getStoreData('@loginState').then((loginInfo) => {
+            if (loginInfo.isLogin) {
+                this.hideRedBag()
+                let  baseUrl = BASE_URL.split(WEBNUM+"/");
+                let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
+                AndroidNativeGameActiviy.openGameWith(url, "", "");
+            } else {
+                DeviceEventEmitter.emit('login', false); //导航到login页面
+            }
+        });
     }
 
     hideRedBag = () => {
@@ -135,7 +153,7 @@ export default class RedBagDialog extends Component<Props> {
                             {this.state.isVisibleTime &&
                             <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
                             <TouchableOpacity onPress={() => {
-                                this.hideRedBag()
+                                this.clickRedBag()
                             }}>
                                 <Image source={require('../static/img/btn_djqhb.png')}
                                        style={this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ? {
