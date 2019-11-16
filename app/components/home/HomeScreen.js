@@ -19,7 +19,7 @@ import {NativeModules} from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
-import ModalDialog from '../../customizeview/ModalDialog'
+import RedBagDialog from '../../customizeview/RedBagDialog'
 import HomeMidView from './HomeMidView'
 import {
     category_group_divide_line_color,
@@ -124,7 +124,7 @@ export default class HomeScreen extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            isRedBagVisible: true,
+            isRedBagVisible: false,
             data: {},
             dataImagUrl: [],
             dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
@@ -239,8 +239,10 @@ export default class HomeScreen extends Component<Props> {
             console.log(res);
             if (res.status === 10000) {
                 this.setState({redData: res.data})
+
                 if (res.data.status !== "faild") {
                     this.showRedBag();
+
                 }
             }
         }).catch(err => {
@@ -249,10 +251,11 @@ export default class HomeScreen extends Component<Props> {
     }
 
     showRedBag = () => {
+
         this.setState({isRedBagVisible: true});
     }
     gotoDiscout = () => {
-        this.props.navigation.navigate('Discount')
+        this.props.navigation.navigate('DiscountsScreen')
     }
 
     gotoDiscoutDetail = (url) => {
@@ -265,14 +268,14 @@ export default class HomeScreen extends Component<Props> {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
-                <ModalDialog
+                {this.state.isRedBagVisible && <RedBagDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
                     dialogData={this.state.redData}
                     _dialogCancle={
                         this.hideDialog.bind(this)
                     }
-                />
+                />}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'black'}}

@@ -15,31 +15,68 @@ let SCREEN_WIDTH = Dimensions.get('window').width;//宽
 let SCREEN_HEIGHT = Dimensions.get('window').height;//高
 
 let timeData
-export default class ModalDialog extends Component<Props> {
+let timeNumber
+export default class RedBagDialog extends Component<Props> {
 
     // 构造
     constructor(props) {
         super(props);
         this.state = {
             time: "",
+            isVisibleTime:this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ,
         }
+        timeData = new Date()
+        timeNumber = parseInt(this.props.dialogData.diff);
     }
+
     componentWillMount() {
 
-    //   timeData =  new Date(this.props.dialogData.diff*1000)
-       // console(timeData.getDay()+" 天   ")
-       // console(timeData.getDay()+" 天   "+timeData.getHours()+" 小时"+timeData.getMinutes()+" 分"+timeData.getMilliseconds()+"秒")
+        if (this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting") {
+            this.timeOut()
+        }
+    }
+
+    formartData = (diff) => {
+        const timeLeft = {
+            days: 0,
+            hours: 0,
+            min: 0,
+            sec: 0,
+        };
+
+
+        if (diff >= 86400) {
+            timeLeft.days = Math.floor(diff / 86400);
+            diff -= timeLeft.days * 86400;
+        }
+        if (diff >= 3600) {
+            timeLeft.hours = Math.floor(diff / 3600);
+            diff -= timeLeft.hours * 3600;
+        }
+        if (diff >= 60) {
+            timeLeft.min = Math.floor(diff / 60);
+            diff -= timeLeft.min * 60;
+        }
+
+        timeLeft.sec = diff;
+
+        this.setState({time: timeLeft.days + "天" + timeLeft.hours + "小时" + timeLeft.min + "分" + timeLeft.sec + "秒"})
     }
 
     componentDidMount() {
-       // console(this.props.dialogData.diff+"啦啦啦")
-        this.timeOut()
+
+
     }
 
     timeOut = () => {
         this.timer = setTimeout(() => {
             console.log("把一个定时器的引用挂在this上");
-
+            timeNumber = timeNumber - 1
+            if (timeNumber === 0) {
+                this.timer && clearTimeout(this.timer);
+                this.setState({isVisibleTime:false})
+            }
+            this.formartData(timeNumber)
             this.timeOut()
         }, 1000);
     }
@@ -54,7 +91,7 @@ export default class ModalDialog extends Component<Props> {
 
     hideRedBag = () => {
         this.props._dialogCancle()
-         this.timer && clearTimeout(this.timer);
+        this.timer && clearTimeout(this.timer);
     }
 
     static defaultProps = {
@@ -84,10 +121,9 @@ export default class ModalDialog extends Component<Props> {
                                        resizeMode: 'contain',
                                        width: SCREEN_WIDTH * 0.2,
                                        height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                       marginTop: SCREEN_WIDTH * 0.8 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 60
-
+                                       marginTop: SCREEN_WIDTH * 0.9 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
                                    }}/>
-                            {this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" &&
+                            {this.state.isVisibleTime&&
                             <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
                             <TouchableOpacity onPress={() => {
                                 this.hideRedBag()
@@ -102,7 +138,7 @@ export default class ModalDialog extends Component<Props> {
                                            resizeMode: 'contain',
                                            width: SCREEN_WIDTH * 0.2,
                                            height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                           marginTop: 10
+                                           marginTop: 15
                                        }}/>
                             </TouchableOpacity>
 
@@ -134,60 +170,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     dialog: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_WIDTH * 0.8 * (791 / 750),
+        width: SCREEN_WIDTH * 0.9,
+        height: SCREEN_WIDTH * 0.9 * (791 / 750),
         borderRadius: 8,
     },
     dialogTitleView: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_WIDTH * 0.8 * (791 / 750),
+        width: SCREEN_WIDTH * 0.9,
+        height: SCREEN_WIDTH * 0.9 * (791 / 750),
         flexDirection: 'column',
         alignItems: 'center',
     },
-    dialogTitle: {
-        textAlign: 'center',
-        fontSize: 14,
-        color: '#000000',
-        marginLeft: 12,
-    },
-    dialogContentView: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.27,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dialogContent: {
-        textAlign: 'left',
-        fontSize: 13,
-        margin: 12,
-    },
-    dialogBtnView: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.04,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
 
 
-    },
-    dialogBtnViewItem: {
-        width: 60,
-        height: SCREEN_HEIGHT * 0.03,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme_color,
-        borderRadius: 3,
-        marginRight: 8
-    },
-    leftButton: {
-        fontSize: 18,
-        color: '#007AFF',
-        borderBottomLeftRadius: 8,
-    },
-    rightButton: {
-
-        fontSize: 12,
-        color: 'white',
-        borderBottomRightRadius: 8,
-    }
 });

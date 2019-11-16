@@ -18,7 +18,7 @@ import http from "../../http/httpFetch";
 import Toast from "react-native-easy-toast";
 import Picker from 'react-native-picker';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
-import ModalDialog from "../../customizeview/ModalDialog";
+import RedBagDialog from "../../customizeview/RedBagDialog";
 import CalendarDialog from "../../customizeview/CalendarDialog";
 import deviceValue from "../../utils/DeviceValue";
 
@@ -279,7 +279,7 @@ export default class FundRecordScreen extends Component<Props> {
                 },
                 onPickerSelect: data => {
                     console.log("斤斤计较");
-    
+
                 }
             });
             Picker.show();
@@ -742,7 +742,7 @@ export default class FundRecordScreen extends Component<Props> {
             curSelectTypeIndex: 0,
             curSelectResultIndex: 0,
         });
-        
+
         type = RECORD_TYPES[0].value;
         status = RESULT_TYPES[0].value;
 

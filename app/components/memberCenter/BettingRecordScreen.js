@@ -19,7 +19,7 @@ import http from "../../http/httpFetch";
 import Toast from "react-native-easy-toast";
 import Picker from 'react-native-picker';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
-import ModalDialog from "../../customizeview/ModalDialog";
+import RedBagDialog from "../../customizeview/RedBagDialog";
 import CalendarDialog from "../../customizeview/CalendarDialog";
 
 let pageSize = 1;
