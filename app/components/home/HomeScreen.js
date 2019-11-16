@@ -31,10 +31,10 @@ import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT} from '../../utils/Config'
-import CodePush from 'react-native-code-push'
+import CodePush from 'react-native-code-push';
+
 
 export default class HomeScreen extends Component<Props> {
-
 
     static navigationOptions = ({navigation}) => {
         return {
@@ -55,9 +55,9 @@ export default class HomeScreen extends Component<Props> {
                     alignItems: 'center',
                     marginRight: 12
                 }}>
-                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                    navigation.navigate('InnerMessager')
-                }}>
+                <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center', marginRight: 10, }}
+                    onPress={() => { navigation.navigate('InnerMessager') }}
+                >
                     <View style={{
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -65,13 +65,35 @@ export default class HomeScreen extends Component<Props> {
                         height: 48,
                         justifyContent: 'center'
                     }}>
+                        <View style={{
+                            position: 'absolute',
+                            top: 5,
+                            left: 14,
+                            height: 14,
+                            width: 14,
+                            zIndex: 999999,
+                            backgroundColor: 'red',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 7,
+                            borderWidth: 0.5,
+                            borderColor: 'white',
+                        }}>
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 10,
+                                textAlign: 'center',
+                            }}>9</Text>
+                        </View>
+
                         <Image
                             source={require('../../static/img/nav_icon_email_nor.png')}
                             style={{
                                 resizeMode: 'contain',
                                 width: 18,
                                 height: 18,
-                            }}/>
+                            }} />
+
                         <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
                     </View>
                 </TouchableOpacity>
