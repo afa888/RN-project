@@ -23,7 +23,7 @@ export default class RedBagDialog extends Component<Props> {
         super(props);
         this.state = {
             time: "",
-            isVisibleTime:this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ,
+            isVisibleTime: this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting",
         }
         timeData = new Date()
         timeNumber = parseInt(this.props.dialogData.diff);
@@ -59,7 +59,16 @@ export default class RedBagDialog extends Component<Props> {
         }
 
         timeLeft.sec = diff;
-
+        console.log(String(timeLeft.sec).length + " 秒的长度 ")
+        if (String(timeLeft.hours).length <= 1) {
+            timeLeft.hours = '0' + timeLeft.hours
+        }
+        if (String(timeLeft.min).length <= 1) {
+            timeLeft.min = '0' + timeLeft.min
+        }
+        if (String(timeLeft.sec).length <= 1) {
+            timeLeft.sec = '0' + timeLeft.sec
+        }
         this.setState({time: timeLeft.days + "天" + timeLeft.hours + "小时" + timeLeft.min + "分" + timeLeft.sec + "秒"})
     }
 
@@ -74,7 +83,7 @@ export default class RedBagDialog extends Component<Props> {
             timeNumber = timeNumber - 1
             if (timeNumber === 0) {
                 this.timer && clearTimeout(this.timer);
-                this.setState({isVisibleTime:false})
+                this.setState({isVisibleTime: false})
             }
             this.formartData(timeNumber)
             this.timeOut()
@@ -123,7 +132,7 @@ export default class RedBagDialog extends Component<Props> {
                                        height: SCREEN_WIDTH * 0.2 * (76 / 314),
                                        marginTop: SCREEN_WIDTH * 0.9 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
                                    }}/>
-                            {this.state.isVisibleTime&&
+                            {this.state.isVisibleTime &&
                             <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
                             <TouchableOpacity onPress={() => {
                                 this.hideRedBag()
