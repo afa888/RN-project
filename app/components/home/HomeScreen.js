@@ -56,7 +56,7 @@ export default class HomeScreen extends Component<Props> {
                     marginRight: 12
                 }}>
                 <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-
+                    navigation.navigate('InnerMessager')
                 }}>
                     <View style={{
                         flexDirection: 'column',

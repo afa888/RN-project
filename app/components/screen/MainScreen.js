@@ -37,6 +37,7 @@ import ContactSetting from "../memberCenter/personSetting/ContactSetting"
 import AssetDetailScreen from "../memberCenter/AssetDetailScreen"
 import HelpScreen from "../memberCenter/help/helpScreen";
 import AboutPage from '../memberCenter/help/AboutPage';
+import InnerMessager from "../home/InnerMessager";
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -204,7 +205,8 @@ export default class MainScreen extends Component<Props> {
             AssetDetailScreen:{screen:AssetDetailScreen},
             HelpScreen: { screen: HelpScreen },
             AboutPage: { screen: AboutPage},
-            CustomerService: { screen: CustomerServiceScreen},
+            CustomerService: { screen: CustomerServiceScreen },
+            InnerMessager: { screen: InnerMessager},
         },
         {
             initialRouteName: this.state.initRoute,
