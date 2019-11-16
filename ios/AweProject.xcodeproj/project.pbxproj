@@ -1304,6 +1304,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -2036,7 +2037,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODEPUSH_KEY = "NbX0t2wa8f1gWrVzktpD4rDpa-Akda47032d-cfef-49c4-b776-6f80bc1dca31";
+				CODEPUSH_KEY = "17GnIG6fkdKZkOPO6zmBK0nlZzhJda47032d-cfef-49c4-b776-6f80bc1dca31";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2120,7 +2121,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODEPUSH_KEY = "NoVa5UDgVQItvFCsI413AjcLVgQ6da47032d-cfef-49c4-b776-6f80bc1dca31";
+				CODEPUSH_KEY = "wAZ-yQkQFfHRo07Q4SYH20KoYbYyda47032d-cfef-49c4-b776-6f80bc1dca31";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
