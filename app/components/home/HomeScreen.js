@@ -56,7 +56,7 @@ export default class HomeScreen extends Component<Props> {
                     marginRight: 12
                 }}>
                 <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-
+                    navigation.navigate('InnerMessager')
                 }}>
                     <View style={{
                         flexDirection: 'column',
@@ -144,10 +144,6 @@ export default class HomeScreen extends Component<Props> {
 
         this.props.navigation.navigate('NoticeScreen', {data: noticeList})
     }
-    showRedBag = () => {
-        this.setState({isRedBagVisible: true});
-    }
-
 
     // http://m.txbet1788.com/TXW/game/getPageTabRecommend?src=TXW&cagent=TXW&terminal=2
 
@@ -252,7 +248,9 @@ export default class HomeScreen extends Component<Props> {
         });
     }
 
-
+    showRedBag = () => {
+        this.setState({isRedBagVisible: true});
+    }
     gotoDiscout = () => {
         this.props.navigation.navigate('Discount')
     }
@@ -270,16 +268,10 @@ export default class HomeScreen extends Component<Props> {
                 <ModalDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
-
-                    _dialogLeftBtnAction={() => {
-                        this.hideDialog()
-                    }}
-                    _dialogRightBtnAction={() => {
-                        this.hideDialog()
-                    }}
-                    _dialogCancle={() => {
-                        this.hideDialog()
-                    }}
+                    dialogData={this.state.redData}
+                    _dialogCancle={
+                        this.hideDialog.bind(this)
+                    }
                 />
                 <Toast
                     ref="toast"

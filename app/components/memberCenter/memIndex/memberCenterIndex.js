@@ -117,7 +117,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     // 无限代理
     onCheckAgencyDetail = () => {
-        TXToastManager.show('暂未实现，敬请期待');
+        TXToastManager.show('暂未实现，敬请期待'); 
     }
 
     // 自动转账选项发生变化
