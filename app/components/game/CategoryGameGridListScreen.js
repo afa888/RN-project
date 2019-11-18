@@ -25,6 +25,7 @@ import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameAc
 let {width, height} = Dimensions.get('window');
 let pageSize = 1;
 let total = 0;
+//分类一级item
 export default class CategoryGameGridListScreen extends Component<Props> {
     static navigationOptions = {
         header: null
