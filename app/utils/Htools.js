@@ -44,7 +44,7 @@ export default class TXTools {
 	static formatDateToCommonString = (theDate) => {
 		let year = theDate.getFullYear();
 		let month = theDate.getMonth() + 1;
-		var day = theDate.getDate();
+		let day = theDate.getDate();
 
 		if (month < 10) {
 			month = '0' + month;
@@ -62,6 +62,39 @@ export default class TXTools {
 	static dateAfter=(days) => {
 		let today = new Date();
 		return new Date(today.getTime() + (24 * 60 * 60 * 1000 * days));
+	}
+
+	/**
+	 * 格式化金额为“12,375.00”的形式
+	 * @param numString 金额字符串，如“123.50”、“-27813.00”
+	 * @param ignoreSign 是否忽略正负号(返回的字符串是否包含‘-’号)
+	 */
+	static formatMoneyAmount = (numString, ignoreSign = true) => {
+		let result = '';
+		let sign = '';
+		let temp = numString;
+		
+		if (numString.startsWith('-')) {
+			temp = numString.slice(1);
+			sign = '-';
+		}
+
+		let tails = '';
+		let index = temp.indexOf('.');
+		if (index != -1) {
+			tails = temp.slice(index);
+			temp = temp.slice(0, index);
+		}
+
+		while (temp.length > 3) {
+			result = ',' + temp.slice(-3) + result;
+			temp = temp.slice(0, temp.length - 3);
+		}
+		if (temp) {
+			result = temp + result;
+		}
+
+		return ignoreSign ? (result + tails) : (sign + result + tails);
 	}
 }
 
