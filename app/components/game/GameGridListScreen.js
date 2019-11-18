@@ -80,7 +80,7 @@ export default class GameGridListScreen extends Component<Props> {
                                     priority: FastImage.priority.normal,
 
                                 }}
-                                resizeMode={FastImage.resizeMode.center}
+                                resizeMode={FastImage.resizeMode.contain}
                             />
                         </View>
 
