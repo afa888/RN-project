@@ -105,13 +105,16 @@ export default class RedBagDialog extends Component<Props> {
 
     clickRedBag = () => {
         getStoreData('@loginState').then((loginInfo) => {
-            if (loginInfo.isLogin) {
+            console.log("登入信息")
+            console.log(loginInfo)
+            if (loginInfo===undefined||loginInfo.isLogin === undefined || loginInfo.isLogin === false || loginInfo.isLogin === null) {
+                this.hideRedBag()//按道理这里是不用走隐藏红包的，因为红包会盖住login界面，然后整体的框架有个问题，就是登入了以后会刷新
+                DeviceEventEmitter.emit('login', false); //导航到login页面
+            } else if (loginInfo.isLogin) {
                 this.hideRedBag()
                 let baseUrl = BASE_URL.split(WEBNUM + "/");
                 let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
                 AndroidNativeGameActiviy.openGameWith(url, "", "");
-            } else {
-                DeviceEventEmitter.emit('login', false); //导航到login页面
             }
         });
     }
@@ -148,7 +151,7 @@ export default class RedBagDialog extends Component<Props> {
                                        resizeMode: 'contain',
                                        width: SCREEN_WIDTH * 0.2,
                                        height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                       marginTop: SCREEN_WIDTH  * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
+                                       marginTop: SCREEN_WIDTH * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
                                    }}/>
                             {this.state.isVisibleTime &&
                             <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
