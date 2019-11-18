@@ -74,7 +74,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                                     uri:  item.imageUrl,
                                     priority: FastImage.priority.normal,
                                 }}
-                                resizeMode={FastImage.resizeMode.contain}
+                                resizeMode={FastImage.resizeMode.cover}
                             />
                         </ImageBackground>
 
