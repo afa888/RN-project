@@ -11,7 +11,7 @@ import {NavigationActions} from "react-navigation";
 import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
 import http from "../http/httpFetch";
 import {getStoreData} from "../http/AsyncStorage";
-import {BASE_URL,WEBNUM} from "../utils/Config"
+import {BASE_URL, WEBNUM} from "../utils/Config"
 import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
 let Dimensions = require('Dimensions');
@@ -107,7 +107,7 @@ export default class RedBagDialog extends Component<Props> {
         getStoreData('@loginState').then((loginInfo) => {
             if (loginInfo.isLogin) {
                 this.hideRedBag()
-                let  baseUrl = BASE_URL.split(WEBNUM+"/");
+                let baseUrl = BASE_URL.split(WEBNUM + "/");
                 let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
                 AndroidNativeGameActiviy.openGameWith(url, "", "");
             } else {
@@ -148,7 +148,7 @@ export default class RedBagDialog extends Component<Props> {
                                        resizeMode: 'contain',
                                        width: SCREEN_WIDTH * 0.2,
                                        height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                       marginTop: SCREEN_WIDTH * 0.9 * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
+                                       marginTop: SCREEN_WIDTH  * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
                                    }}/>
                             {this.state.isVisibleTime &&
                             <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
@@ -159,13 +159,13 @@ export default class RedBagDialog extends Component<Props> {
                                        style={this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ? {
                                            resizeMode: 'contain',
                                            width: SCREEN_WIDTH * 0.2,
-                                           height: SCREEN_WIDTH * 0.2 * (76 / 314),
+                                           height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
 
                                        } : {
                                            resizeMode: 'contain',
                                            width: SCREEN_WIDTH * 0.2,
-                                           height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                           marginTop: 15
+                                           height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
+                                           marginTop: 20
                                        }}/>
                             </TouchableOpacity>
 
@@ -197,13 +197,13 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     dialog: {
-        width: SCREEN_WIDTH * 0.9,
-        height: SCREEN_WIDTH * 0.9 * (791 / 750),
+        width: SCREEN_WIDTH,
+        height: SCREEN_WIDTH * (791 / 750),
         borderRadius: 8,
     },
     dialogTitleView: {
-        width: SCREEN_WIDTH * 0.9,
-        height: SCREEN_WIDTH * 0.9 * (791 / 750),
+        width: SCREEN_WIDTH,
+        height: SCREEN_WIDTH * (791 / 750),
         flexDirection: 'column',
         alignItems: 'center',
     },
