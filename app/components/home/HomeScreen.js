@@ -301,6 +301,9 @@ export default class HomeScreen extends Component<Props> {
     hideDialog = () => {
         this.setState({isRedBagVisible: false});
     }
+    gotoWebView=()=>{
+        this.props.navigation.navigate('RnWebScreen')
+    }
     /**
      * 获取站内信未读数量
      */
@@ -330,6 +333,7 @@ export default class HomeScreen extends Component<Props> {
                     _dialogCancle={
                         this.hideDialog.bind(this)
                     }
+                    gotoWebView = {this.gotoWebView.bind(this)}
                 />}
                 <Toast
                     ref="toast"

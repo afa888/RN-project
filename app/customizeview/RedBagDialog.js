@@ -107,14 +107,16 @@ export default class RedBagDialog extends Component<Props> {
         getStoreData('@loginState').then((loginInfo) => {
             console.log("登入信息")
             console.log(loginInfo)
-            if (loginInfo===undefined||loginInfo.isLogin === undefined || loginInfo.isLogin === false || loginInfo.isLogin === null) {
+            if (loginInfo === undefined || loginInfo.isLogin === undefined || loginInfo.isLogin === false || loginInfo.isLogin === null) {
                 this.hideRedBag()//按道理这里是不用走隐藏红包的，因为红包会盖住login界面，然后整体的框架有个问题，就是登入了以后会刷新
                 DeviceEventEmitter.emit('login', false); //导航到login页面
             } else if (loginInfo.isLogin) {
                 this.hideRedBag()
-                let baseUrl = BASE_URL.split(WEBNUM + "/");
-                let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
-                AndroidNativeGameActiviy.openGameWith(url, "", "");
+                  let baseUrl = BASE_URL.split(WEBNUM + "/");
+                  let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
+                  AndroidNativeGameActiviy.openGameWith(url, "", "");
+
+               // this.props.gotoWebView()
             }
         });
     }

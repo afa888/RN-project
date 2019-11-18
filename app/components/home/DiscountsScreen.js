@@ -147,19 +147,19 @@ export default class DiscountsScreen extends Component<Props> {
             }}><View style={{
                 backgroundColor: category_tab_checked_bg_color,
                 width: (deviceValue.windowWidth - 12),
-                height: (deviceValue.windowWidth - 12) * (326 / 335),
+                height: (deviceValue.windowWidth - 12) * (326 / 690),
             }}><ImageBackground style={{
                 margin: 6,
                 flex: 1,
                 width: deviceValue.windowWidth,
-                height: (deviceValue.windowWidth - 12) * (326 / 335),
+                height: (deviceValue.windowWidth - 12) * (326 / 690),
             }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
                 <FastImage
                     style={{
                         width: deviceValue.windowWidth - 12,
-                        height: (deviceValue.windowWidth - 12) * (326 / 335),
+                        height: (deviceValue.windowWidth - 12) * (326 / 690),
                         flex: 1
                     }}
                     source={{

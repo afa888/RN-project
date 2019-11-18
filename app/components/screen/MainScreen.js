@@ -38,6 +38,7 @@ import AssetDetailScreen from "../memberCenter/AssetDetailScreen"
 import HelpScreen from "../memberCenter/help/helpScreen";
 import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
+import RnWebViewScreen from "../memberCenter/help/RnWebViewScreen"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -214,6 +215,7 @@ export default class MainScreen extends Component<Props> {
             AboutPage: { screen: AboutPage },
             CustomerService: { screen: CustomerServiceScreen },
             InnerMessager: { screen: InnerMessager },
+            RnWebScreen:{screen:RnWebViewScreen }
         },
         {
             initialRouteName: this.state.initRoute,
