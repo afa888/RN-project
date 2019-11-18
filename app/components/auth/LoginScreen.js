@@ -220,6 +220,7 @@ export default class LoginScreen extends Component<Props> {
                                 inActiveText={'X'}
                                 circleSize={15}
                                 barHeight={15}
+                                activeTextStyle={{ fontFamily: 'ArialHebrew',}}
                                 backgroundActive={MainTheme.SpecialColor}
                                 backgroundInactive={MainTheme.LightGrayColor}
                                 changeValueImmediately={true}
