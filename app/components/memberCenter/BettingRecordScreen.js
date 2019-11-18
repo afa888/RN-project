@@ -546,32 +546,6 @@ export default class BettingRecordScreen extends Component<Props> {
         );
     }
 
-    formatMoneyAmount = (numString) => {
-        let result = '';
-
-        let str = numString;
-        if (numString.startsWith('-')) {
-            str = numString.slice(1);
-        }
-
-        let tails = '';
-        let index = str.indexOf('.');
-        if (index != -1) {
-            tails = str.slice(index);
-            str = str.slice(0, index);
-        }
-
-        while (str.length > 3) {
-            result = ',' + str.slice(-3) + result;
-            str = str.slice(0, str.length - 3);
-        }
-        if (str) {
-            result = str + result;
-        }
-
-        return result + tails;
-    }
-
     render() {
         return (
             <View style={{ flex: 1 }}>
