@@ -74,30 +74,36 @@ export default class DiscountsScreen extends Component<Props> {
         let dicountList = [];
         let gridcount = []
         http.post('mobleWebcomConfig.do', prams).then(res => {
-            console.log(res);
-            if (res.status === 10000) {
-                if (res.data !== undefined && res.data.length > 0) {
-                    for (var i = 0; i < res.data.length; i++) {
-                        if (i !== 0) {
+              //  console.log(res);
+                if (res.status === 10000) {
+                    if (res.data !== undefined && res.data.length > 0) {
+                        let isFirstPicture = true;
+                        for (var i = 0; i < res.data.length; i++) {
                             if (res.data[i].src1 === 'TXW') {
-                                dicountList.push(res.data[i])
+                                console.log("优惠")
+                                console.log(res.data[i])
+                                if (isFirstPicture) {
+                                    gridcount.push(res.data[i])
+                                    this.setState({gridData: gridcount})
+                                    isFirstPicture = false;
+                                } else {
+                                    dicountList.push(res.data[i])
+
+                                }
                             }
-                        } else {
-                            gridcount.push(res.data[0])
-                            this.setState({gridData: gridcount})
                         }
+
+                        this.setState({data: dicountList})
                     }
 
-                    this.setState({data: dicountList})
                 }
-
             }
-        }).catch(err => {
+        ).catch(err => {
             console.error(err)
         });
     }
     rightItem = ({item, index}) => {
-        console.log("优惠图"+item.img1)
+        console.log("优惠图" + item.img1)
         return (
             <TouchableOpacity onPress={() => {
                 this.props.navigation.navigate('DiscountDetail', {url: item.img2})
@@ -105,13 +111,13 @@ export default class DiscountsScreen extends Component<Props> {
                 <View style={{
                     backgroundColor: category_tab_checked_bg_color,
                     width: deviceValue.windowWidth / 2,
-                    height: (deviceValue.windowWidth / 2) * (326/ 335),
+                    height: (deviceValue.windowWidth / 2) * (326 / 335),
                 }}>
                     <ImageBackground style={{
                         margin: 4,
                         flex: 1,
                         width: (deviceValue.windowWidth - 16) / 2,
-                        height: (deviceValue.windowWidth - 24 - 8) / 2 * (326/ 335),
+                        height: (deviceValue.windowWidth - 24 - 8) / 2 * (326 / 335),
                     }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
@@ -119,7 +125,7 @@ export default class DiscountsScreen extends Component<Props> {
                             style={{
                                 flex: 1,
                                 width: (deviceValue.windowWidth - 16) / 2,
-                                height: (deviceValue.windowWidth - 24 - 8) / 2 * (326/ 335),
+                                height: (deviceValue.windowWidth - 24 - 8) / 2 * (326 / 335),
                             }}
                             source={{
                                 uri: item.img1.startsWith('//') ? "http:" + item.img1 : item.img1,
@@ -141,19 +147,19 @@ export default class DiscountsScreen extends Component<Props> {
             }}><View style={{
                 backgroundColor: category_tab_checked_bg_color,
                 width: (deviceValue.windowWidth - 12),
-                height: (deviceValue.windowWidth - 12) * (326/ 335),
+                height: (deviceValue.windowWidth - 12) * (326 / 335),
             }}><ImageBackground style={{
                 margin: 6,
                 flex: 1,
                 width: deviceValue.windowWidth,
-                height: (deviceValue.windowWidth - 12) * (326/ 335),
+                height: (deviceValue.windowWidth - 12) * (326 / 335),
             }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
                 <FastImage
                     style={{
                         width: deviceValue.windowWidth - 12,
-                        height: (deviceValue.windowWidth - 12) * (326/ 335),
+                        height: (deviceValue.windowWidth - 12) * (326 / 335),
                         flex: 1
                     }}
                     source={{
