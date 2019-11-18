@@ -21,7 +21,7 @@ import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
 import RedBagDialog from '../../customizeview/RedBagDialog'
 import HomeMidView from './HomeMidView'
-import {
+import MainTheme, {
     category_group_divide_line_color,
     category_tab_checked_bg_color,
     theme_color,
@@ -42,9 +42,9 @@ export default class HomeScreen extends Component<Props> {
                 <Image source={require('../../static/img/banner.png')}
                        style={{
                            flex: 1,
-                           resizeMode: 'cover',
-                           width: 150,
-                           height: 20,
+                           resizeMode: 'contain',
+                           width: DeviceValue.windowWidth ,
+                           height: 48,
                        }}/>
             </View>,
             headerRight: <View
@@ -55,8 +55,10 @@ export default class HomeScreen extends Component<Props> {
                     alignItems: 'center',
                     marginRight: 12
                 }}>
-                <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center', marginRight: 10, }}
-                    onPress={() => { navigation.navigate('InnerMessager') }}
+                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center', marginRight: 10,}}
+                                  onPress={() => {
+                                      navigation.navigate('InnerMessager')
+                                  }}
                 >
                     <View style={{
                         flexDirection: 'column',
@@ -92,7 +94,7 @@ export default class HomeScreen extends Component<Props> {
                                 resizeMode: 'contain',
                                 width: 18,
                                 height: 18,
-                            }} />
+                            }}/>
 
                         <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
                     </View>
@@ -118,7 +120,10 @@ export default class HomeScreen extends Component<Props> {
                         <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
+            </View>,
+            headerLeft: (
+                <View></View>
+            ),
         }
     }
 
@@ -149,9 +154,9 @@ export default class HomeScreen extends Component<Props> {
             isRedBagVisible: false,
             data: {},
             dataImagUrl: [],
-            dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
-                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/2.jpg",
-                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/3.jpg",],
+            dicountUrl: ["https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/1.jpg",
+                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/2.jpg",
+                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/3.jpg",],
             noticeTitle: [],
             redData: {}
         }

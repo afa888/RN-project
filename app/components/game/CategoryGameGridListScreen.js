@@ -71,7 +71,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                                     borderRadius: 6
                                 }}
                                 source={{
-                                    uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
+                                    uri:  item.imageUrl,
                                     priority: FastImage.priority.normal,
                                 }}
                                 resizeMode={FastImage.resizeMode.contain}
@@ -139,7 +139,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                     textStyle={{color: 'white'}}
                 />
                 <FlatList
-                    numColumns={3}
+                    numColumns={2}
                     style={{backgroundColor: "white"}}
                     data={this.state.data}
                     ListHeaderComponent={this.renderHeader}//头部

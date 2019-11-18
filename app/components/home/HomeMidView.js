@@ -27,13 +27,13 @@ export default class HomeMidView extends Component<Props> {
                             <ImageBackground style={{
                                 marginTop: 10,
                                 backgroundColor: 'white',
-                                width: deviceValue.windowWidth / 4 - 62,
-                                height: deviceValue.windowWidth / 4 - 62,
+                                width: deviceValue.windowWidth / 4 - 50,
+                                height: deviceValue.windowWidth / 4 - 50,
                             }} source={require('../../static/img/index_loading.png')} resizeMode='cover'>
                                 <FastImage
                                     style={{
-                                        width: deviceValue.windowWidth / 4 - 62,
-                                        height: deviceValue.windowWidth / 4 - 62,
+                                        width: deviceValue.windowWidth / 4 - 50,
+                                        height: deviceValue.windowWidth / 4 - 50,
                                     }}
                                     source={{
                                         uri: item.imageUrl !== "" ? item.imageUrl : '',
