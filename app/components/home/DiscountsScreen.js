@@ -97,6 +97,7 @@ export default class DiscountsScreen extends Component<Props> {
         });
     }
     rightItem = ({item, index}) => {
+        console.log("优惠图"+item.img1)
         return (
             <TouchableOpacity onPress={() => {
                 this.props.navigation.navigate('DiscountDetail', {url: item.img2})
@@ -104,13 +105,13 @@ export default class DiscountsScreen extends Component<Props> {
                 <View style={{
                     backgroundColor: category_tab_checked_bg_color,
                     width: deviceValue.windowWidth / 2,
-                    height: (deviceValue.windowWidth / 2) * (450 / 750),
+                    height: (deviceValue.windowWidth / 2) * (326/ 335),
                 }}>
                     <ImageBackground style={{
                         margin: 4,
                         flex: 1,
                         width: (deviceValue.windowWidth - 16) / 2,
-                        height: (deviceValue.windowWidth - 24 - 8) / 2 * (450 / 750),
+                        height: (deviceValue.windowWidth - 24 - 8) / 2 * (326/ 335),
                     }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
@@ -118,7 +119,7 @@ export default class DiscountsScreen extends Component<Props> {
                             style={{
                                 flex: 1,
                                 width: (deviceValue.windowWidth - 16) / 2,
-                                height: (deviceValue.windowWidth - 24 - 8) / 2 * (450 / 750),
+                                height: (deviceValue.windowWidth - 24 - 8) / 2 * (326/ 335),
                             }}
                             source={{
                                 uri: item.img1.startsWith('//') ? "http:" + item.img1 : item.img1,
@@ -140,19 +141,19 @@ export default class DiscountsScreen extends Component<Props> {
             }}><View style={{
                 backgroundColor: category_tab_checked_bg_color,
                 width: (deviceValue.windowWidth - 12),
-                height: (deviceValue.windowWidth - 12) * (450 / 750),
+                height: (deviceValue.windowWidth - 12) * (326/ 335),
             }}><ImageBackground style={{
                 margin: 6,
                 flex: 1,
                 width: deviceValue.windowWidth,
-                height: (deviceValue.windowWidth - 12) * (450 / 750),
+                height: (deviceValue.windowWidth - 12) * (326/ 335),
             }} source={require('../../static/img/loading_image.png')} resizeMode='cover'>
 
 
                 <FastImage
                     style={{
                         width: deviceValue.windowWidth - 12,
-                        height: (deviceValue.windowWidth - 12) * (450 / 750),
+                        height: (deviceValue.windowWidth - 12) * (326/ 335),
                         flex: 1
                     }}
                     source={{
