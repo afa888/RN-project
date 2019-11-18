@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Switch, Image, TouchableOpacity, TextInput } from 'react-native';
+import {
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    DeviceEventEmitter,
+    Image,
+    TouchableOpacity,
+    TextInput
+} from 'react-native';
 import http from "../../http/httpFetch";
 import { BASE_URL, CAGENT } from "../../utils/Config";
 import { Login_validate } from "../../utils/Validate"
@@ -9,6 +18,7 @@ import { RememberUserKey, UserNameKey, UserPwdKey } from "../../http/AsyncStorag
 import AsyncStorage from '@react-native-community/async-storage';
 import MainTheme from "../../utils/AllColor";
 import { TXSwitch } from "../../customizeview/TXSwitch";
+import { INNER_MESSAGER_STATUS_CHANGED } from '../home/InnerMessager';
 
 export default class LoginScreen extends Component<Props> {
     static navigationOptions = {
@@ -49,6 +59,12 @@ export default class LoginScreen extends Component<Props> {
                 //添加密码保存 在安全中心需要
                 oData['password'] = password;
                 setLoginStore(oData);
+
+                // 站内信未读数量（同步首页的badge）
+                let unread = Number(res.data.noread);
+                DeviceEventEmitter.emit(INNER_MESSAGER_STATUS_CHANGED, unread);
+
+                // 记住用户名和密码
                 this.saveAccountInfo().then(() => {
                     this.props.navigation.navigate('Home');
                 }).catch(() => {
@@ -314,7 +330,7 @@ const styles = StyleSheet.create({
         borderRadius: 12.5,
         borderWidth: 0.5,
         borderColor: MainTheme.LightGrayColor,
-        backgroundColor: MainTheme.BackgroundColor, 
+        backgroundColor: MainTheme.BackgroundColor,
     },
 
     switch_remember_pwd_ball: {
