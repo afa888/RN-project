@@ -8,7 +8,8 @@ import {
     RefreshControl,
     TouchableOpacity,
     StyleSheet,
-    ViewPropTypes
+    ViewPropTypes,
+    DeviceEventEmitter,
 } from 'react-native';
 import PropTypes from "prop-types";
 
@@ -18,11 +19,15 @@ import TXToastManager from '../../tools/TXToastManager';
 import MainTheme from '../../utils/AllColor'
 
 // 站内信列表url
-const INNER_MESSAGER_MESSAGE_LIST_URL = '/User/getMessageList';
+export const INNER_MESSAGER_MESSAGE_LIST_URL = '/User/getMessageList';
 // 读取站内信详情
-const INNER_MESSAGER_READ_MESSAGE_URL = '/User/getMessageInfo';
+export const INNER_MESSAGER_READ_MESSAGE_URL = '/User/getMessageInfo';
+// 读取站内信数量
+export const INNER_MESSAGER_MESSAGE_NUM_URL = '/User/getMessageNum';
+// 站内信状态变化通知
+export const INNER_MESSAGER_STATUS_CHANGED = 'innerMessageChanged';
 // 查询的天数
-const INNER_MESSAGER_DATETIME_PERIOD = 90;
+export const INNER_MESSAGER_DATETIME_PERIOD = 90;
 
 export default class InnerMessager extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
@@ -118,6 +123,7 @@ export default class InnerMessager extends Component<Props> {
                     item.status = res.data.status;
                     item.isOpened = true;
                     this.setState({ curIndex: index });
+                    this.refreshUnreadState(); // 刷新站内信未读数量
                 }
                 else {
                     let { msg } = res;
@@ -129,6 +135,24 @@ export default class InnerMessager extends Component<Props> {
             }).catch(err => {
                 console.log(err);
                 TXToastManager.show('网络错误，请重试！');
+            });
+    }
+    /**
+     * 刷新站内信的未读数量（同步首页的badge）
+     */
+    refreshUnreadState = () => {
+        // 查询的日期周期
+        let theDay = TXTools.dateAfter(-INNER_MESSAGER_DATETIME_PERIOD);
+        let from = TXTools.formatDateToCommonString(theDay);
+        let to = TXTools.formatDateToCommonString(new Date());
+        // 发送数据请求
+        http.post(INNER_MESSAGER_MESSAGE_NUM_URL, { bdate: from, edate: to, })
+            .then(res => {
+                if (res.status == 10000) {
+                    DeviceEventEmitter.emit(INNER_MESSAGER_STATUS_CHANGED, res.data.noread);
+                }
+            }).catch(err => {
+                console.log(err);
             });
     }
 

@@ -2,25 +2,19 @@ import React, { Component } from 'react';
 import {
     FlatList,
     Image,
-    ImageBackground,
     RefreshControl,
-    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
-    Alert,
     View
 } from "react-native";
 import MainTheme from "../../utils/AllColor";
 import deviceValue from "../../utils/DeviceValue";
-import FastImage from 'react-native-fast-image'
-import { CAGENT } from "../../utils/Config";
 import http from "../../http/httpFetch";
-import Toast from "react-native-easy-toast";
 import Picker from 'react-native-picker';
-import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
-import RedBagDialog from "../../customizeview/RedBagDialog";
+import { LocaleConfig } from 'react-native-calendars';
 import CalendarDialog from "../../customizeview/CalendarDialog";
+import TXTools from '../../utils/Htools';
 
 let pageSize = 1;
 let total = 0;
@@ -543,7 +537,7 @@ export default class BettingRecordScreen extends Component<Props> {
                                 <Text style={{
                                     ...styles.userBetTotalItemValueText,
                                     color: index == 2 ? netTotalColor : MainTheme.DarkGrayColor,
-                                }}>{this.formatMoneyAmount(value.account)}</Text>
+                                }}>{TXTools.formatMoneyAmount(value.account)}</Text>
                             </View>
                         </View>
                     )
@@ -646,7 +640,7 @@ export default class BettingRecordScreen extends Component<Props> {
 
                 <FlatList
                     numColumns={1}
-                    style={{ backgroundColor:MainTheme.BackgroundColor }}
+                    style={{ backgroundColor: MainTheme.BackgroundColor }}
                     data={this.state.data}
                     ListFooterComponent={this.renderFooter}//尾巴
                     keyExtractor={item => item.key}//这里要是使用重复的key出现莫名其妙的错误
