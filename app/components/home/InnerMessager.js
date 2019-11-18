@@ -7,8 +7,10 @@ import {
     Image,
     RefreshControl,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    ViewPropTypes
 } from 'react-native';
+import PropTypes from "prop-types";
 
 import http from "../../http/httpFetch";
 import TXTools from '../../utils/Htools';
@@ -226,6 +228,70 @@ export default class InnerMessager extends Component<Props> {
     }
 }
 
+export class InnerMessagerIcon extends Component<Props> {
+    static propTypes = {
+        ...ViewPropTypes,
+        badgeValue: PropTypes.number,
+    };
+
+    static defaultProps = {
+        ...View.defaultProps,
+        badgeValue: 0,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            badgeValue: props.badgeValue,
+        }
+    }
+
+    render() {
+        let { style } = this.props;
+        return (
+            <View style={[{
+                flexDirection: 'column',
+                alignItems: 'center',
+                // width: 28,
+                // height: 48,
+                justifyContent: 'center'
+            }, style]}>
+                <View style={{
+                    position: 'absolute',
+                    top: 5,
+                    left: 14,
+                    height: 14,
+                    width: 14,
+                    zIndex: 999999,
+                    backgroundColor: 'red',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 7,
+                    borderWidth: 0.5,
+                    borderColor: 'white',
+                }}>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 10,
+                        textAlign: 'center',
+                    }}>{this.state.badgeValue}</Text>
+                </View>
+
+                <Image
+                    source={require('../../static/img/nav_icon_email_nor.png')}
+                    style={{
+                        resizeMode: 'contain',
+                        width: 18,
+                        height: 18,
+                    }} />
+
+                <Text style={{ color: textTitleColor, fontSize: 8, marginTop: 2 }}>消息</Text>
+            </View>
+        );
+    }
+}
+
 const styles = StyleSheet.create({
     listStyle: {
         backgroundColor: MainTheme.BackgroundColor,
@@ -256,7 +322,7 @@ const styles = StyleSheet.create({
 
     listItemTitle: {
         fontSize: 15,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: MainTheme.DarkGrayColor,
     },
 
