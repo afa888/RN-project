@@ -13,7 +13,7 @@ export const LoginStateKey = '@loginState';
  * @param value
  * @return {Promise<void>}
  */
-export const setStoreData = async (key,value) => {
+export const setStoreData = async (key, value) => {
     try {
         await AsyncStorage.setItem(key, JSON.stringify(value))
     } catch (e) {
@@ -30,10 +30,10 @@ export const setStoreData = async (key,value) => {
 export const getStoreData = async (key) => {
     try {
         const value = await AsyncStorage.getItem(key);
-        if(value !== null) {
+        if (value !== null) {
             return JSON.parse(value);
         }
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
     console.log('Done.')
@@ -45,11 +45,11 @@ export const getStoreData = async (key) => {
  * @param value
  * @return {Promise<void>}
  */
-export const mergeStoreData = async (key,value) => {
+export const mergeStoreData = async (key, value) => {
     try {
         await AsyncStorage.mergeItem(key, JSON.stringify(value));
-        return {status:'success'};
-    } catch(e) {
+        return { status: 'success' };
+    } catch (e) {
         console.log(e)
     }
     console.log('Done.')
@@ -63,7 +63,7 @@ export const mergeStoreData = async (key,value) => {
 export const removeStoreData = async (key) => {
     try {
         await AsyncStorage.removeItem(key);
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
     console.log('Done.')
@@ -85,9 +85,21 @@ export const clearAllStore = async () => {
         }).catch(() => {
             console.error("Read All keys failed.");
         });
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
     console.log('Done.')
 }
 
+/**
+ * 检查用户的登录状态
+ * @returns {Promise<Boolean>}
+ */
+export const checkLoginState = async () => {
+    try {
+        const value = await AsyncStorage.getItem(LoginStateKey);
+        return value == null ? false : (JSON.parse(value)).isLogin;
+    } catch (e) {
+        console.error(e);
+    }
+}

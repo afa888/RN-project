@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    View, Text,
+    View, Text, SafeAreaView,
     Image, TouchableOpacity, ScrollView,
     ImageBackground, FlatList, DeviceEventEmitter
 } from "react-native";
@@ -136,7 +136,7 @@ export default class AssetDetailScreen extends Component<Props>{
 
     render() {
         return(
-            <View style={{flex:1}}>
+            <SafeAreaView style={{flex:1}}>
                 <ScrollView style={{flex: 1, backgroundColor: '#efeff4'}}>
                     <ImageBackground style={{ flex:1,height: 160,
                         justifyContent:'center', alignItems:'center' }}
@@ -179,7 +179,7 @@ export default class AssetDetailScreen extends Component<Props>{
                         <Text style={{color: 'white', fontSize:18, fontWeight:'bold'}}>存 款</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 
