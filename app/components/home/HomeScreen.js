@@ -30,16 +30,8 @@ import {
 } from "../../utils/AllColor";
 import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
-<<<<<<< HEAD
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { CAGENT } from '../../utils/Config'
-=======
-import Toast, {DURATION} from 'react-native-easy-toast'
-import {CAGENT} from '../../utils/Config'
-
-import {getStoreData,mergeStoreData} from "../../http/AsyncStorage";
-
->>>>>>> master
 import CodePush from 'react-native-code-push';
 import TXTools from '../../utils/Htools';
 import {
@@ -368,12 +360,8 @@ export default class HomeScreen extends Component<Props> {
     }
 
     showRedBag = () => {
-<<<<<<< HEAD
 
         this.setState({ isRedBagVisible: true });
-=======
-        this.setState({isRedBagVisible: true});
->>>>>>> master
     }
     gotoDiscout = () => {
         this.props.navigation.navigate('DiscountsScreen')
