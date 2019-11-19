@@ -16,11 +16,6 @@ export default class RnWebViewScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            url: BASE_H5_URL + 'help',
-        };
-
-
     }
     componentWillMount(): void {
         getStoreData('@loginState').then((loginInfo) => {
