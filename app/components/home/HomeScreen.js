@@ -11,7 +11,7 @@ import {
     StatusBar,
     TouchableOpacity,
     FlatList,
-    RefreshControl, ImageBackground, DeviceEventEmitter
+    RefreshControl, ImageBackground, DeviceEventEmitter,InteractionManager
 } from 'react-native';
 import Dimensions from 'Dimensions'
 import http from "../../http/httpFetch";
@@ -19,6 +19,7 @@ import {NativeModules} from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
+import ModalScratch from '../../customizeview/ModalScratch'
 import RedBagDialog from '../../customizeview/RedBagDialog'
 import HomeMidView from './HomeMidView'
 import {
@@ -31,6 +32,9 @@ import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT} from '../../utils/Config'
+
+import {getStoreData,mergeStoreData} from "../../http/AsyncStorage";
+
 import CodePush from 'react-native-code-push';
 import TXTools from '../../utils/Htools';
 import {
@@ -130,6 +134,7 @@ export default class HomeScreen extends Component<Props> {
         this.listener = DeviceEventEmitter.addListener('login', (val) => {
             this.props.navigation.navigate('LoginService')
         });
+        
 
         // 站内信
         this.innerMessagerListener =
@@ -143,8 +148,10 @@ export default class HomeScreen extends Component<Props> {
         // 游戏列表：获取平台推荐游戏
         this.httpGridGame();
 
-        // 红包状态查询
-        this.httpRedBag();
+        // // 红包状态查询
+        // this.httpRedBag();
+        // 刮刮乐 与 红包;
+        this.httpScratch()
 
         // 获取未读的站内信数量
         getStoreData(LoginStateKey).then((loginInfo) => {
@@ -167,6 +174,7 @@ export default class HomeScreen extends Component<Props> {
         super(props);
         this.state = {
             isRedBagVisible: false,
+            isScrachVisible: false,
             data: {},
             dataImagUrl: [],
             dicountUrl: ["https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/1.jpg",
@@ -179,6 +187,7 @@ export default class HomeScreen extends Component<Props> {
     }
 
     noticeScreen = (blo, notice) => {
+        
         let noticeList = []
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
@@ -274,6 +283,59 @@ export default class HomeScreen extends Component<Props> {
         });
     }
 
+    httpScratch = () => {
+
+        getStoreData('@loginState').then((loginInfo) => {
+            if (loginInfo.isLogin) {
+                //已经登录
+                getStoreData('userInfoState').then(userInfo => {
+                    if (!userInfo.hasOwnProperty('scratchStatus') || userInfo.scratchStatus === 0) {
+                        // 没有领取过 刮刮乐 就 去 服务器查询是否有活动
+                        let prams = {type:'2',cagentCode:CAGENT};
+                        http.post('gglActivity/getReward.do', prams).then(res => {
+                            console.log("刮刮乐")
+                            console.log(res);
+                            if (res && res.status === 10000) {
+                                
+                                if (res.data.status == '0') {
+                                    //verifyPhone 1 是收机号 注册 无需验证， 0 是快速注册 需要验证手机号
+                                    if (res.data.hasOwnProperty('activityId') && res.data.hasOwnProperty('usermoney') && res.data.hasOwnProperty('verifyPhone')) {
+                                        this.setState({scratchData: res.data});
+                                        this.showScrach();
+                                    }
+                                    
+                                }else if(res.hasOwnProperty('msg') && res.msg === '用户已参与过此次活动') {
+                                    //
+                                    this.saveScratchStatus();
+                                }
+                            }else {
+                                this.httpRedBag();
+                            }
+                        }).catch(err => {
+                            console.error(err)
+                            this.httpRedBag();
+                        });
+                    }else {
+                        this.httpRedBag();
+                    }
+                });
+            }else {
+                //未登录
+                this.httpRedBag();
+            }
+        });
+
+        
+        
+    }
+
+    saveScratchStatus = () => {
+        mergeStoreData('userInfoState',
+                    {
+                        scratchStatus: 1
+                    });
+    }
+
     httpRedBag = () => {
         let prams = {};
         http.get('LuckyDraw/getStatus.do', prams).then(res => {
@@ -293,7 +355,6 @@ export default class HomeScreen extends Component<Props> {
     }
 
     showRedBag = () => {
-
         this.setState({isRedBagVisible: true});
     }
     gotoDiscout = () => {
@@ -328,6 +389,15 @@ export default class HomeScreen extends Component<Props> {
         });
     }
 
+    showScrach = () => {
+        console.log('刮刮乐开始显示');
+        this.setState({isScrachVisible: true});
+    }
+    hideScrach = () => {
+        this.setState({isScrachVisible: false});
+        this.httpRedBag();
+    }
+
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
@@ -339,6 +409,16 @@ export default class HomeScreen extends Component<Props> {
                         this.hideDialog.bind(this)
                     }
                     gotoWebView = {this.gotoWebView.bind(this)}
+                />}
+
+                {this.state.isScrachVisible && <ModalScratch
+                    _scrachVisible={this.state.isScrachVisible}
+                    scratchData = {this.state.scratchData}
+                    _verifyPhone = {this.state.scratchData ? this.state.scratchData.verifyPhone : 0}
+                    _dialogSaveScratch = {this.saveScratchStatus.bind(this)}
+                    _dialogCancle={
+                        this.hideScrach.bind(this)
+                    }
                 />}
                 <Toast
                     ref="toast"
