@@ -39,7 +39,7 @@ import {
     INNER_MESSAGER_MESSAGE_NUM_URL,
     INNER_MESSAGER_STATUS_CHANGED,
 } from './InnerMessager';
-import { checkLoginState } from "../../http/AsyncStorage";
+import { getStoreData, checkLoginState } from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 
 
