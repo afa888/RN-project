@@ -121,7 +121,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     // 无限代理
     onCheckAgencyDetail = () => {
-        TXToastManager.show('暂未实现，敬请期待'); 
+        TXToastManager.show('暂未实现，敬请期待');
     }
 
     // 自动转账选项发生变化
@@ -163,7 +163,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     onLogout = () => {
         Alert.alert('温馨提示', '退出账户，是否继续？', [
             { text: '取消', onPress: () => console.log('Cancel loginOut') },
-            { text: '确定', onPress: () => {
+            {
+                text: '确定', onPress: () => {
                     http.post('logout.do', {}, true).then(res => {
                         if (res.status === 10000) {
                             clearAllStore();
@@ -245,15 +246,46 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                 {
                     assertsItems.map((items) => {
                         return (
-                            <View style={styles.assertsItems}>
+                            <TouchableOpacity style={styles.assertsItems}
+                                onPress={() => this.gotoAssetDetails(items[0])}>
                                 <Text style={styles.assetsNumber}>{items[1]}</Text>
                                 <Text style={styles.assetsCategory}>{items[0]}</Text>
-                            </View>
+                            </TouchableOpacity>
                         );
                     })
                 }
             </View>
         );
+    }
+
+    /**
+     * 查看资产详情
+     */
+    gotoAssetDetails = (title) => {
+        switch (title) {
+            case '钱包余额': break;
+            case '代理佣金':
+                this.gotoAgencyRewardDetail();
+                break;
+            case '总共资产':
+                this.gotoAllAssetDetail();
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * 查看代理佣金的详情
+     */
+    gotoAgencyRewardDetail = () => {
+        TXToastManager.show('暂未实现，敬请期待');
+    }
+
+    /**
+    * 查看总资产的详情
+    */
+    gotoAllAssetDetail = () => {
+        this.props.navigation.navigate('AssetDetailScreen');
     }
 
     /**
@@ -283,7 +315,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     shortcutOperations.map(item =>
                         <TouchableOpacity style={styles.shortcutItem} onPress={item.handler} >
                             <Image source={item.icon} style={styles.shortcutIcon} />
-                            <Text style={styles.shortcutTitle } > {item.title} </Text>
+                            <Text style={styles.shortcutTitle} > {item.title} </Text>
                         </TouchableOpacity>
                     )
                 }

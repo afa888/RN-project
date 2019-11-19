@@ -11,8 +11,8 @@ const Reg = {
     card: /^[0-9]{14,20}$/,//卡号
     cardNum: /^[0-9]{4,20}$/,
     chineseName: /[\u4e00-\u9fa5]/,//中文名称
-    wechat: /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/, //微信号
-    QQ: /^[0-9]{4,12}$/ //QQ号
+    wechat: /^([a-zA-Z][a-zA-Z0-9_-]{5,19})|([1-9][0-9]{5,11})+$/, //微信号
+    QQ: /^[0-9]{5,14}$/ //QQ号
 };
 
 /**
@@ -89,6 +89,21 @@ export const Reg_phone_validate = (params) => {
     }
     return true;
 };
+
+/**
+ * 手机号验证
+ * @param phone
+ * @return {boolean}
+ * @constructor
+ */
+export const Reg_phoneNum_validate = (phone) => {
+    if(!Reg.mobile.test(phone)){
+        TXToastManager.show('请输入真实的手机号码');
+        return false;
+    }
+    return true;
+};
+
 /**
  * 手机注册 => 发送验证码
  * @param phoneNum

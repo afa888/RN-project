@@ -3,10 +3,10 @@ import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {NavigationActions} from "react-navigation";
 import {DeviceEventEmitter, SafeAreaView} from "react-native";
-import {BASE_H5_URL, BASE_URL, WEBNUM} from "../utils/Config";
+import {BASE_H5_URL, BASE_URL, WEBNUM} from "../../../utils/Config";
 import {highlightTrailingWhitespace} from 'jest-matcher-utils';
-import {getStoreData} from "../http/AsyncStorage";
-import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
+import { getStoreData, LoginStateKey} from "../../../http/AsyncStorage";
+import AndroidNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
 
 let url
 export default class RnWebViewScreen extends Component {
@@ -16,9 +16,14 @@ export default class RnWebViewScreen extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            url: BASE_H5_URL + 'help',
+        };
+
+
     }
     componentWillMount(): void {
-        getStoreData('@loginState').then((loginInfo) => {
+        getStoreData(LoginStateKey).then((loginInfo) => {
             console.log("登入信息")
             console.log(loginInfo)
             url = "http://m.txbet1788.com/" + "Coupon?token=" + loginInfo.token
