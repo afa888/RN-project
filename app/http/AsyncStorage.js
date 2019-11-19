@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 export const RememberUserKey = '@should_save_account_key';
 export const UserNameKey = '@saved_user_name_key';
 export const UserPwdKey = '@saved_user_password_key';
+// 用户的登录状态
+export const LoginStateKey = '@loginState';
 
 /**
  *设置

@@ -1,4 +1,9 @@
-import {clearAllStore, setStoreData,mergeStoreData} from "../../http/AsyncStorage";
+import {
+    clearAllStore,
+    setStoreData,
+    mergeStoreData,
+    LoginStateKey,
+} from "../../http/AsyncStorage";
 import {DeviceEventEmitter} from "react-native";
 import httpBaseManager from "../../http/httpBaseManager"
 
@@ -7,7 +12,7 @@ import httpBaseManager from "../../http/httpBaseManager"
  * @param oData
  */
 export const setLoginStore = (oData) => {
-    setStoreData('@loginState',
+    setStoreData(LoginStateKey,
         {
             token: oData.token,
             session: oData.sessionId,

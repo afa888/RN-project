@@ -72,6 +72,7 @@ export default class ContactSetting extends Component<Props>{
     }
 
     render() {
+        const { type } = this.props.navigation.state.params;
         return (
             <View style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
                 {/* <TextInput
@@ -90,7 +91,7 @@ export default class ContactSetting extends Component<Props>{
                 <View style={{ backgroundColor: MainTheme.BackgroundColor, height: 10, width: DeviceValue.windowWidth}}/>
                 <TXInput textInputStyle={{ color: MainTheme.DarkGrayColor }}
                     label={this.state.labelText}
-                    maxLength={11}
+                    maxLength={type === 2 ? 20 : 14}
                     keyboardType='numeric'
                     placeholder={this.state.placeholderVal}
                     textAlign='right'

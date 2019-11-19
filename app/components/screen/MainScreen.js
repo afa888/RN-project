@@ -21,7 +21,7 @@ import DepositManagerScreen from "../capital/Deposit/DepositManagerScreen"
 import DepositBankTransferScreen from "../capital/Deposit/DepositBankTransferScreen"
 import DepositPayResultScreen from "../capital/Deposit/DepositPayResultScreen"
 import MemberCenterIndexScreen from "../memberCenter/memIndex/memberCenterIndex";
-import { getStoreData } from "../../http/AsyncStorage";
+import { getStoreData, LoginStateKey } from "../../http/AsyncStorage";
 import DiscountsScreen from "../home/DiscountsScreen";
 import DiscountsDitailScreen from "../home/DiscountsDitailScreen";
 import FundRecordScreen from "../memberCenter/FundRecordScreen";
@@ -102,7 +102,7 @@ export default class MainScreen extends Component<Props> {
 
     componentWillMount() {
         // 加载时，如果本地缓存有登录状态
-        getStoreData('@loginState').then((loginInfo) => {
+        getStoreData(LoginStateKey).then((loginInfo) => {
             if (loginInfo.isLogin) {
                 this.setState({ bottomTabs: LoginAfterTabs })
             }

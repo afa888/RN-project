@@ -38,6 +38,7 @@ import {
     INNER_MESSAGER_MESSAGE_NUM_URL,
     INNER_MESSAGER_STATUS_CHANGED,
 } from './InnerMessager';
+import { getStoreData, LoginStateKey } from "../../http/AsyncStorage";
 
 
 export default class HomeScreen extends Component<Props> {
@@ -146,10 +147,14 @@ export default class HomeScreen extends Component<Props> {
         this.httpRedBag();
 
         // 获取未读的站内信数量
-        this.requestInnerMessageInfo();
-
-        console.log("99999")
-        console.log(this.state.dicountUrl)
+        getStoreData(LoginStateKey).then((loginInfo) => {
+            if (loginInfo != undefined && loginInfo.isLogin) {
+                this.requestInnerMessageInfo();
+            }
+            else {
+                this.props.navigation.setParams({ badgeValue: 0 });
+            }
+        })
     }
 
 

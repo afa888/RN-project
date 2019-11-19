@@ -10,7 +10,7 @@ import {
 import {NavigationActions} from "react-navigation";
 import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
 import http from "../http/httpFetch";
-import {getStoreData} from "../http/AsyncStorage";
+import { getStoreData, LoginStateKey} from "../http/AsyncStorage";
 import {BASE_URL, WEBNUM} from "../utils/Config"
 import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
@@ -104,7 +104,7 @@ export default class RedBagDialog extends Component<Props> {
     }
 
     clickRedBag = () => {
-        getStoreData('@loginState').then((loginInfo) => {
+        getStoreData(LoginStateKey).then((loginInfo) => {
             console.log("登入信息")
             console.log(loginInfo)
             if (loginInfo === undefined || loginInfo.isLogin === undefined || loginInfo.isLogin === false || loginInfo.isLogin === null) {
