@@ -5,21 +5,20 @@ import {
     DeviceEventEmitter, Alert
 } from "react-native";
 import httpBaseManager from "../../../http/httpBaseManager";
-import { category_group_divide_line_color } from "../../../utils/AllColor";
+import { MainTheme } from "../../../utils/AllColor";
 import MidBalanceShow from './midBalanceShow'
 import MainEntrance from './mainEntrance'
 import { getStoreData } from "../../../http/AsyncStorage";
 import AndroidIosNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
 import http from "../../../http/httpFetch";
-import { CAGENT } from "../../../utils/Config";
-import MainTheme from '../../../utils/AllColor';
+import { CAGENT, RN_VERSION } from "../../../utils/Config";
 import DeviceValue from "../../../utils/DeviceValue";
 import { FlatList, Switch } from 'react-native-gesture-handler';
 import TXToastManager from "../../../tools/TXToastManager";
 import { clearAllStore } from "../../../http/AsyncStorage";
 
 // 是否接入了无限代理
-export var IS_INFINITE_AGENCY_ENABLE = true;
+export const IS_INFINITE_AGENCY_ENABLE = true;
 
 export default class MemberCenterIndexScreen extends Component<Props> {
 
@@ -64,6 +63,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     loginTime: login_time,
                     agencyLevel: '白银会员', // mock data
                     agencyReward: 888,      // mock data
+                    version: 0,             // 版本
                 })
             }
         })
@@ -72,6 +72,10 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     async componentDidMount() {
         // 获取用户信息并存储
         await httpBaseManager.baseRequest();
+        // 获取版本
+        AndroidIosNativeGameActiviy.getVersion().then((andriodVersionCode) => {
+            this.setState({ version: andriodVersionCode })
+        });
     }
 
     componentWillUnmount() {
@@ -213,17 +217,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={styles.userInfo}>认证状态：</Text>
                         <Image source={phoneVerify ? require('../../../static/img/iphone_pass.png') : require('../../../static/img/iphone_nov.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                height: 24,
-                                width: 30
-                            }} />
+                            style={{ resizeMode: 'contain', height: 24, width: 30 }} />
                         <Image source={cardVerify ? require('../../../static/img/bank_pass.png') : require('../../../static/img/bank_nov.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                height: 20,
-                                width: 30
-                            }} />
+                            style={{ resizeMode: 'contain', height: 20, width: 30 }} />
                     </View>
                     <Text style={styles.userInfo}>当前积分：{integral}</Text>
                     <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
@@ -364,7 +360,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                 return ( // APP版本号
                     <TouchableOpacity style={styles.otherSettingsVersionContainer}>
                         <Text style={styles.otherSettingsTitle}>{item}</Text>
-                        <Text style={styles.otherSettingsVersionDetail}>v1.0.2</Text>
+                        <Text style={styles.otherSettingsVersionDetail}>
+                            {RN_VERSION.toLowerCase() + "-" + this.state.version}
+                        </Text>
                     </TouchableOpacity>
                 );
             default:
@@ -380,7 +378,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                <ScrollView style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
                     <View style={{ height: 220, position: 'relative' }}>
                         <ImageBackground style={{ flex: 1 }} resizeMode='cover'
                             source={require('../../../static/img/centertop_bg.png')} >
@@ -455,7 +453,7 @@ const styles = StyleSheet.create({
 
     assetsNumber: {
         marginBottom: 10,
-        color: '#FFFFFF',
+        color: MainTheme.BackgroundColor,
         fontSize: 16,
     },
 
@@ -470,14 +468,14 @@ const styles = StyleSheet.create({
         width: DeviceValue.windowWidth - 50,
         height: 100,
         bottom: -75,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: MainTheme.BackgroundColor,
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         position: 'absolute',
         alignItems: 'center',
         borderRadius: 5,
         borderWidth: 0.5,
-        borderColor: category_group_divide_line_color,
+        borderColor: MainTheme.DivideLineColor,
     },
 
     shortcutItem: {
@@ -493,7 +491,7 @@ const styles = StyleSheet.create({
 
     shortcutTitle: {
         fontSize: 14,
-        color: '#333333',
+        color: MainTheme.DarkGrayColor,
     },
 
     recordItemsContainer: {
@@ -514,7 +512,7 @@ const styles = StyleSheet.create({
 
     otherSettingsTitle: {
         fontSize: 14,
-        color: '#333333',
+        color: MainTheme.DarkGrayColor,
     },
 
     otherSettingsAutoTransferContainer: {

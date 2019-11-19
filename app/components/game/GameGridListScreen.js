@@ -72,8 +72,8 @@ export default class GameGridListScreen extends Component<Props> {
                             <FastImage
                                 style={{
                                     marginTop: 5,
-                                    width: deviceValue.windowWidth / 3 - 24 - 20,
-                                    height: deviceValue.windowWidth / 3 - 24 - 20,
+                                    width: deviceValue.windowWidth / 3 - 24 - 30,
+                                    height: deviceValue.windowWidth / 3 - 24 - 30,
                                 }}
                                 source={{
                                     uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,

@@ -67,7 +67,7 @@ export default class ModalScratch extends Component<Props> {
     onScratchProgressChanged = ({ value, id }) => {
         // Do domething like showing the progress to the user
         console.log(value);
-        if (value > 20) {
+        if (value > 30) {
             this.setState({scrachStatus:'1'});
         }
     }

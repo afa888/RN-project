@@ -1,6 +1,6 @@
 // 接口请求地址
-//  export const BASE_URL = 'http://m.txbet1788.com/TXW/';
-export const BASE_URL = 'http://192.168.107.144:1101/JJF/';
+//export const BASE_URL = 'http://m.txbet1788.com/TXW/';
+ export const BASE_URL = 'http://192.168.107.144:1101/JJF/';
 
 export const BASE_H5_URL = 'http://m.txbet1788.com/';
 // 代理号
@@ -8,7 +8,7 @@ export const CAGENT = 'TXW';
 // 网站识别号
 export const WEBNUM = 'TXW';
 //android全量更新地址json
-export const URL_DOWNLOAD_UPDATE_JSON = "https://www.openl.cn/txw/apk.json";
+export const URL_DOWNLOAD_UPDATE_JSON = "https://www.8382vip.com/txw/apk.json";
 //IOS全量更新地址json
 export const URL_IOS_DOWNLOAD_UPDATE_JSON = "https://www.8382vip.com/txw/ipa.json";
 //http://m.txbet1788.com/TXW/game/forwardGame

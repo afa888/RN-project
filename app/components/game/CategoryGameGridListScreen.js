@@ -25,6 +25,7 @@ import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameAc
 let {width, height} = Dimensions.get('window');
 let pageSize = 1;
 let total = 0;
+//分类一级item
 export default class CategoryGameGridListScreen extends Component<Props> {
     static navigationOptions = {
         header: null
@@ -71,10 +72,10 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                                     borderRadius: 6
                                 }}
                                 source={{
-                                    uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
+                                    uri:  item.imageUrl,
                                     priority: FastImage.priority.normal,
                                 }}
-                                resizeMode={FastImage.resizeMode.contain}
+                                resizeMode={FastImage.resizeMode.cover}
                             />
                         </ImageBackground>
 
@@ -139,7 +140,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                     textStyle={{color: 'white'}}
                 />
                 <FlatList
-                    numColumns={3}
+                    numColumns={2}
                     style={{backgroundColor: "white"}}
                     data={this.state.data}
                     ListHeaderComponent={this.renderHeader}//头部

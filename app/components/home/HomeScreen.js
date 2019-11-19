@@ -19,8 +19,8 @@ import {NativeModules} from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
-import ModalDialog from '../../customizeview/ModalDialog'
 import ModalScratch from '../../customizeview/ModalScratch'
+import RedBagDialog from '../../customizeview/RedBagDialog'
 import HomeMidView from './HomeMidView'
 import {
     category_group_divide_line_color,
@@ -32,21 +32,40 @@ import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT} from '../../utils/Config'
-import CodePush from 'react-native-code-push'
+
 import {getStoreData,mergeStoreData} from "../../http/AsyncStorage";
+
+import CodePush from 'react-native-code-push';
+import TXTools from '../../utils/Htools';
+import {
+    INNER_MESSAGER_DATETIME_PERIOD,
+    INNER_MESSAGER_MESSAGE_NUM_URL,
+    INNER_MESSAGER_STATUS_CHANGED,
+} from './InnerMessager';
+
 
 export default class HomeScreen extends Component<Props> {
 
-
     static navigationOptions = ({navigation}) => {
+        const {params} = navigation.state;
+        let badgeWidth = 14;
+        if (params && params.badgeValue > 0) {
+            if (params.badgeValue > 9) {
+                badgeWidth = 20;
+            }
+            if (params.badgeValue > 99) {
+                badgeWidth = 26;
+            }
+        }
+
         return {
             headerTitle: <View style={{flex: 1, alignItems: "center"}}>
                 <Image source={require('../../static/img/banner.png')}
                        style={{
                            flex: 1,
-                           resizeMode: 'cover',
-                           width: 150,
-                           height: 20,
+                           resizeMode: 'contain',
+                           width: DeviceValue.windowWidth,
+                           height: 48,
                        }}/>
             </View>,
             headerRight: <View
@@ -57,26 +76,26 @@ export default class HomeScreen extends Component<Props> {
                     alignItems: 'center',
                     marginRight: 12
                 }}>
-                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                    navigation.navigate('InnerMessager')
-                }}>
-                    <View style={{
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: 28,
-                        height: 48,
-                        justifyContent: 'center'
-                    }}>
-                        <Image
-                            source={require('../../static/img/nav_icon_email_nor.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                width: 18,
-                                height: 18,
-                            }}/>
+                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center', marginRight: 10,}}
+                                  onPress={() => {
+                                      navigation.navigate('InnerMessager')
+                                  }}>
+                    <View style={styles.innerMessageIcon}>
+                        {
+                            params && params.badgeValue > 0 && (
+                                <View style={{...styles.badgeContainer, width: badgeWidth}}>
+                                    <Text style={styles.badgeText}>
+                                        {params.badgeValue > 99 ? '99+' : params.badgeValue}
+                                    </Text>
+                                </View>
+                            )
+                        }
+                        <Image source={require('../../static/img/nav_icon_email_nor.png')}
+                               style={{resizeMode: 'contain', width: 18, height: 18,}}/>
                         <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
                     </View>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
                     navigation.navigate('CustomerService')
 
@@ -98,7 +117,10 @@ export default class HomeScreen extends Component<Props> {
                         <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
+            </View>,
+            headerLeft: (
+                <View></View>
+            ),
         }
     }
 
@@ -107,19 +129,40 @@ export default class HomeScreen extends Component<Props> {
     }
 
     componentDidMount() {
-
+        // 跳转到登陆页面
         this.listener = DeviceEventEmitter.addListener('login', (val) => {
             this.props.navigation.navigate('LoginService')
         });
-        this.httpCategoryRefresh()
-        this.httpGridGame()
+        
+
+        // 站内信
+        this.innerMessagerListener =
+            DeviceEventEmitter.addListener(INNER_MESSAGER_STATUS_CHANGED, (val) => {
+                this.props.navigation.setParams({badgeValue: val});
+            });
+
+        // 游戏列表：获得一二级游戏
+        this.httpCategoryRefresh();
+
+        // 游戏列表：获取平台推荐游戏
+        this.httpGridGame();
+
+        // // 红包状态查询
+        // this.httpRedBag();
+        // 刮刮乐 与 红包;
         this.httpScratch()
-        // this.httpRedBag()
+
+        // 获取未读的站内信数量
+        this.requestInnerMessageInfo();
+
+        console.log("99999")
+        console.log(this.state.dicountUrl)
     }
 
 
     componentWillUnmount() {
         this.listener.remove();
+        this.innerMessagerListener.remove();
     }
 
     constructor(props) {
@@ -129,9 +172,9 @@ export default class HomeScreen extends Component<Props> {
             isScrachVisible: false,
             data: {},
             dataImagUrl: [],
-            dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
-                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/2.jpg",
-                "https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/3.jpg",],
+            dicountUrl: ["https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/1.jpg",
+                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/2.jpg",
+                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/3.jpg",],
             noticeTitle: [],
             redData: {}
         }
@@ -295,8 +338,10 @@ export default class HomeScreen extends Component<Props> {
             console.log(res);
             if (res.status === 10000) {
                 this.setState({redData: res.data})
+
                 if (res.data.status !== "faild") {
                     this.showRedBag();
+
                 }
             }
         }).catch(err => {
@@ -305,11 +350,10 @@ export default class HomeScreen extends Component<Props> {
     }
 
     showRedBag = () => {
-        console.log('红包开始显示');
         this.setState({isRedBagVisible: true});
     }
     gotoDiscout = () => {
-        this.props.navigation.navigate('Discount')
+        this.props.navigation.navigate('DiscountsScreen')
     }
 
     gotoDiscoutDetail = (url) => {
@@ -317,6 +361,27 @@ export default class HomeScreen extends Component<Props> {
     }
     hideDialog = () => {
         this.setState({isRedBagVisible: false});
+    }
+    gotoWebView=()=>{
+        this.props.navigation.navigate('RnWebScreen')
+    }
+    /**
+     * 获取站内信未读数量
+     */
+    requestInnerMessageInfo = () => {
+        // 查询的日期周期
+        let theDay = TXTools.dateAfter(-INNER_MESSAGER_DATETIME_PERIOD);
+        let from = TXTools.formatDateToCommonString(theDay);
+        let to = TXTools.formatDateToCommonString(new Date());
+        // 发送数据请求
+        http.post(INNER_MESSAGER_MESSAGE_NUM_URL, {bdate: from, edate: to,})
+            .then(res => {
+                if (res.status == 10000) {
+                    this.props.navigation.setParams({badgeValue: res.data.noread});
+                }
+            }).catch(err => {
+            console.log(err);
+        });
     }
 
     showScrach = () => {
@@ -331,17 +396,17 @@ export default class HomeScreen extends Component<Props> {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
-
-                <ModalDialog
+                {this.state.isRedBagVisible && <RedBagDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
                     dialogData={this.state.redData}
                     _dialogCancle={
                         this.hideDialog.bind(this)
                     }
-                />
-                
-                <ModalScratch
+                    gotoWebView = {this.gotoWebView.bind(this)}
+                />}
+
+                {this.state.isScrachVisible && <ModalScratch
                     _scrachVisible={this.state.isScrachVisible}
                     scratchData = {this.state.scratchData}
                     _verifyPhone = {this.state.scratchData ? this.state.scratchData.verifyPhone : 0}
@@ -349,8 +414,7 @@ export default class HomeScreen extends Component<Props> {
                     _dialogCancle={
                         this.hideScrach.bind(this)
                     }
-                />
-
+                />}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'black'}}
@@ -399,6 +463,35 @@ const styles = StyleSheet.create({
     textView: {
         textAlign: 'center',
         textAlignVertical: 'center',
+    },
+
+    innerMessageIcon: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: 28,
+        height: 48,
+        justifyContent: 'center'
+    },
+
+    badgeContainer: {
+        position: 'absolute',
+        top: 5,
+        left: 14,
+        height: 14,
+        width: 14,
+        zIndex: 999999,
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: 'white',
+    },
+
+    badgeText: {
+        color: 'white',
+        fontSize: 10,
+        textAlign: 'center',
     }
 
 });

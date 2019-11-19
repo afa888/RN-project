@@ -82,7 +82,7 @@ export default class SeachGameGridListScreen extends Component<Props> {
                                     priority: FastImage.priority.normal,
 
                                 }}
-                                resizeMode={FastImage.resizeMode.contain}
+                                resizeMode={FastImage.resizeMode.cover}
                             />
                         </View>
 
