@@ -38,7 +38,7 @@ import AssetDetailScreen from "../memberCenter/AssetDetailScreen"
 import HelpScreen from "../memberCenter/help/helpScreen";
 import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
-import RnWebViewScreen from "../memberCenter/help/RnWebViewScreen"
+import RnWebViewScreen from "../../customizeview/RnWebViewScreen"
 
 import { theme_color } from "../../utils/AllColor";
 

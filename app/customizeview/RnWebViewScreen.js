@@ -3,10 +3,10 @@ import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {NavigationActions} from "react-navigation";
 import {DeviceEventEmitter, SafeAreaView} from "react-native";
-import {BASE_H5_URL, BASE_URL, WEBNUM} from "../../../utils/Config";
+import {BASE_H5_URL, BASE_URL, WEBNUM} from "../utils/Config";
 import {highlightTrailingWhitespace} from 'jest-matcher-utils';
-import {getStoreData} from "../../../http/AsyncStorage";
-import AndroidNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
+import {getStoreData} from "../http/AsyncStorage";
+import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
 let url
 export default class RnWebViewScreen extends Component {
