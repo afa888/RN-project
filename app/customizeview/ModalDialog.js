@@ -38,7 +38,6 @@ export default class ModalDialog extends Component<Props> {
 
     timeOut = () => {
         this.timer = setTimeout(() => {
-            console.log("把一个定时器的引用挂在this上");
 
             this.timeOut()
         }, 1000);
@@ -68,7 +67,7 @@ export default class ModalDialog extends Component<Props> {
     render() {
         // onPress事件直接与父组件传递进来的属性挂接
         return (
-            <Modal
+            <Modal zIndex={1000}
                 visible={this.props._dialogVisible}
                 transparent={true}
                 onRequestClose={() => {

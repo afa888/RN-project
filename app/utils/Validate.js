@@ -89,6 +89,21 @@ export const Reg_phone_validate = (params) => {
     }
     return true;
 };
+
+/**
+ * 手机号验证
+ * @param phone
+ * @return {boolean}
+ * @constructor
+ */
+export const Reg_phoneNum_validate = (phone) => {
+    if(!Reg.mobile.test(phone)){
+        TXToastManager.show('请输入真实的手机号码');
+        return false;
+    }
+    return true;
+};
+
 /**
  * 手机注册 => 发送验证码
  * @param phoneNum

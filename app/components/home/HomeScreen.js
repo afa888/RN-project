@@ -11,7 +11,7 @@ import {
     StatusBar,
     TouchableOpacity,
     FlatList,
-    RefreshControl, ImageBackground, DeviceEventEmitter
+    RefreshControl, ImageBackground, DeviceEventEmitter,InteractionManager
 } from 'react-native';
 import Dimensions from 'Dimensions'
 import http from "../../http/httpFetch";
@@ -20,6 +20,7 @@ import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
 import ModalDialog from '../../customizeview/ModalDialog'
+import ModalScratch from '../../customizeview/ModalScratch'
 import HomeMidView from './HomeMidView'
 import {
     category_group_divide_line_color,
@@ -32,6 +33,7 @@ import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameAc
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT} from '../../utils/Config'
 import CodePush from 'react-native-code-push'
+import {getStoreData,mergeStoreData} from "../../http/AsyncStorage";
 
 export default class HomeScreen extends Component<Props> {
 
@@ -111,9 +113,8 @@ export default class HomeScreen extends Component<Props> {
         });
         this.httpCategoryRefresh()
         this.httpGridGame()
-        this.httpRedBag()
-        console.log("99999")
-        console.log(this.state.dicountUrl)
+        this.httpScratch()
+        // this.httpRedBag()
     }
 
 
@@ -124,7 +125,8 @@ export default class HomeScreen extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            isRedBagVisible: true,
+            isRedBagVisible: false,
+            isScrachVisible: false,
             data: {},
             dataImagUrl: [],
             dicountUrl: ["https://mobile.worLdweaLth.com.cn/front/mobile" + CAGENT + "/image/Home/1.jpg",
@@ -137,6 +139,7 @@ export default class HomeScreen extends Component<Props> {
     }
 
     noticeScreen = (blo, notice) => {
+        
         let noticeList = []
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
@@ -232,6 +235,59 @@ export default class HomeScreen extends Component<Props> {
         });
     }
 
+    httpScratch = () => {
+
+        getStoreData('@loginState').then((loginInfo) => {
+            if (loginInfo.isLogin) {
+                //已经登录
+                getStoreData('userInfoState').then(userInfo => {
+                    if (!userInfo.hasOwnProperty('scratchStatus') || userInfo.scratchStatus === 0) {
+                        // 没有领取过 刮刮乐 就 去 服务器查询是否有活动
+                        let prams = {type:'2',cagentCode:CAGENT};
+                        http.post('gglActivity/getReward.do', prams).then(res => {
+                            console.log("刮刮乐")
+                            console.log(res);
+                            if (res && res.status === 10000) {
+                                
+                                if (res.data.status == '0') {
+                                    //verifyPhone 1 是收机号 注册 无需验证， 0 是快速注册 需要验证手机号
+                                    if (res.data.hasOwnProperty('activityId') && res.data.hasOwnProperty('usermoney') && res.data.hasOwnProperty('verifyPhone')) {
+                                        this.setState({scratchData: res.data});
+                                        this.showScrach();
+                                    }
+                                    
+                                }else if(res.hasOwnProperty('msg') && res.msg === '用户已参与过此次活动') {
+                                    //
+                                    this.saveScratchStatus();
+                                }
+                            }else {
+                                this.httpRedBag();
+                            }
+                        }).catch(err => {
+                            console.error(err)
+                            this.httpRedBag();
+                        });
+                    }else {
+                        this.httpRedBag();
+                    }
+                });
+            }else {
+                //未登录
+                this.httpRedBag();
+            }
+        });
+
+        
+        
+    }
+
+    saveScratchStatus = () => {
+        mergeStoreData('userInfoState',
+                    {
+                        scratchStatus: 1
+                    });
+    }
+
     httpRedBag = () => {
         let prams = {};
         http.get('LuckyDraw/getStatus.do', prams).then(res => {
@@ -249,6 +305,7 @@ export default class HomeScreen extends Component<Props> {
     }
 
     showRedBag = () => {
+        console.log('红包开始显示');
         this.setState({isRedBagVisible: true});
     }
     gotoDiscout = () => {
@@ -262,9 +319,19 @@ export default class HomeScreen extends Component<Props> {
         this.setState({isRedBagVisible: false});
     }
 
+    showScrach = () => {
+        console.log('刮刮乐开始显示');
+        this.setState({isScrachVisible: true});
+    }
+    hideScrach = () => {
+        this.setState({isScrachVisible: false});
+        this.httpRedBag();
+    }
+
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center'}}>
+
                 <ModalDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
@@ -273,6 +340,17 @@ export default class HomeScreen extends Component<Props> {
                         this.hideDialog.bind(this)
                     }
                 />
+                
+                <ModalScratch
+                    _scrachVisible={this.state.isScrachVisible}
+                    scratchData = {this.state.scratchData}
+                    _verifyPhone = {this.state.scratchData ? this.state.scratchData.verifyPhone : 0}
+                    _dialogSaveScratch = {this.saveScratchStatus.bind(this)}
+                    _dialogCancle={
+                        this.hideScrach.bind(this)
+                    }
+                />
+
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'black'}}
