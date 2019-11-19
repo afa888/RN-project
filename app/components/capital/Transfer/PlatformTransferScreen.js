@@ -277,7 +277,7 @@ export default class PlatformTransfer extends Component<Props> {
     /**
      * 转账
      */
-    _onCommitTransfer (){
+    _onCommitTransfer (data){
         if (this.state.platFrom.length == 0) {
             Alert.alert('请选择转出平台');
         }else if(this.state.platTo.length == 0){
@@ -285,7 +285,7 @@ export default class PlatformTransfer extends Component<Props> {
         }else if(this.state.money.length == 0){
             Alert.alert('请输入转入金额');
         }
-        else if (parseInt(this.state.money)<1 || parseInt(this.state.money) > 10000) {
+        else if (parseInt(this.state.money)<1 || parseInt(this.state.money) > 100000) {
             Alert.alert('输入金额范围1~100000元');
         }else {
             console.log('验证完成，调用接口');
@@ -307,72 +307,8 @@ export default class PlatformTransfer extends Component<Props> {
 
             http.post(url, params,true).then((res) => {
                 if (res && res.status === 10000) {
-                    let oData = res.data;
-                    let fromBalance = transferMoneyFamat(oData.balance);
-                    let toBalance = transferMoneyFamat(oData.wallet);
-                    //修改本地数据金额
-                    let gameListArr = this.state.gameList;
-                    let titleArr = this.state.platTitle.slice(0);
-                    if (this.state.platTo.indexOf('钱包余额') != -1) {
-                        //传入平台为平台
-                        //转账户
-                        let transIndex1 = titleArr.indexOf(this.state.platFrom);
-                        let modelTransItem = gameListArr[transIndex1];
-                        modelTransItem.subTitle = fromBalance;
-                        gameListArr.splice(transIndex1,1,modelTransItem);
-
-                        //主账户
-                        let transIndex2 = titleArr.indexOf(this.state.platTo);
-                        let mainModel = gameListArr[transIndex2];
-                        mainModel.subTitle = toBalance;
-                        gameListArr.splice(transIndex2,1,mainModel);
-
-                        let fromAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
-                        let ToAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
-
-
-                        let from = modelTransItem.title;
-                        let fromMoney ='￥' + modelTransItem.subTitle;
-
-                        let To = mainModel.title ;
-
-                        let ToMoney = '￥' + mainModel.subTitle;
-
-                        titleArr.splice(transIndex1,1,fromAll);
-                        titleArr.splice(transIndex2,1,ToAll);
-                        //保存数据变化 并 清空输入金额
-                        this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
-
-                    }else {
-                        //转账到游戏
-
-                        //转账户
-                        let transIndex2 = titleArr.indexOf(this.state.platTo);
-                        let modelTransItem = gameListArr[transIndex2];
-                        modelTransItem.subTitle = fromBalance;
-                        gameListArr.splice(transIndex2,1,modelTransItem);
-
-                        //主账户
-                        let transIndex1 = titleArr.indexOf(this.state.platFrom);
-                        let mainModel = gameListArr[transIndex1];
-                        mainModel.subTitle = toBalance;
-                        gameListArr.splice(transIndex1,1,mainModel);
-
-                        let fromAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
-                        let ToAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
-
-
-                        let from = mainModel.title ;
-                        let fromMoney = '￥' + mainModel.subTitle;
-                        let To = modelTransItem.title;
-                        let ToMoney = '￥' + modelTransItem.subTitle;
-
-                        titleArr.splice(transIndex1,1,fromAll);
-                        titleArr.splice(transIndex2,1,ToAll);
-                        //保存数据变化 并 清空输入金额
-                        this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
-                    }
-
+                    
+                    this.dealWithData(res.data);
                     TXAlert('转账成功！');
                 }else {
                     if (res && res.msg) {
@@ -386,6 +322,77 @@ export default class PlatformTransfer extends Component<Props> {
             });
         }
     };
+
+    dealWithData = (oData) => {
+        let fromBalance = transferMoneyFamat(oData.balance);
+        let toBalance = transferMoneyFamat(oData.wallet);
+        //修改本地数据金额
+        let gameListArr = this.state.gameList;
+        let titleArr = this.state.platTitle.slice(0);
+        if (this.state.platTo.indexOf('钱包余额') != -1) {
+            //传入平台为平台
+            //转账户
+            let allFrom = this.state.platFrom + '(' + this.state.platFromMoney + ')';
+            let transIndex1 = titleArr.indexOf(allFrom);
+            let modelTransItem = gameListArr[transIndex1];
+            modelTransItem.subTitle = fromBalance;
+            gameListArr.splice(transIndex1,1,modelTransItem);
+
+            //主账户
+            let allTo = this.state.platTo + '(' + this.state.platToMoney + ')';
+            let transIndex2 = titleArr.indexOf(allTo);
+            let mainModel = gameListArr[transIndex2];
+            mainModel.subTitle = toBalance;
+            gameListArr.splice(transIndex2,1,mainModel);
+
+            let fromAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
+            let ToAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
+
+
+            let from = modelTransItem.title;
+            let fromMoney ='￥' + modelTransItem.subTitle;
+
+            let To = mainModel.title ;
+
+            let ToMoney = '￥' + mainModel.subTitle;
+
+            titleArr.splice(transIndex1,1,fromAll);
+            titleArr.splice(transIndex2,1,ToAll);
+            //保存数据变化 并 清空输入金额
+            this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
+
+        }else {
+            //转账到游戏
+
+            //转账户
+            let allTo = this.state.platTo + '(' + this.state.platToMoney + ')';
+            let transIndex2 = titleArr.indexOf(allTo);
+            let modelTransItem = gameListArr[transIndex2];
+            modelTransItem.subTitle = fromBalance;
+            gameListArr.splice(transIndex2,1,modelTransItem);
+
+            //主账户
+            let allFrom = this.state.platFrom + '(' + this.state.platFromMoney + ')';
+            let transIndex1 = titleArr.indexOf(allFrom);
+            let mainModel = gameListArr[transIndex1];
+            mainModel.subTitle = toBalance;
+            gameListArr.splice(transIndex1,1,mainModel);
+
+            let fromAll = mainModel.title + '(￥' + mainModel.subTitle + ')';
+            let ToAll = modelTransItem.title + '(￥' + modelTransItem.subTitle + ')';
+
+
+            let from = mainModel.title ;
+            let fromMoney = '￥' + mainModel.subTitle;
+            let To = modelTransItem.title;
+            let ToMoney = '￥' + modelTransItem.subTitle;
+
+            titleArr.splice(transIndex1,1,fromAll);
+            titleArr.splice(transIndex2,1,ToAll);
+            //保存数据变化 并 清空输入金额
+            this.setState({money:'',gameList:gameListArr,platFrom:from,platFromMoney:fromMoney,platTo:To,platToMoney:ToMoney,platTitle:titleArr});
+        }
+    }
 
     render() {
         return (
@@ -452,7 +459,7 @@ export default class PlatformTransfer extends Component<Props> {
                     </View>
                 </View>
                 <View style={{paddingTop:5,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onCommitTransfer()}  activeOpacity={0.2} focusedOpacity={0.5}>
+                    <TouchableOpacity  onPress={() => this._onCommitTransfer(this.state)}  activeOpacity={0.2} focusedOpacity={0.5}>
                      <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
                         <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即转账</Text>

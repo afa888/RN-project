@@ -201,8 +201,8 @@ export default class DepositManagerScreen extends Component<Props> {
         if (this.state.payType == 'bank') {
             //银行汇款
             let cagentBankCardEntity = this.state.currentPayModel.cagentBankCardEntity;
-            if (this.state.name.length == 0) {
-                TXToastManager.show('请输入付款人姓名');
+            if (this.state.name.length < 2 || this.state.name.length > 10) {
+                TXToastManager.show('请输入付款人真实姓名');
             }else if(!Reg_chineseName_validate(this.state.name)){
                 TXToastManager.show('真实姓名只能为中文');
             }else if(this.state.money.length ==0){
@@ -393,7 +393,7 @@ export default class DepositManagerScreen extends Component<Props> {
         if (this.state.payType == 'bank') {
             return (
                 <View style={{paddingTop:10}}>
-                    <PayBank onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal.bind(this)} onChange={this._onChange} params={this.state} />
+                    <PayBank payModel={this.state.currentPayModel.cagentBankCardEntity} onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal.bind(this)} onChange={this._onChange} params={this.state} />
                 </View>
             );
         }else if(this.state.payType == 'scan') {

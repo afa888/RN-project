@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.como.RNTScratchView.ScratchViewPackage;
 import com.amsoft.RNProgressHUB.RNProgressHUBPackage;
 import com.como.RNTScratchView.ScratchViewPackage;
 import com.microsoft.codepush.react.CodePush;
@@ -45,6 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new ScratchViewPackage(),
             new RNProgressHUBPackage(),
             new ScratchViewPackage(),
                     new SplashScreenReactPackage(),
