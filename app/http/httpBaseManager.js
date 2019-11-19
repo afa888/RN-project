@@ -1,13 +1,13 @@
 import React, { AsyncStorage }from 'react-native';
 import http from './httpFetch';
 import {CAGENT} from '../utils/Config';
-import {mergeStoreData,getStoreData} from "./AsyncStorage";
+import { mergeStoreData, getStoreData, LoginStateKey} from "./AsyncStorage";
 
 export default class httpBaseManager {
 
     //基础请求, 排除它端登录的情况
     static async baseRequest () {
-        getStoreData('@loginState').then((loginInfo) => {
+        getStoreData(LoginStateKey).then((loginInfo) => {
             if (loginInfo.isLogin) {
                 getStoreData('userInfoState').then((userInfo) => {
 

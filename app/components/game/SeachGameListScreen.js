@@ -73,15 +73,16 @@ export default class SeachGameListScreen extends Component<Props> {
             console.log(res);
             if (res.status === 10000) {
                 if (res.data !== null && res.data.list !== null) {
-                    this.setState({data: res.data.list})
+                    //   this.setState({data: res.data.list})
                     let list = [];
                     list = res.data.list
                     if (list.length > 0) {
-                        this.setState({isEmpty: false})
+                        this.setState({isEmpty: false, data: list})
                     } else {
                         this.setState({isEmpty: true})
 
                     }
+                    console.log(this.state.data)
                 } else {
 
                 }
@@ -159,12 +160,13 @@ export default class SeachGameListScreen extends Component<Props> {
                     marginTop: 15,
                     marginBottom: 15
                 }}/>
-                {this.state.isEmpty ? <ListDataEmptyView/> :
-                    <SeachGameGridListScreen
-                        searchName={this.state.keyWord}
-                        dataList={this.state.data}
-                        id={gameId}
-                        gotoGame={this.gotoGame.bind(this)}/>}
+
+                {this.state.data.length > 0 && <SeachGameGridListScreen
+                    searchName={this.state.keyWord}
+                    dataList={this.state.data}
+                    id={gameId}
+                    gotoGame={this.gotoGame.bind(this)}/>}
+                {this.state.isEmpty && <ListDataEmptyView/>}
             </View>
         );
     }

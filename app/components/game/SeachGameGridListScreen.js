@@ -48,6 +48,7 @@ export default class SeachGameGridListScreen extends Component<Props> {
 
 
     //这里为了保持原图，比例是按图片比例缩放的
+    //这里为了保持原图，比例是按图片比例缩放的
     rightItem = ({item, index}) => {
         return (
             <TouchableOpacity onPress={() => {
@@ -74,15 +75,15 @@ export default class SeachGameGridListScreen extends Component<Props> {
                             <FastImage
                                 style={{
                                     marginTop: 5,
-                                    width: deviceValue.windowWidth / 3 - 24 - 20,
-                                    height: deviceValue.windowWidth / 3 - 24 - 20,
+                                    width: deviceValue.windowWidth / 3 - 24 - 30,
+                                    height: deviceValue.windowWidth / 3 - 24 - 30,
                                 }}
                                 source={{
                                     uri: item.imageUrl.startsWith('//') ? "http:" + item.imageUrl : item.imageUrl,
                                     priority: FastImage.priority.normal,
 
                                 }}
-                                resizeMode={FastImage.resizeMode.cover}
+                                resizeMode={FastImage.resizeMode.contain}
                             />
                         </View>
 

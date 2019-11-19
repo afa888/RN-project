@@ -4,15 +4,18 @@ import {
     StyleSheet, Text, View, Button, Alert, Image,
     StatusBar, ImageBackground, SafeAreaView
 } from 'react-native';
-import Picker from 'react-native-picker';
 import TXInput from "../../../tools/TXInput";
 import http from '../../../http/httpFetch';
-import { getStoreData } from "../../../http/AsyncStorage";
+import {
+    getStoreData,
+    clearAllStore,
+} from "../../../http/AsyncStorage";
 import httpBaseManager from '../../../http/httpBaseManager';
 import { NavigationActions, navigation } from 'react-navigation';
-import { TXAlert } from "../../../tools/TXAlert";
 import { MainTheme } from "../../../utils/AllColor";
 import DeviceValue from "../../../utils/DeviceValue";
+import TXToastManager from "../../../tools/TXToastManager";
+
 
 export default class SecurityManagerScreen extends Component<Props> {
     static navigationOptions = {
@@ -137,6 +140,29 @@ export default class SecurityManagerScreen extends Component<Props> {
 
     onLogout = () => {
         console.log("登出");
+        const { navigation } = this.props;
+        Alert.alert('温馨提示', '退出账户，是否继续？', [
+            { text: '取消', onPress: () => console.log('Cancel loginOut') },
+            {
+                text: '确定', onPress: () => {
+                    http.post('logout.do', {}, true).then(res => {
+                        if (res.status === 10000) {
+                            this.doLogout();
+                        }
+                        TXToastManager.show(res.msg);
+                    })
+                }
+            },
+        ]);
+    }
+
+    doLogout = () => {
+        clearAllStore().then(() => {
+            DeviceEventEmitter.emit('changeTabs', false); //改变Tabs内容广播
+            this.props.navigation.navigate('LoginService');
+        }).catch(err => {
+            console.log('Error:' + err);
+        });
     }
 
     render() {
@@ -190,6 +216,7 @@ export default class SecurityManagerScreen extends Component<Props> {
                     onClick={() => this._onUpdateInfo(4)}
                     value={this.state.bankCard || ''}
                 />
+                <View style={{flex:1,width:0.5}}></View>
                 {/* 退出登录按钮 */}
                 <TouchableOpacity style={styles.logoutContainer} onPress={this.onLogout}>
                     <Text style={styles.logoutText}>退出登录</Text>
@@ -201,6 +228,7 @@ export default class SecurityManagerScreen extends Component<Props> {
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         alignItems: 'center',
         backgroundColor: MainTheme.BackgroundColor,
     },
@@ -235,12 +263,10 @@ const styles = StyleSheet.create({
     logoutContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
-        zIndex: 1,
-        bottom: -150,
-        marginLeft: 22.5,
+        alignSelf:'center',
         height: 42,
         width: DeviceValue.windowWidth - 45,
+        marginBottom: 60,
         backgroundColor: MainTheme.SpecialColor,
         borderRadius: 4,
         borderWidth: 0.5,

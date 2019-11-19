@@ -5,21 +5,22 @@ import {
     TouchableHighlight,
     View,
     StyleSheet,
-    BackAndroid, TouchableOpacity, Image, ScrollView, ImageBackground, DeviceEventEmitter
+    BackAndroid, TouchableOpacity, Image, ScrollView, ImageBackground, DeviceEventEmitter, StatusBar
 } from 'react-native';
 import {NavigationActions} from "react-navigation";
 import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
 import http from "../http/httpFetch";
-import {getStoreData} from "../http/AsyncStorage";
+import { getStoreData, LoginStateKey} from "../http/AsyncStorage";
 import {BASE_URL, WEBNUM} from "../utils/Config"
 import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
-let SCREEN_HEIGHT = Dimensions.get('window').height;//高
+let SCREEN_HEIGHT = Dimensions.get('window').height+StatusBar.currentHeight;//高
 
 let timeData
 let timeNumber
+
 export default class RedBagDialog extends Component<Props> {
 
     // 构造
@@ -104,7 +105,7 @@ export default class RedBagDialog extends Component<Props> {
     }
 
     clickRedBag = () => {
-        getStoreData('@loginState').then((loginInfo) => {
+        getStoreData(LoginStateKey).then((loginInfo) => {
             console.log("登入信息")
             console.log(loginInfo)
             if (loginInfo === undefined || loginInfo.isLogin === undefined || loginInfo.isLogin === false || loginInfo.isLogin === null) {
@@ -112,11 +113,10 @@ export default class RedBagDialog extends Component<Props> {
                 DeviceEventEmitter.emit('login', false); //导航到login页面
             } else if (loginInfo.isLogin) {
                 this.hideRedBag()
-                  let baseUrl = BASE_URL.split(WEBNUM + "/");
-                  let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
-                  AndroidNativeGameActiviy.openGameWith(url, "", "");
-
-               // this.props.gotoWebView()
+                let baseUrl = BASE_URL.split(WEBNUM + "/");
+                let url = baseUrl[0] + "Coupon?token=" + loginInfo.token
+                AndroidNativeGameActiviy.openGameWith(url, "", "");
+                // this.props.gotoWebView()
             }
         });
     }
@@ -137,57 +137,58 @@ export default class RedBagDialog extends Component<Props> {
     render() {
         // onPress事件直接与父组件传递进来的属性挂接
         return (
-            <Modal
-                visible={this.props._dialogVisible}
-                transparent={true}
-                onRequestClose={() => {
-                }} //如果是Android设备 必须有此方法
-            >
-                <View style={styles.bg}>
-                    <ImageBackground style={styles.dialog}
-                                     source={require('../static/img/hb_background.png')}
-                                     resizeMode='contain'>
-                        <View style={styles.dialogTitleView}>
-                            <Image source={require('../static/img/text_dsps.png')}
+                <Modal
+                    visible={this.props._dialogVisible}
+                    transparent={true}
+                    onRequestClose={() => {
+                    }} //如果是Android设备 必须有此方法
+                >
+                    <View style={styles.bg}>
+                        <ImageBackground style={styles.dialog}
+                                         source={require('../static/img/hb_background.png')}
+                                         resizeMode='contain'>
+                            <View style={styles.dialogTitleView}>
+                                <Image source={require('../static/img/text_dsps.png')}
+                                       style={{
+                                           resizeMode: 'contain',
+                                           width: SCREEN_WIDTH * 0.2,
+                                           height: SCREEN_WIDTH * 0.2 * (76 / 314),
+                                           marginTop: SCREEN_WIDTH * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
+                                       }}/>
+                                {this.state.isVisibleTime &&
+                                <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
+                                <TouchableOpacity onPress={() => {
+                                    this.clickRedBag()
+                                }}>
+                                    <Image source={require('../static/img/btn_djqhb.png')}
+                                           style={this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ? {
+                                               resizeMode: 'contain',
+                                               width: SCREEN_WIDTH * 0.2,
+                                               height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
+
+                                           } : {
+                                               resizeMode: 'contain',
+                                               width: SCREEN_WIDTH * 0.2,
+                                               height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
+                                               marginTop: 20
+                                           }}/>
+                                </TouchableOpacity>
+
+                            </View>
+                        </ImageBackground>
+                        <TouchableOpacity onPress={() => {
+                            this.hideRedBag()
+                        }}>
+                            <Image source={require('../static/img/hb_back.png')}
                                    style={{
                                        resizeMode: 'contain',
-                                       width: SCREEN_WIDTH * 0.2,
-                                       height: SCREEN_WIDTH * 0.2 * (76 / 314),
-                                       marginTop: SCREEN_WIDTH * (791 / 750) - SCREEN_WIDTH * 0.2 * (76 / 314) - 70
+                                       width: 25,
+                                       height: 25,
                                    }}/>
-                            {this.state.isVisibleTime &&
-                            <Text style={{color: 'white', fontSize: 16}}>{this.state.time}</Text>}
-                            <TouchableOpacity onPress={() => {
-                                this.clickRedBag()
-                            }}>
-                                <Image source={require('../static/img/btn_djqhb.png')}
-                                       style={this.props.dialogData.diff > 0 && this.props.dialogData.status === "waiting" ? {
-                                           resizeMode: 'contain',
-                                           width: SCREEN_WIDTH * 0.2,
-                                           height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
 
-                                       } : {
-                                           resizeMode: 'contain',
-                                           width: SCREEN_WIDTH * 0.2,
-                                           height: SCREEN_WIDTH * 0.2 * (76 / 314) + 10,
-                                           marginTop: 20
-                                       }}/>
-                            </TouchableOpacity>
-
-                        </View>
-                    </ImageBackground>
-                    <TouchableOpacity onPress={() => {
-                        this.hideRedBag()
-                    }}>
-                        <Image source={require('../static/img/hb_back.png')}
-                               style={{
-                                   resizeMode: 'contain',
-                                   width: 25,
-                                   height: 25,
-                               }}/>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
         );
     }
 }
