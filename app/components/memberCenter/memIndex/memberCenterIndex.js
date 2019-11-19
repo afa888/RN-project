@@ -61,8 +61,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     wallet: wallet,
                     totalBalance: totalBalance,
                     loginTime: login_time,
-                    agencyLevel: '白银会员', // mock data
-                    agencyReward: 888,      // mock data
+                    agencyLevel: '会员',    // mock data
+                    agencyReward: 0,        // mock data
                     version: 0,             // 版本
                 })
             }
