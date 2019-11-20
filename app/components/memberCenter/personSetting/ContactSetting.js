@@ -92,7 +92,7 @@ export default class ContactSetting extends Component<Props>{
                 <TXInput textInputStyle={{ color: MainTheme.DarkGrayColor }}
                     label={this.state.labelText}
                     maxLength={type === 2 ? 20 : 14}
-                    keyboardType='numeric'
+                    keyboardType={type==2 ? 'default' : 'numeric'}
                     placeholder={this.state.placeholderVal}
                     textAlign='right'
                     onChange={
