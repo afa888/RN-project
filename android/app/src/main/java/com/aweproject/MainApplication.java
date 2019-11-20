@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.facebook.react.ReactApplication;
 import com.como.RNTScratchView.ScratchViewPackage;
-import com.como.RNTScratchView.ScratchViewPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -45,9 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new ScratchViewPackage(),
-            new ScratchViewPackage(),
-
+                    new ScratchViewPackage(),
                     new SplashScreenReactPackage(),
                     new RNCWebViewPackage(),
                     new AsyncStoragePackage(),
@@ -93,7 +90,7 @@ public class MainApplication extends Application implements ReactApplication {
         initBugly();
     }
 
-    public void initBugly(){
+    public void initBugly() {
         Context context = getApplicationContext();
         // 获取当前包名
         String packageName = context.getPackageName();
