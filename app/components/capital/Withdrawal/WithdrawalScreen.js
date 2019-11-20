@@ -319,14 +319,8 @@ export default class WithdrawalScreen extends Component<Props> {
                 <View style={{paddingTop:15,paddingLeft:10,flexDirection: 'column',justifyContent:'center',height:35,width:Dimensions.get('window').width}}>
                     <Text style={{fontSize:12,color:MainTheme.GrayColor}}>{des}</Text>
                 </View>
-                <View style={{paddingTop:20,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onCheckWithdrawal()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,backgroundColor:MainTheme.commonButtonBGColor,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40}}>
-
-                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即提款</Text>
-                     </View>
-                </TouchableOpacity>
-                </View>
+                
+                {MainTheme.renderCommonSubmitButton(this._onCheckWithdrawal.bind(this),'立即提款')}
                 <View style={{paddingTop:20,paddingLeft:10,flexDirection: 'row',height:50,width:Dimensions.get('window').width}}>
                     <Text style={{fontSize:10,color:'#8B8B8B'}}>若您在取款过程中遇到困难，请您随时联系我们的</Text>
                     <Text style={{fontSize:10,color:'red'}} onPress={this._onShowCustomer}> 在线客服 </Text>

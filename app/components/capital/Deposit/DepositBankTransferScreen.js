@@ -129,8 +129,9 @@ export default class DepositBankTransferScreen extends Component<Props> {
                      </View>
                     </TouchableOpacity>
                 </View>
-                
-                {MainTheme.renderCommonCancelButton(this.commitRequest.bind(this,2))}
+
+                {MainTheme.renderCommonSubmitButton(this._onCommitWithdrawal.bind(this,1),'完成存款')}
+                {MainTheme.renderCommonCancelButton(this.commitRequest.bind(this,2),'取消订单')}
 
             </View>
             <View style={{height:34}}></View>
