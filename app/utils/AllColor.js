@@ -59,6 +59,10 @@ export class MainTheme {
     static FundGreenColor = '#33CC00';
     // 通用分隔线颜色
     static DivideLineColor = '#DDD';
+    //银行汇款成功界面银行信息背景颜色
+    static BankTransgerBGColor = '#EB6F5A';
+    //银行信息文字颜色
+    static BankInfoFontColor = '#FFFFFF';
 
 
     /* ============================= 以下为一些通用控件的定义 ============================= */
