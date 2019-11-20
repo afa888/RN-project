@@ -138,7 +138,7 @@ export class MainTheme {
         return (
             <View style={{paddingTop:18,alignItems: 'center',height:60}}>
                 <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
-                    <View style=  {{borderRadius:8,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
+                    <View style=  {{borderRadius:8,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 45,height:40,backgroundColor:MainTheme.backgroundColor}}>
 
                         <Text style={{color:MainTheme.specialTextColor,fontSize:16}}>{title}</Text>
                     </View>
