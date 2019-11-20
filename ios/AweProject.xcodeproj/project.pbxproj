@@ -90,7 +90,6 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* AweProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AweProjectTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
-		3895A7D12DE14E5EA677115B /* libRNProgressHUB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7856E0091EE4B63BA7B8F65 /* libRNProgressHUB.a */; };
 		4E136CEA2AC7462CB7C99011 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F1A52638E1F4DF69BF2B543 /* libRNGestureHandler.a */; };
 		66E7E173EBF6411D8A0BC2E9 /* libFastImage-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0789CB2282F04B9B8DBBBFC5 /* libFastImage-tvOS.a */; };
 		82624DB63DDB4D1492F1D5C6 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 778CE6F0E49643149EB0E300 /* libRNCWebView.a */; };
@@ -651,7 +650,6 @@
 				ABADC7DD9E264905AF85FC2F /* libCodePush.a in Frameworks */,
 				ECB22C53866F471D90D6E350 /* libz.tbd in Frameworks */,
 				85637BCA2AFF4F1D92CDC211 /* libRNScratch.a in Frameworks */,
-				3895A7D12DE14E5EA677115B /* libRNProgressHUB.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,6 +3,8 @@ import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,
 import Dimensions from 'Dimensions'
 import TXInput from "../../../tools/TXInput"
 import { NavigationActions } from 'react-navigation';
+import MainTheme from "../../../utils/AllColor"
+import {ThemeEditTextTextColor} from "../../../utils/AllColor"
 
 let timeCount = 59*60+59
 
@@ -82,7 +84,7 @@ export default class DepositBankTransferScreen extends Component<Props> {
     render() {
         const { params } = this.props.navigation.state;
         const payMethod = params.transferType;
-        const money = params.transferAmount;
+        const money = params.transferAmount + '(元)';
         const orderNum = params.orderNumber;
         const orderTime = params.orderTime;
         const cagentBankCardEntity = params.cagentBankCardEntity;
@@ -90,54 +92,27 @@ export default class DepositBankTransferScreen extends Component<Props> {
 
         return (
             <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View style={{alignItems: 'center',backgroundColor:'#efeff4',height:800}}>
-                <View style={{alignItems:'center',justifyContent:'center',height:150,width:Dimensions.get('window').width}}>
-                    <Text style={{color:'#535353',fontSize:17}}>{payMethod}(元)</Text>
-                    <Text style={{paddingTop:10,color:'#CFA359',fontSize:25}}>{money}</Text>
-
-                </View>
-                <View style={{width:Dimensions.get('window').width,height:1,backgroundColor:'#B7B7B7'}}></View>
-                <View style={{paddingTop:30}}>
-                    <View style={{paddingTop:30,width:Dimensions.get('window').width-40,height:200,backgroundColor:'#CFA359',borderRadius:10}}>
-                        <Text style={{paddingLeft:20,color:'#FFFFFF',fontSize:17}}>{cagentBankCardEntity.bankname}</Text>
-                        <View style={{paddingTop:10}}>
-                        <Text style={styles.Text_style}>{cagentBankCardEntity.cardno}</Text>
+            <View style={{alignItems: 'center',backgroundColor:MainTheme.backgroundColor,height:750}}>
+                
+                <View style={{paddingTop:10}}>
+                    <View style={{paddingTop:30,width:Dimensions.get('window').width-40,height:200,backgroundColor:MainTheme.BankTransgerBGColor,borderRadius:10}}>
+                        <Text style={{paddingLeft:20,color:MainTheme.BankInfoFontColor,fontSize:17}}>{cagentBankCardEntity.bankname}</Text>
+                        <View style={[styles.Text_style,{paddingTop:10,backgroundColor:ThemeEditTextTextColor}]}>
+                            <Text style={{color:MainTheme.BankInfoFontColor}}>{cagentBankCardEntity.cardno}</Text>
                         </View>
-                        <Text style={{paddingTop:10,paddingLeft:20,color:'#FFFFFF',fontSize:17,height:40}}>开户名：{cagentBankCardEntity.realname}</Text>
-                        <Text style={{paddingLeft:20,color:'#FFFFFF',fontSize:17,height:30}}>开户行：{cagentBankCardEntity.bankaddress}</Text>
+                        <Text style={{paddingTop:10,paddingLeft:20,color:MainTheme.BankInfoFontColor,fontSize:17,height:40}}>开户名：{cagentBankCardEntity.realname}</Text>
+                        <Text style={{paddingLeft:20,color:MainTheme.BankInfoFontColor,fontSize:17,height:30}}>开户行：{cagentBankCardEntity.bankaddress}</Text>
+                    </View>
+                    <View style={{paddingTop:10}}>
+                        <Text style={{color:MainTheme.GrayColor,fontSize:10}}>小提示: 点击银行卡各项信息可直接复制到剪贴板</Text>
                     </View>
                 </View>
-                <View style={{paddingLeft:20,paddingTop:30,width:Dimensions.get('window').width}}>
-                    <View style={{flexDirection:'row',alignItems:'flex-end'}}>
-                        <Text style={styles.TextG_style}>备注</Text>
-                        <View style={{paddingLeft:20}}>
-                            <Text style={styles.TextW_style}>{orderNum}</Text>
-                        </View>
 
-                    </View>
-                </View>
                 <View style={{paddingTop:20,width:Dimensions.get('window').width - 20}}>
-                    <TXInput label="下单时间" value={orderTime} textAlign='right' />
-                    <TXInput label="订单编号" value={orderNum} textAlign='right' isUpdate={false} />
+                    <TXInput label="存款金额" value={money} textAlign='right' isUpdate={false} textInputStyle={{color:MainTheme.BankTransgerBGColor}} />
+                    <TXInput label="下单时间" value={orderTime} textAlign='right' isUpdate={false}/>
+                    <TXInput label="订单编号" value={orderNum} textAlign='right' isUpdate={false}  textInputStyle={{color:MainTheme.BankTransgerBGColor}}/>
                     <TXInput label="订单失效时间" value={this.state.leftTime} textAlign='right' isUpdate={false} />
-                </View>
-
-                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                    <TouchableOpacity  onPress={() => {this.commitRequest(1)}}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#CFA359',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#CFA359'}}>
-
-                        <Text style={{color:'#ffffff',fontSize:17}}>完成存款</Text>
-                     </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                    <TouchableOpacity  onPress={() => {this.commitRequest(2)}}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:'#FFFFFF',borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:'#FFFFFF'}}>
-
-                        <Text style={{color:'#606266',fontSize:17}}>取消订单</Text>
-                     </View>
-                    </TouchableOpacity>
                 </View>
                 <View style={{paddingTop:20,paddingLeft:10,flexDirection: 'column',justifyContent:'center',width:Dimensions.get('window').width - 20}}>
                     <Text style={{fontSize:12,color:'#D62F27',height:18}}>温馨提示</Text>
@@ -145,6 +120,25 @@ export default class DepositBankTransferScreen extends Component<Props> {
                     <Text numberOfLines={5} style={{fontSize:10,color:'#8B8B8B',height:50}}>2.以上银行帐号限本次存款使用，帐号不定期更换！每次存款前请依照本页所显示的银行帐号入款。如入款至已过期帐号，公司无法查收，恕不负责！</Text>
 
                 </View>
+
+                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
+                    <TouchableOpacity  onPress={() => {this.commitRequest(1)}}  activeOpacity={0.2} focusedOpacity={0.5}>
+                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
+
+                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>完成存款</Text>
+                     </View>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
+                    <TouchableOpacity  onPress={() => {this.commitRequest(2)}}  activeOpacity={0.2} focusedOpacity={0.5}>
+                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
+
+                        <Text style={{color:MainTheme.specialTextColor,fontSize:17}}>取消订单</Text>
+                     </View>
+                    </TouchableOpacity>
+                </View>
+                
 
 
 
@@ -164,8 +158,7 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize:17,
         paddingLeft:20,
-        color:'#FFFFFF',
-        backgroundColor:'#B28D61',
+        marginTop:10,
         textAlignVertical: 'center',
         ...Platform.select({
         ios: { lineHeight: 40},
