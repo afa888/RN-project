@@ -16,7 +16,7 @@ import AndroidNativeGameActiviy from "./AndroidIosNativeGameActiviy";
 
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
-let SCREEN_HEIGHT = Dimensions.get('window').height+StatusBar.currentHeight;//高
+let SCREEN_HEIGHT = Dimensions.get('window').height;//高
 
 let timeData
 let timeNumber

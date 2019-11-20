@@ -129,18 +129,8 @@ export default class DepositBankTransferScreen extends Component<Props> {
                      </View>
                     </TouchableOpacity>
                 </View>
-
-                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                    <TouchableOpacity  onPress={() => {this.commitRequest(2)}}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
-
-                        <Text style={{color:MainTheme.specialTextColor,fontSize:17}}>取消订单</Text>
-                     </View>
-                    </TouchableOpacity>
-                </View>
                 
-
-
+                {MainTheme.renderCommonCancelButton(this.commitRequest.bind(this,2))}
 
             </View>
             <View style={{height:34}}></View>
