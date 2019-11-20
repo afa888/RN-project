@@ -54,12 +54,12 @@ export default class DepositManagerScreen extends Component<Props> {
                 </TouchableOpacity>
           ),
           headerRight: (
-            <View style={{width:60,flexDirection:'row',alignItems:'center'}}>
+            <View style={{width:70,flexDirection:'row',alignItems:'center'}}>
                 <TouchableOpacity onPress={() => {
                     Picker.hide()
                     navigation.navigate('FundRecord')
                 }}>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center',width:30}}>
                         <Image source={require('../../../static/img/nav_icon_jilu_nor.png')}
                            style={{
                                width: 20,
@@ -74,7 +74,7 @@ export default class DepositManagerScreen extends Component<Props> {
                     Picker.hide()
                     navigation.navigate('CustomerService')
                 }}>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center',width:30}}>
                         <Image source={require('../../../static/img/nav_icon_kefu_nor.png')}
                            style={{
                                width: 20,
@@ -300,7 +300,8 @@ export default class DepositManagerScreen extends Component<Props> {
                 setTimeout(() =>{
                     this._onDrawFeeAlert('提交成功！如有疑问，请及时联系在线客服确认存款信息，谢谢！');
                 },600)
-                this._onClearInput();
+                // this._onClearInput();
+                this.setState({money:'',name:'',orderNum:'',payTypeSelectedIndex:0});//
             }else {
                 //异常提示
                 TXAlert(res.msg);
