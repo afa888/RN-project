@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
+import Dimensions from 'Dimensions'
 
 
 export const category_tab_checked_bg_color = "#f2f2f2";
@@ -90,6 +91,57 @@ export class MainTheme {
                     onPress={() => { navigation.goBack() }}>
                     <Image source={require('../static/img/titlebar_back_normal.png')}
                         style={MainTheme.GlobalStyles.PageBackImage} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    /**
+    * 生成底部全屏提交通用按钮
+    * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
+    */
+    static renderCommonBottomSubmitButton = (onPressF,title='下一步') => {
+        return (
+            <View style={{paddingTop:7,alignItems: 'center',height:60}}>
+                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
+                 <View style=  {{justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width,height:53,backgroundColor:MainTheme.commonButtonBGColor}}>
+
+                    <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:20}}>{title}</Text>
+                 </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    /**
+    * 生成默认提交通用按钮
+    * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
+    */
+    static renderCommonSubmitButton = (onPressF,title='确定') => {
+        return (
+            <View style={{paddingTop:18,alignItems: 'center',height:60}}>
+                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
+                 <View style=  {{borderRadius:8,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 45,height:42,backgroundColor:MainTheme.commonButtonBGColor}}>
+
+                    <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:16}}>{title}</Text>
+                 </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    /**
+    * 生成默认通用取消按钮
+    * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
+    */
+    static renderCommonCancelButton = (onPressF,title='取消') => {
+        return (
+            <View style={{paddingTop:18,alignItems: 'center',height:60}}>
+                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
+                    <View style=  {{borderRadius:8,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
+
+                        <Text style={{color:MainTheme.specialTextColor,fontSize:16}}>{title}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
