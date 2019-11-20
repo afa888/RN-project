@@ -91,7 +91,7 @@ class TXInput extends Component {
   }
 
   _renderInputContent = () => {
-    const { detailTextColor, textInputStyle, placeholderTextColor, autoCapitalize, isUpdate, showDetail, suffix } = this.props;
+    const {detailTextColor, textInputStyle, placeholderTextColor, autoCapitalize, isUpdate, showDetail, suffix } = this.props;
     return (
       isUpdate == true ?
         <View
@@ -130,7 +130,7 @@ class TXInput extends Component {
           <TouchableOpacity onPress={() => this._onClickButton()} activeOpacity={0.2} focusedOpacity={0.5}>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
-              <Text style={{ color: detailTextColor, fontSize: 15 }}>{this.state.value}</Text>
+              <Text style={[{ color: detailTextColor, fontSize: 15 },textInputStyle]}>{this.state.value}</Text>
             </View>
 
           </TouchableOpacity>

@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.amsoft.RNProgressHUB.RNProgressHUBPackage;
+import com.como.RNTScratchView.ScratchViewPackage;
 import com.como.RNTScratchView.ScratchViewPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -45,8 +45,9 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNProgressHUBPackage(),
             new ScratchViewPackage(),
+            new ScratchViewPackage(),
+
                     new SplashScreenReactPackage(),
                     new RNCWebViewPackage(),
                     new AsyncStoragePackage(),

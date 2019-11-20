@@ -116,8 +116,8 @@ export default class DepositBankTransferScreen extends Component<Props> {
 
                     </View>
                 </View>
-                <View style={{paddingTop:20}}>
-                    <TXInput label="下单时间" value={orderTime} textAlign='right' isUpdate={false} />
+                <View style={{paddingTop:20,width:Dimensions.get('window').width - 20}}>
+                    <TXInput label="下单时间" value={orderTime} textAlign='right' />
                     <TXInput label="订单编号" value={orderNum} textAlign='right' isUpdate={false} />
                     <TXInput label="订单失效时间" value={this.state.leftTime} textAlign='right' isUpdate={false} />
                 </View>
