@@ -1,5 +1,5 @@
 import React from "react";
-import RNProgressHUB from 'react-native-progresshub';
+// import RNProgressHUB from 'react-native-progresshub';
 
 export default class TXProgressHUB {
 
@@ -9,14 +9,14 @@ export default class TXProgressHUB {
      * @param duration 默认 3 秒
      */
     static show(text, duration=3000) {
-        RNProgressHUB.showSimpleText(text,duration)
+        // RNProgressHUB.showSimpleText(text,duration)
     }
 
     static showSpinIndeterminate(text) {
         if (text) {
-            RNProgressHUB.showSpinIndeterminate(text);
+            // RNProgressHUB.showSpinIndeterminate(text);
         }else {
-            RNProgressHUB.showSpinIndeterminate();
+            // RNProgressHUB.showSpinIndeterminate();
         }
         
     }
@@ -27,11 +27,11 @@ export default class TXProgressHUB {
      * @param duration
      */
     static close(duration) {
-        RNProgressHUB.dismiss();
+        // RNProgressHUB.dismiss();
     }
 
     static dismiss () {
-        RNProgressHUB.dismiss();
+        // RNProgressHUB.dismiss();
     }
 
     /**

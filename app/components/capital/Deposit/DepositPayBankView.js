@@ -52,11 +52,16 @@ export default class PayBank extends Component<Props> {
     }
 
     render () {
+        let payModel = this.props.payModel;
+        let des = '单笔限额100~2000000(元)';
+        if (payModel && payModel.hasOwnProperty('minquota') && payModel.hasOwnProperty('maxquota')) {
+                des = '单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'(元)';
+            }
         return (
         <View style={{paddingTop:0}} >
             <TXInput label="付款方式" placeholder="网银转账" isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.props.params.method || ''}/>
             <View style={{height:10}}></View>
-            <TXInput label="真实姓名" placeholder="请输入真实姓名" textAlign='right' onChange={(value) => this.props.onChange('name', value)} value={this.props.params.name || ''}/>
+            <TXInput label="真实姓名" maxLength={10} placeholder="请输入真实姓名" textAlign='right' onChange={(value) => this.props.onChange('name', value)} value={this.props.params.name || ''}/>
             <View style={[styles.inputViewStyle,{flexDirection:'row'}]}>
                 <Text style={{paddingTop:10,fontSize:14,color: '#514b46',height:30,width:Dimensions.get('window').width - 120}}>申请彩金</Text>
                 <View style={{paddingTop:10,flx:1,flexDirection:'row',justifyContent:'flex-end'}}>
@@ -97,7 +102,7 @@ export default class PayBank extends Component<Props> {
             </View>
 
             <View style={{height:10}}></View>
-            <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder="单笔限额100~2000000(元)" textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
+            <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
             <View style={{paddingTop:20,alignItems: 'center',height:60}}>
                     <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
                      <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>

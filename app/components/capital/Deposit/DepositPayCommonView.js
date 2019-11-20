@@ -151,7 +151,7 @@ export default class DepositPayCommonView extends Component<Props> {
                               renderItem={this._renderItem}
                             /> :
                                 <View>
-                                    <TXInput label="充值金额"  forbiddenDot={true} placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
+                                    <TXInput label="充值金额" keyboardType='numeric'  forbiddenDot={true} placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
 
                                 </View>
                             }
