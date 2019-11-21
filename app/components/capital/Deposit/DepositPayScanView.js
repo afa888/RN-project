@@ -77,7 +77,7 @@ export default class PayScan extends Component<Props> {
 
         var imgUrl = this.props.params.currentPayModel.cagentPayerPOList[this.props.params.scanSelectedIndex].accountimg;
         return (
-            <View style={{flex:1,justifyContent:'center'}}>
+            <ScrollView bounces = {true} style={{flex:1}}>
                 <View style={{paddingTop:0,height:25,width:Dimensions.get('window').width}}>
                         <Text style={{paddingLeft:10}}>支付渠道</Text>
                     </View>
@@ -128,8 +128,8 @@ export default class PayScan extends Component<Props> {
                 <View style={{height:10}}>
                 </View>
                 <TXInput label="订单号" placeholder="请输入订单号后四位" maxLength={4} textAlign='right' onChange={(value) => this.props.onChange('orderNum', value)} value={this.props.params.orderNum || ''}/>
-                
-            </View>
+                <Tips onShowCustomer={this.props.onShowCustomer} onShowHelp={this.props.onShowHelp} />
+            </ScrollView>
 
         );
     }

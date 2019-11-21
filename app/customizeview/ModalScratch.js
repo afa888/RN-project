@@ -93,9 +93,13 @@ export default class ModalScratch extends Component<Props> {
     }
 
     onCommitPhone = () => {
-        if (this.state.phoneNum.length != 11) {
+        let needCheck = true;
+        if (this.props.scratchData.verifyPhone === 1) {
+            needCheck = false;
+        }
+        if (needCheck && this.state.phoneNum.length != 11) {
             TXAlert('手机号输入不正确，请重新输入');
-        }else if(this.state.code.length < 4){
+        }else if(needCheck && this.state.code.length < 4){
             TXAlert('请输入您收到的短信验证码!');
         }else {
             let prams;
@@ -109,6 +113,7 @@ export default class ModalScratch extends Component<Props> {
             http.post('gglActivity/receiveReward.do', prams).then(res => {
                 console.log("刮刮乐领取")
                 console.log(res);
+                TXProgressHUB.dismiss();
                 if (res && res.status === 10000) {
                     TXProgressHUB.show('领取成功,将尽快完成审核并计入您的主账户中!')
                     this.props._dialogSaveScratch();
@@ -278,7 +283,7 @@ export default class ModalScratch extends Component<Props> {
                                 <View style={[styles.scratchViewPic,{flexDirection:'column',position: 'absolute'}]}>
                                     <View style={{marginTop:20,flexDirection:'row',justifyContent:'center'}}>
                                         <TextInput maxLength={11}
-                                          style={{backgroundColor:'white',width:80,height: 22,fontSize:10, borderWidth: 0 }}
+                                          style={{backgroundColor:'white',width:80,height: 22,fontSize:10, borderWidth: 0,paddingVertical: 0 }}
                                           onChangeText={text => this.onChangeText(text)} 
                                           value = {this.state.phoneNum}
                                           />
@@ -297,7 +302,7 @@ export default class ModalScratch extends Component<Props> {
 
                                     <View style={{marginTop:20,flexDirection:'row',justifyContent:'center'}}>
                                         <TextInput maxLength={6}
-                                          style={{marginRight:5,backgroundColor:'white',width:65,height: 22,fontSize:10, borderWidth: 0 }}
+                                          style={{paddingVertical: 0,marginRight:5,backgroundColor:'white',width:65,height: 22,fontSize:10, borderWidth: 0 }}
                                           onChangeText={text => this.onChangeCode(text)}                                        />
                                         <View style={{alignItems:'center'}}>
                                                    <View style={{width: 90,

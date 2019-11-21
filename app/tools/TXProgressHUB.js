@@ -3,7 +3,8 @@ import React from "react";
 import ProgressHUD from "./src/ProgressHUD";
 import HUD from "./src/HUD";
 import MyToast from "./src/MyToast"
-import {Platform} from 'react-native';
+import {Platform}from'react-native';
+import RNProgressHUB from 'react-native-progresshub';
 
 export default class TXProgressHUB {
 
@@ -14,14 +15,19 @@ export default class TXProgressHUB {
      */
     static show(text, duration=3000) {
         // RNProgressHUB.showSimpleText(text,duration)
-        if (Platform.OS === "ios") {
-            ProgressHUD.showText(text,duration);
+        if (Platform.OS == 'ios') {
+            RNProgressHUB.showSimpleText(text,duration);
+        }else {
+            // MyToast.showText(text);
+            RNProgressHUB.showSimpleText(text,duration);
         }
     }
 
     static showSpinIndeterminate(text) {
-        if (Platform.OS === "ios") {
-            ProgressHUD.showSpinIndeterminate(text);
+        if (Platform.OS == 'ios') {
+            RNProgressHUB.showSpinIndeterminate(text);
+        }else {
+            RNProgressHUB.showSpinIndeterminate();
         }
         
     }
@@ -32,14 +38,18 @@ export default class TXProgressHUB {
      * @param duration
      */
     static close(duration) {
-        if (Platform.OS === "ios") {
+        if (Platform.OS == 'ios') {
             ProgressHUD.dismiss();
+        }else {
+            RNProgressHUB.dismiss();
         }
     }
 
     static dismiss () {
-        if (Platform.OS === "ios") {
+        if (Platform.OS == 'ios') {
             ProgressHUD.dismiss();
+        }else {
+            RNProgressHUB.dismiss();
         }
         
     }

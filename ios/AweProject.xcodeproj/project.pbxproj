@@ -267,6 +267,13 @@
 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
 			remoteInfo = SplashScreen;
 		};
+		27BBF8D423864FDC001AC422 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5E8C81061D86A08B00F9EC58;
+			remoteInfo = RNProgressHUB;
+		};
 		27BE618A237FEA03009AD17D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6C1194FC42DC4F7F9AD53742 /* RNScratch.xcodeproj */;
@@ -621,6 +628,7 @@
 		9AC38E9E3354454EA6A4A8B3 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
 		9CE77DCC1EE5424A824A8E4C /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+		B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNProgressHUB.xcodeproj; path = "../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB.xcodeproj"; sourceTree = "<group>"; };
 		BD5A9560065548B58D3A99EE /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		C5835719C3374C299C1E7F54 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		CB255B85F4D54D7999930FB4 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
@@ -1158,6 +1166,14 @@
 			path = CQExtend;
 			sourceTree = "<group>";
 		};
+		27BBF8A323864FDC001AC422 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF8D523864FDC001AC422 /* libRNProgressHUB.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		27BE6187237FEA03009AD17D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1226,6 +1242,7 @@
 				CCDBB1DB2BFD42C3980D090B /* CodePush.xcodeproj */,
 				E4E4E2B2577F4571AFC24F2B /* SplashScreen.xcodeproj */,
 				6C1194FC42DC4F7F9AD53742 /* RNScratch.xcodeproj */,
+				B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1464,6 +1481,10 @@
 					ProjectRef = 9CE77DCC1EE5424A824A8E4C /* RNGestureHandler.xcodeproj */;
 				},
 				{
+					ProductGroup = 27BBF8A323864FDC001AC422 /* Products */;
+					ProjectRef = B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */;
+				},
+				{
 					ProductGroup = 27BE6187237FEA03009AD17D /* Products */;
 					ProjectRef = 6C1194FC42DC4F7F9AD53742 /* RNScratch.xcodeproj */;
 				},
@@ -1628,6 +1649,13 @@
 			fileType = archive.ar;
 			path = libSplashScreen.a;
 			remoteRef = 27B686842306A8DA005DEA0F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		27BBF8D523864FDC001AC422 /* libRNProgressHUB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNProgressHUB.a;
+			remoteRef = 27BBF8D423864FDC001AC422 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		27BE618B237FEA03009AD17D /* libRNScratch.a */ = {
@@ -2019,6 +2047,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2067,6 +2096,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
@@ -2123,6 +2153,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2163,6 +2194,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
@@ -2252,6 +2284,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2287,6 +2320,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
@@ -2343,6 +2377,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2397,6 +2432,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";
@@ -2454,6 +2490,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2510,6 +2547,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2565,6 +2603,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2619,6 +2658,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";
