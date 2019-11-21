@@ -39,6 +39,7 @@ import HelpScreen from "../memberCenter/help/helpScreen";
 import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
 import RnWebViewScreen from "../../customizeview/RnWebViewScreen"
+import AgentManager from "../../components/agent/AgentManager"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -217,7 +218,8 @@ export default class MainScreen extends Component<Props> {
             AboutPage: { screen: AboutPage },
             CustomerService: { screen: CustomerServiceScreen },
             InnerMessager: { screen: InnerMessager },
-            RnWebScreen:{screen:RnWebViewScreen }
+            RnWebScreen:{screen:RnWebViewScreen },
+           AgentManager:{screen:AgentManager}
         },
         {
             initialRouteName: this.state.initRoute,
