@@ -72,10 +72,11 @@ export default class TXTools {
 	static formatMoneyAmount = (numString, ignoreSign = true) => {
 		let result = '';
 		let sign = '';
-		let temp = numString;
+
+		let temp = ((parseFloat(numString) * 100) / 100).toFixed(2);
 		
-		if (numString.startsWith('-')) {
-			temp = numString.slice(1);
+		if (temp.startsWith('-')) {
+			temp = temp.slice(1);
 			sign = '-';
 		}
 
