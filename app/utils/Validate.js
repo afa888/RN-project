@@ -12,7 +12,8 @@ const Reg = {
     cardNum: /^[0-9]{4,20}$/,
     chineseName: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,10}$/,//中文名称
     wechat: /^([a-zA-Z][a-zA-Z0-9_-]{5,19})|([1-9][0-9]{5,11})+$/, //微信号
-    QQ: /^[0-9]{5,14}$/ //QQ号
+    QQ: /^[0-9]{5,14}$/, //QQ号
+    money: /^\d+$/,//金额数字校验
 };
 
 /**
@@ -142,6 +143,13 @@ export const wechat_validate = (wechat) => {
 export const qq_validate = (qq) => {
     if(!Reg.QQ.test(qq)){
         TXToastManager.show('请输入真实的QQ号码');
+        return false;
+    }
+    return true;
+};
+
+export const money_validate = (money) => {
+    if(!Reg.money.test(money)){
         return false;
     }
     return true;

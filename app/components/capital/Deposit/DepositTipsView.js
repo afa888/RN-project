@@ -13,12 +13,12 @@ export default class Tips extends Component<Props> {
 
     render () {
         return (
-            <View style={{paddingLeft:10,flexDirection: 'column',justifyContent:'center',width:Dimensions.get('window').width}}>
+            <View style={{marginTop:10,paddingLeft:10,flexDirection: 'column',justifyContent:'center',width:Dimensions.get('window').width}}>
                     
                     <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>为确保您的款项及时到账，请您留意以下：</Text>
                     <View style={{flexDirection: 'row',height:15,width:Dimensions.get('window').width}}>
                         <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>1，若您支付遇到困难，可</Text>
-                        <Text style={{fontSize:10,color:MainTheme.tipsSpecialTextColor,height:15}} onPress={this.props.onShowCustomer}>“点此” </Text>
+                        <Text style={{fontSize:10,color:MainTheme.tipsSpecialTextColor,height:15}} onPress={this.props.onShowHelp}>“点此” </Text>
                         <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>查看存款帮助</Text>
                     </View>
                     <Text style={{fontSize:10,color:textThreeHightTitleColor,height:15}}>2，若您支付过充值遇到问题未完成支付，请重新下单；</Text>

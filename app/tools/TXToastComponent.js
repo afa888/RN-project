@@ -13,7 +13,7 @@ class ToastComponent extends React.Component {
     }
 
     render() {
-        return (<Toast position='center' ref={e => TXToastManager.toast = e}/>);
+        return (<Toast position='top' positionValue={200} ref={e => TXToastManager.toast = e}/>);
     }
 }
 

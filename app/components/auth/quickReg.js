@@ -69,6 +69,7 @@ export default class QuickRegister extends Component<Props> {
                 // 存储登录信息
                 //添加密码保存 在安全中心需要
                 oData['password'] = _passWord;
+                oData['mobile'] = _mobileNo;
                 setLoginStore(oData);
                 this.props.router.navigate('Home');
             } else {
