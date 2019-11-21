@@ -10,6 +10,7 @@ import {
     StyleSheet,
     ViewPropTypes,
     DeviceEventEmitter,
+    Platform,
 } from 'react-native';
 import PropTypes from "prop-types";
 
@@ -185,7 +186,7 @@ export default class InnerMessager extends Component<Props> {
                     <Text style={item.status == '0' ? styles.listItemContent : styles.listItemUnreadContent}
                         numberOfLines={this.state.curIndex == index ? 0 : 1}
                     >
-                        {item.message}
+                        { Platform.OS == 'ios' ? item.message : item.message+'\n' }
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     listItemContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingBottom: 15,
+        marginBottom: 15,
         paddingTop: 15,
         marginLeft: 10,
         marginRight: 10,

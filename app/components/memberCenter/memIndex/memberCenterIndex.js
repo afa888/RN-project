@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import httpBaseManager from "../../../http/httpBaseManager";
 import { MainTheme } from "../../../utils/AllColor";
-import { getStoreData } from "../../../http/AsyncStorage";
+import { getStoreData, checkLoginState, UserSession } from "../../../http/AsyncStorage";
 import AndroidIosNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
 import http from "../../../http/httpFetch";
 import { CAGENT, RN_VERSION } from "../../../utils/Config";
@@ -37,13 +37,19 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             agencyLevel: '',    // 无限代理的等级
             agencyReward: 0,    // 无限代理的佣金
             autoTransfer: true,  // 是否自动转账
+            isLogin: false,
         };
 
         // 监听组件的四个状态回调：willFocus、didFocus、willBlur、didBlur
         // 分别是: 即将获取焦点、已经获取焦点、即将失去焦点、已经失去焦点
         if (this.props.navigation) {
             this._navListener = this.props.navigation.addListener("willFocus", () => {
-                this.refreshUserInfo();
+                checkLoginState().then((isLogined) => {
+                    this.setState({ isLogin: isLogined });
+                    if (isLogined) {
+                        this.refreshUserInfo();
+                    }
+                });
             });
         }
     }
@@ -70,7 +76,14 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     async componentDidMount() {
         // 获取用户信息并存储
-        await httpBaseManager.baseRequest();
+        checkLoginState().then((isLogin) => {
+            if (isLogin) {
+                httpBaseManager.baseRequest().then(() => {
+                    console.log("Load user info finished.");
+                });
+            }
+        });
+
         // 获取版本
         AndroidIosNativeGameActiviy.getVersion().then((andriodVersionCode) => {
             this.setState({ version: andriodVersionCode })
@@ -80,6 +93,16 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     componentWillUnmount() {
         this._navListener.remove();//删除订阅
     };
+
+    // 
+    checkLoginStateThenDo = (func) => {
+        if (UserSession.isLogin) {
+            func();
+        }
+        else {
+            this.props.navigation.navigate('LoginService', { backRoute: '会员' });
+        }
+    }
 
     // 充值
     onRechange = () => {
@@ -110,19 +133,24 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     // 资金记录
     onCheckAssetsRecord = () => {
-        this.props.navigation.navigate('FundRecord');
+        this.checkLoginStateThenDo(() => {
+            this.props.navigation.navigate('FundRecord');
+        });
     }
 
     // 投注记录
     onCheckBetRecord = () => {
-        this.props.navigation.navigate('BettingRecord');
+        this.checkLoginStateThenDo(() => {
+            this.props.navigation.navigate('BettingRecord');
+        });
     }
 
     // 无限代理
     onCheckAgencyDetail = () => {
-        this.props.navigation.navigate('AgentManager');
-
-      //  TXToastManager.show('暂未实现，敬请期待');
+        this.checkLoginStateThenDo(() => {
+            this.props.navigation.navigate('AgentManager');
+        });
+        //  TXToastManager.show('暂未实现，敬请期待');
     }
 
     // 自动转账选项发生变化
@@ -142,7 +170,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         console.log(item);
         switch (item) {
             case '安全设置':
-                this.props.navigation.navigate('SecurityManagerScreen');
+                this.checkLoginStateThenDo(() => {
+                    this.props.navigation.navigate('SecurityManagerScreen');
+                });
                 break;
             case '帮助中心':
                 this.props.navigation.navigate('HelpScreen');
@@ -159,24 +189,29 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     }
 
     /**
-     * 登录
+     * 登录/登出
      */
     onLogout = () => {
-        Alert.alert('温馨提示', '退出账户，是否继续？', [
-            { text: '取消', onPress: () => console.log('Cancel loginOut') },
-            {
-                text: '确定', onPress: () => {
-                    http.post('logout.do', {}, true).then(res => {
-                        if (res.status === 10000) {
-                            clearAllStore();
-                            DeviceEventEmitter.emit('changeTabs', false); //改变Tabs内容广播
-                            this.props.navigation.navigate('LoginService');
-                        }
-                        TXToastManager.show(res.msg);
-                    })
-                }
-            },
-        ]);
+        if (UserSession.isLogin) {
+            Alert.alert('温馨提示', '退出账户，是否继续？', [
+                { text: '取消', onPress: () => console.log('Cancel loginOut') },
+                {
+                    text: '确定', onPress: () => {
+                        http.post('logout.do', {}, true).then(res => {
+                            if (res.status === 10000) {
+                                clearAllStore();
+                                DeviceEventEmitter.emit('changeTabs', false); //改变Tabs内容广播
+                                this.props.navigation.navigate('LoginService');
+                            }
+                            TXToastManager.show(res.msg);
+                        })
+                    }
+                },
+            ]);
+        }
+        else {
+            this.props.navigation.navigate('LoginService', { backRoute: '会员' });
+        }
     }
 
     /**
@@ -203,14 +238,32 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         const { userName, phoneVerify, cardVerify, integral, loginTime } = this.state;
 
         if (IS_INFINITE_AGENCY_ENABLE) {
-            return (
-                <View>
-                    <Text style={styles.loginName}>{userName}</Text>
-                    <Text style={styles.userInfo}>代理等级：{this.state.agencyLevel}</Text>
-                    <Text style={styles.userInfo}>当前积分：{integral}</Text>
-                    <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
-                </View>
-            );
+            if (this.state.isLogin) {
+                return (
+                    <View>
+                        <Text style={styles.loginName}>{userName}</Text>
+                        <Text style={styles.userInfo}>代理等级：{this.state.agencyLevel}</Text>
+                        <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                        <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                    </View>
+                );
+            }
+            else {
+                return (
+                    <TouchableOpacity style={{
+                        justifyContent: 'center',
+                        width: DeviceValue.windowWidth * 0.5,
+                        height: 80,
+                    }}
+                        onPress={this.onLogout}>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: MainTheme.SubmitTextColor
+                        }} >立即登录</Text>
+                    </TouchableOpacity>
+                );
+            }
         }
         else {
             return (
@@ -297,21 +350,24 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             {
                 icon: require('../../../static/img/UserCenter/userCenter_recharge.png'),
                 title: '充值',
-                handler: this.onRechange,
+                handler: () => this.checkLoginStateThenDo(this.onRechange),
             },
             {
                 icon: require('../../../static/img/UserCenter/userCenter_draw.png'),
                 title: '提款',
-                handler: this.onDraw,
+                handler: () => this.checkLoginStateThenDo(this.onDraw),
             },
             {
                 icon: require('../../../static/img/UserCenter/userCenter_transfer.png'),
                 title: '转账',
-                handler: this.onTransfer,
+                handler: () => this.checkLoginStateThenDo(this.onTransfer),
             },
         ];
         return (
-            <View style={styles.shortcutContainer}>
+            <View style={{
+                ...styles.shortcutContainer,
+                bottom: this.state.isLogin ? -75 : -40,
+            }}>
                 {
                     shortcutOperations.map(item =>
                         <TouchableOpacity style={styles.shortcutItem} onPress={item.handler} >
@@ -343,7 +399,10 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             },
         ];
         return (
-            <View style={styles.recordItemsContainer}>
+            <View style={{
+                ...styles.recordItemsContainer,
+                marginTop: this.state.isLogin ? 100 : 70,
+            }}>
                 {
                     assetsOperations.map(item =>
                         <TouchableOpacity onPress={item.handler}>
@@ -417,7 +476,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                             source={require('../../../static/img/centertop_bg.png')} >
                             {/* 设置按钮 */}
                             <TouchableOpacity style={styles.userSettingsContaner}
-                                onPress={() => this.props.navigation.navigate('PersonSetting')}>
+                                onPress={() => this.checkLoginStateThenDo(() => {
+                                    this.props.navigation.navigate('PersonSetting')
+                                })}>
                                 <Image source={require('../../../static/img/person_setting.png')}
                                     style={styles.userSettingsIcon} />
                             </TouchableOpacity>
@@ -427,7 +488,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                                 {this.createUserInfo()/* 用户名称等信息 */}
                             </View>
                             {/* 用户资产 */}
-                            {this.crateAssetsInfo()}
+                            {this.state.isLogin && this.crateAssetsInfo()}
                         </ImageBackground>
                         {/* 快捷功能 */}
                         {this.createShortcuts()}
@@ -440,7 +501,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     {/* <MainEntrance route={this.props.navigation} /> */}
                     {/* 退出登录按钮 */}
                     <TouchableOpacity style={styles.logoutContainer} onPress={this.onLogout}>
-                        <Text style={styles.logoutText}>退出登录</Text>
+                        <Text style={styles.logoutText}>
+                            {this.state.isLogin ? '退出登录' : '立即登录'} </Text>
                     </TouchableOpacity>
                 </ScrollView>
             </SafeAreaView>

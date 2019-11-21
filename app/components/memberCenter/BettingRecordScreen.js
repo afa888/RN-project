@@ -318,7 +318,7 @@ export default class BettingRecordScreen extends Component<Props> {
                     </View>
 
                     <Text style={item.netAmount.startsWith('-') ? styles.betRecordAmountLose : styles.betRecordAmountWin}>
-                        {item.netAmount}
+                        { TXTools.formatMoneyAmount(item.netAmount,false)}
                     </Text>
                 </TouchableOpacity>
 

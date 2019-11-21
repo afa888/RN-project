@@ -115,11 +115,11 @@ export class MainTheme {
     * 生成默认提交通用按钮
     * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
     */
-    static renderCommonSubmitButton = (onPressF,title='确定') => {
+    static renderCommonSubmitButton = (onPressF,title='确定',paddingLeft=22.5) => {
         return (
             <View style={{paddingTop:18,alignItems: 'center',height:60}}>
                 <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
-                 <View style=  {{borderRadius:8,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 45,height:42,backgroundColor:MainTheme.commonButtonBGColor}}>
+                 <View style=  {{borderRadius:8,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 2*paddingLeft,height:42,backgroundColor:MainTheme.commonButtonBGColor}}>
 
                     <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:16}}>{title}</Text>
                  </View>
