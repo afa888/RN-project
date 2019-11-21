@@ -157,7 +157,7 @@ export default class HomeScreen extends Component<Props> {
         // // 红包状态查询
         // this.httpRedBag();
         // 刮刮乐 与 红包;
-       // this.httpScratch()
+       this.httpScratch()
 
         // 获取未读的站内信数量
         checkLoginState().then((isLogin) => {
