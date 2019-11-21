@@ -6,8 +6,6 @@ import {
 } from "react-native";
 import httpBaseManager from "../../../http/httpBaseManager";
 import { MainTheme } from "../../../utils/AllColor";
-import MidBalanceShow from './midBalanceShow'
-import MainEntrance from './mainEntrance'
 import { getStoreData } from "../../../http/AsyncStorage";
 import AndroidIosNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
 import http from "../../../http/httpFetch";
@@ -16,6 +14,7 @@ import DeviceValue from "../../../utils/DeviceValue";
 import { FlatList, Switch } from 'react-native-gesture-handler';
 import TXToastManager from "../../../tools/TXToastManager";
 import { clearAllStore } from "../../../http/AsyncStorage";
+import TXTools from '../../../utils/Htools';
 
 // 是否接入了无限代理
 export const IS_INFINITE_AGENCY_ENABLE = true;
@@ -186,7 +185,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             <View style={{ width: 90, alignItems: 'center', paddingTop: 5 }}>
                 <Image source={require('../../../static/img/ic_launcher.png')}
                     style={{
-                        resizeMode: 'contain',
+                        resizeMode: 'cover',
                         width: 70,
                         height: 70,
                         borderRadius: 35
@@ -248,7 +247,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                         return (
                             <TouchableOpacity style={styles.assertsItems}
                                 onPress={() => this.gotoAssetDetails(items[0])}>
-                                <Text style={styles.assetsNumber}>{items[1]}</Text>
+                                <Text style={styles.assetsNumber}>{TXTools.formatMoneyAmount(items[1])}</Text>
                                 <Text style={styles.assetsCategory}>{items[0]}</Text>
                             </TouchableOpacity>
                         );

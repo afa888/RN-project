@@ -108,7 +108,7 @@ export default class AssetDetailScreen extends Component<Props>{
             { backgroundColor: (item.status === 0 ? MainTheme.LightGrayColor : MainTheme.BackgroundColor) }]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <FastImage
-                        style={{ width: 40, height: 40 }}
+                        style={{ width: 40, height: 40, borderRadius:20, borderWidth:0.5, borderColor:MainTheme.BackgroundColor }}
                         source={
                             item.platCode === 0 ?
                                 item.platImg :
@@ -134,8 +134,7 @@ export default class AssetDetailScreen extends Component<Props>{
         if (isNaN(num)) {
             return num;
         } else {
-            let money = ((parseFloat(num) * 100) / 100).toFixed(2);
-            return TXTools.formatMoneyAmount(money);
+            return TXTools.formatMoneyAmount(num);
         }
     };
 

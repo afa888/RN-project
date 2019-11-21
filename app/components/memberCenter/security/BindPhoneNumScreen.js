@@ -31,7 +31,7 @@ export default class BindPhoneNumScreen extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = { phoneNum: '', code: '', password: '', countDown: '获取验证码' };
+        this.state = { phoneNum: '', code: '', password: '', countDown: '发送验证码' };
     }
 
     componentDidMount() {
@@ -140,7 +140,7 @@ export default class BindPhoneNumScreen extends Component<Props> {
                 </View>
                 <TXInput textInputStyle={{ color: MainTheme.DarkGrayColor }} label="手机号" maxLength={11} keyboardType='numeric' placeholder="请输入手机号码" textAlign='right' onChange={(value) => this._onChange('phoneNum', value)} value={this.state.phoneNum || ''} />
                 <TXInputButton label="验证码" maxLength={6} keyboardType='numeric' placeholder="请输入验证码" buttonbgColor={MainTheme.SpecialColor} detailTextColor='white' textAlign='right' onClick={this._onGetCode} onChange={(value) => this._onChange('code', value)} value={this.state.code || ''} buttonTitle={this.state.countDown} />
-                <TXInput label="登录密码" secureTextEntry={true} maxLength={12} placeholder="请输入登陆密码" textAlign='right' onChange={(value) => this._onChange('password', value)} value={this.state.password || ''} />
+                <TXInput label="登录密码" secureTextEntry={true} maxLength={12} placeholder="请输入登录密码" textAlign='right' onChange={(value) => this._onChange('password', value)} value={this.state.password || ''} />
 
                 <View style={{ paddingTop: 20, alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this._onBindPhone()} activeOpacity={0.2} focusedOpacity={0.5} style={styles.submitButton}>
