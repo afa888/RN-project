@@ -7,6 +7,10 @@ export const UserPwdKey = '@saved_user_password_key';
 // 用户的登录状态
 export const LoginStateKey = '@loginState';
 
+export const UserSession = {
+    isLogin:false,
+}
+
 /**
  *设置
  * @param key
@@ -14,6 +18,9 @@ export const LoginStateKey = '@loginState';
  * @return {Promise<void>}
  */
 export const setStoreData = async (key, value) => {
+    if (key == LoginStateKey) {
+        UserSession.isLogin = value.isLogin;
+    }
     try {
         await AsyncStorage.setItem(key, JSON.stringify(value))
     } catch (e) {
@@ -76,6 +83,7 @@ export const removeStoreData = async (key) => {
 export const clearAllStore = async () => {
     try {
         // await AsyncStorage.clear()
+        UserSession.isLogin = false;
         let unDeletedKeys = [RememberUserKey, UserNameKey, UserPwdKey];
         AsyncStorage.getAllKeys().then((keys) => {
             let keyArr = keys.filter((key) => {
@@ -98,7 +106,8 @@ export const clearAllStore = async () => {
 export const checkLoginState = async () => {
     try {
         const value = await AsyncStorage.getItem(LoginStateKey);
-        return value == null ? false : (JSON.parse(value)).isLogin;
+        UserSession.isLogin = value == null ? false : (JSON.parse(value)).isLogin;
+        return UserSession.isLogin;
     } catch (e) {
         console.error(e);
     }
