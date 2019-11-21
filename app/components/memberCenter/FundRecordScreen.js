@@ -18,9 +18,8 @@ import http from "../../http/httpFetch";
 import Toast from "react-native-easy-toast";
 import Picker from 'react-native-picker';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
-import RedBagDialog from "../../customizeview/RedBagDialog";
-import CalendarDialog from "../../customizeview/CalendarDialog";
 import deviceValue from "../../utils/DeviceValue";
+import TXTools from '../../utils/Htools';
 
 const TYPE_TITLE_MAP = new Map([['加款', '中心钱包加款'], ['存款', '中心钱包加款'], ['彩金', '赠送彩金'],
 ['优惠', '赠送优惠'], ['提款', '中心钱包扣款'], ['扣款', '中心钱包扣款'], ['返水', '游戏返水'],
@@ -351,7 +350,7 @@ export default class FundRecordScreen extends Component<Props> {
                     {/* 最右侧：金额及类型 */}
                     <View style={styles.recordIetmCellRightPanel}>
                         <Text style={{ ...styles.recordItemCellAmount, color: this.getAmountColorForItem(item) }}>
-                            {item.amount}
+                            { TXTools.formatMoneyAmount(item.amount,false) }
                         </Text>
                         <Text style={styles.recordItemCellType}>{item.type}</Text>
                     </View>
