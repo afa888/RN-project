@@ -132,10 +132,12 @@ export default class LoginScreen extends Component<Props> {
 
     render() {
         const { passWordShow } = this.state;
+        const params = this.props.navigation.state.params;
+        const routeName = (params && params.backRoute) ? params.backRoute:'Home';
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, margin: 12, backgroundColor: 'white' }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate(routeName)}>
                         <Image source={require('../../static/img/login_back.png')}
                             style={styles.header_img} />
                     </TouchableOpacity>

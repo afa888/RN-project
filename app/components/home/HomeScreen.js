@@ -291,7 +291,7 @@ export default class HomeScreen extends Component<Props> {
     httpScratch = () => {
 
         getStoreData('@loginState').then((loginInfo) => {
-            if (loginInfo.isLogin) {
+            if (loginInfo && loginInfo.isLogin) {
                 //已经登录
                 getStoreData('userInfoState').then(userInfo => {
                     if (!userInfo.hasOwnProperty('scratchStatus') || userInfo.scratchStatus === 0) {
