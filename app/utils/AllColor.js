@@ -7,8 +7,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Dimensions from 'Dimensions'
-
-
 export const category_tab_checked_bg_color = "#f2f2f2";
 
 export const category_group_divide_line_color = "#F2F2F2";
