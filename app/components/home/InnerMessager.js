@@ -17,7 +17,8 @@ import PropTypes from "prop-types";
 import http from "../../http/httpFetch";
 import TXTools from '../../utils/Htools';
 import TXToastManager from '../../tools/TXToastManager';
-import MainTheme from '../../utils/AllColor'
+import MainTheme from '../../utils/AllColor';
+import deviceValue from "../../utils/DeviceValue";
 
 // 站内信列表url
 export const INNER_MESSAGER_MESSAGE_LIST_URL = '/User/getMessageList';
@@ -186,7 +187,7 @@ export default class InnerMessager extends Component<Props> {
                     <Text style={item.status == '0' ? styles.listItemContent : styles.listItemUnreadContent}
                         numberOfLines={this.state.curIndex == index ? 0 : 1}
                     >
-                        { Platform.OS == 'ios' ? item.message : item.message+'\n' }
+                        {Platform.OS == 'ios' ? item.message : item.message + '\n'}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -226,8 +227,22 @@ export default class InnerMessager extends Component<Props> {
 
     renderEmptyComponent = () => {
         return (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Text>暂无数据</Text>
+            <View style={styles.emptyView}>
+                <View style={{ alignItems: 'center' }}>
+                    <Image
+                        source={require('../../static/img/nodata.png')}
+                        style={{
+                            resizeMode: 'contain',
+                            width: deviceValue.windowWidth * 0.4,
+                            height: deviceValue.windowWidth * 0.4,
+                            marginRight: 6,
+                            padding: 3
+                        }} />
+                    <Text style={{
+                        fontSize: 16
+                    }}>暂无数据</Text>
+                </View>
+
             </View>
         )
     }
@@ -382,5 +397,14 @@ const styles = StyleSheet.create({
         color: MainTheme.GrayColor,
         textAlign: 'center',
         fontSize: 10
+    },
+
+    emptyView: {
+        flex: 1,
+        width: deviceValue.windowWidth,
+        height: deviceValue.windowHeight * 0.8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
