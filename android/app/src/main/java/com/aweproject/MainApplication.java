@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.amsoft.RNProgressHUB.RNProgressHUBPackage;
 import com.como.RNTScratchView.ScratchViewPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -26,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import com.demohud.MyToast.ToastReactPackage;
 
 import javax.annotation.Nullable;
 
@@ -44,6 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNProgressHUBPackage(),
                     new ScratchViewPackage(),
                     new SplashScreenReactPackage(),
                     new RNCWebViewPackage(),
@@ -53,6 +56,7 @@ public class MainApplication extends Application implements ReactApplication {
 
                     new RNGestureHandlerPackage(),
                     new AnExampleReactPackage(),
+                    new ToastReactPackage(),
                     new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, BuildConfig.DEBUG)
             );
         }

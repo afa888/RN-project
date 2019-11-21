@@ -171,6 +171,7 @@ def static buildTime(def release = false) {
 }
 
 dependencies {
+    implementation project(':react-native-progresshub')
     implementation project(':react-native-scratch')
     implementation project(':react-native-code-push')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -192,6 +193,7 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:latest.release'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
 }
 
 // Run this once to be able to run the application with BUCK

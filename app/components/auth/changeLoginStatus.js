@@ -27,7 +27,8 @@ export const setLoginStore = (oData) => {
     if (oData.hasOwnProperty('password')) {
         mergeStoreData('userInfoState',
         {
-            password: oData.password
+            password: oData.password,
+            mobile:oData.mobile
         });
     }
 
