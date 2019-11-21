@@ -42,7 +42,7 @@ export default class NewBankCardScreen extends Component<Props> {
 
     constructor(props){
         super(props);
-        this.state = {name:'',cardNum:'',cardType:'请选择银行种类',address:'',password:''};
+        this.state = {name:'',cardNum:'',cardType:'选择银行',address:'',password:''};
     }
 
     _isChineseName = (name) => {
@@ -139,25 +139,28 @@ export default class NewBankCardScreen extends Component<Props> {
 
     render() {
         return (
-            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:'#efeff4'}}>
+            <View style={{height:Dimensions.get('window').height,alignItems: 'center',backgroundColor:MainTheme.BackgroundColor}}>
                 
                 <TXInput label="银行" detailTextColor={ThemeEditTextTextColor} isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.state.cardType || ''}/>
                 <TXInput label="银行卡号" placeholder="请输入银行卡号" textAlign='right' onChange={(value) => this._onChange('cardNum', value)} value={this.state.cardNum || ''}/>
                 <TXInput label="真实姓名" placeholder="请输入持卡人姓名" textAlign='right' onChange={(value) => this._onChange('name', value)} value={this.state.name || ''}/>
                 <TXInput label="开户行" placeholder="请输入开户行名称" textAlign='right' onChange={(value) => this._onChange('address', value)} value={this.state.address || ''}/>
-                <TXInput label="资金密码" secureTextEntry={true} placeholder="4位资金密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
+                <TXInput label="提款密码" secureTextEntry={true} placeholder="4位资金密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
                 
                 <View style={{paddingTop:10,height:60,width:Dimensions.get('window').width}}>
                     <Text style={{paddingLeft:10,fontSize:12,color:MainTheme.tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
                 </View>
-                <View style={{alignItems: 'center'}}>
+                {
+                    MainTheme.renderCommonSubmitButton(()=>this._onBindCard(),'立即绑定')
+                }
+                {/* <View style={{alignItems: 'center'}}>
                     <TouchableOpacity  onPress={() => this._onBindCard()}  activeOpacity={0.2} focusedOpacity={0.5}>
                      <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
 
                         <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即绑定</Text>
                      </View>
                 </TouchableOpacity>
-                </View>
+                </View> */}
             </View>
         );
     }
