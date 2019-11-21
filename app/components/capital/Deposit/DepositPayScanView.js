@@ -69,7 +69,7 @@ export default class PayScan extends Component<Props> {
         }
         let payModel = this.props.params.currentPayModel.cagentPayerPOList[this.props.params.scanSelectedIndex];
         let des
-        if (payModel.hasOwnProperty('minquota')) {//可能后台返回没有这个字段
+        if (payModel && payModel.hasOwnProperty('minquota')) {//可能后台返回没有这个字段
             des = '单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'元';
         }else {
             des = '请输入订单金额';
@@ -128,15 +128,7 @@ export default class PayScan extends Component<Props> {
                 <View style={{height:10}}>
                 </View>
                 <TXInput label="订单号" placeholder="请输入订单号后四位" maxLength={4} textAlign='right' onChange={(value) => this.props.onChange('orderNum', value)} value={this.props.params.orderNum || ''}/>
-                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                        <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                         <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
-
-                            <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>下一步</Text>
-                         </View>
-                    </TouchableOpacity>
-                    </View>
-                <Tips onShowCustomer={this.props.onShowCustomer}/>
+                
             </View>
 
         );

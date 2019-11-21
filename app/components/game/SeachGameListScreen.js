@@ -7,6 +7,8 @@ import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-
 import deviceValue from "../../utils/DeviceValue";
 import http from "../../http/httpFetch";
 import ListDataEmptyView from '../../customizeview/ListDataEmptyView'
+import {checkLoginState} from "../../http/AsyncStorage";
+import TXToastManager from "../../tools/TXToastManager";
 
 let gameId
 
@@ -144,12 +146,18 @@ export default class SeachGameListScreen extends Component<Props> {
                             }}
                             returnKeyType='search'
                         />
-                        <Image source={require('../../static/img/ic_menu_search.png')}
-                               style={{
-                                   resizeMode: 'contain',
-                                   width: 20,
-                                   height: 20,
-                               }}/>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.onSubmitEditing()
+                            }}>
+                            <Image source={require('../../static/img/ic_menu_search.png')}
+                                   style={{
+                                       resizeMode: 'contain',
+                                       width: 20,
+                                       height: 20,
+                                       marginRight:10
+                                   }}/>
+                        </TouchableOpacity>
                     </View>
 
 

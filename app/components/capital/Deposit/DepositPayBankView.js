@@ -59,6 +59,7 @@ export default class PayBank extends Component<Props> {
             }
         return (
         <View style={{paddingTop:0}} >
+        <ScrollView>
             <TXInput label="付款方式" placeholder="网银转账" isUpdate={false} showDetail={true} textAlign='right' onClick={this._onChooseBank} value={this.props.params.method || ''}/>
             <View style={{height:10}}></View>
             <TXInput label="真实姓名" maxLength={10} placeholder="请输入真实姓名" textAlign='right' onChange={(value) => this.props.onChange('name', value)} value={this.props.params.name || ''}/>
@@ -103,15 +104,8 @@ export default class PayBank extends Component<Props> {
 
             <View style={{height:10}}></View>
             <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
-            <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                    <TouchableOpacity  onPress={() => this.props.commitRequest()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
-
-                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>下一步</Text>
-                     </View>
-                </TouchableOpacity>
-                </View>
-                <Tips onShowCustomer={this.props.onShowCustomer} />
+            
+        </ScrollView>
 
         </View>
 

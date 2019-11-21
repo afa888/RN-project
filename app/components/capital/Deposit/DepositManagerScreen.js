@@ -18,6 +18,7 @@ import TXToastManager from "../../../tools/TXToastManager"
 import Picker from 'react-native-picker';
 import MainTheme from "../../../utils/AllColor"
 import {ThemeEditTextTextColor} from "../../../utils/AllColor"
+import Tips from './DepositTipsView'
 
 var payTypeList = [
     "网银转账", "支付宝", "财付通", "微信", "ATM自动柜员机", "ATM现金入款", "银行柜台"
@@ -414,6 +415,7 @@ export default class DepositManagerScreen extends Component<Props> {
 
     renderData() {
         return (
+        <View style={{flex: 1}}>
             <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:MainTheme.backgroundViewColor}}>
 
                 <View style={{alignItems: 'center',backgroundColor:MainTheme.backgroundViewColor}}>
@@ -442,7 +444,14 @@ export default class DepositManagerScreen extends Component<Props> {
                 </View>
                 <View style={{height:10,width:Dimensions.get('window').width}}></View>
                 {this.renderFooter()}
+                
             </ScrollView>
+
+                <View style={{ position:'absolute',bottom: 0}}>
+                    <Tips onShowCustomer={this._onShowCustomer}/>
+                    {MainTheme.renderCommonBottomSubmitButton(this._onCommitWithdrawal)}
+                </View>
+            </View>
         );
     }
 
@@ -547,7 +556,7 @@ export default class DepositManagerScreen extends Component<Props> {
     //点击列表点击每一行
     clickItem(item,index) {
         this.setState({selectedIndex:index,currentPayModel:this.state.data[index],
-            money:'',payTypeSelectedIndex:0,orderNum:'',name:''
+            money:'',payTypeSelectedIndex:0,scanSelectedIndex:0,orderNum:'',name:''
         });
         /*this.setState({currentPayModel:this.state.data[index]});
 

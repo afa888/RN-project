@@ -88,14 +88,7 @@ export default class SettingCapitalPwdScreen extends Component<Props> {
                     <Text style={{fontSize:10,color:textThreeHightTitleColor}}>注:提款密码限制为</Text>
                     <Text style={{fontSize:10,color:MainTheme.tipsSpecialTextColor}}>4位数字</Text>
                 </View>
-                <View style={{paddingTop:20,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onSettingPWD()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.commonButtonBGColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
-
-                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>设置</Text>
-                     </View>
-                </TouchableOpacity>
-                </View>
+                {MainTheme.renderCommonSubmitButton(this._onSettingPWD.bind(this),'设置')}
             </View>
         );
     }

@@ -149,7 +149,7 @@ export default class SeachGameGridListScreen extends Component<Props> {
         let prams = {
             pageNo: pageSize,
             pageSize: 24,
-            id: gameId,
+            id: this.props.id,
             searchName: this.state.searchName
         };
         http.get('game/getForthTab', prams).then(res => {

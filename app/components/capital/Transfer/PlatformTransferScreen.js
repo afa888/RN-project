@@ -458,23 +458,11 @@ export default class PlatformTransfer extends Component<Props> {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{paddingTop:5,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._onCommitTransfer(this.state)}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
-
-                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>立即转账</Text>
-                     </View>
-                    </TouchableOpacity>
-                </View>
                 
-                <View style={{paddingTop:10,alignItems: 'center'}}>
-                    <TouchableOpacity  onPress={() => this._receiveAll()}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.backgroundColor}}>
 
-                        <Text style={{color:MainTheme.specialTextColor,fontSize:17}}>一键回收</Text>
-                     </View>
-                    </TouchableOpacity>
-                </View>
+                {MainTheme.renderCommonSubmitButton(this._onCommitTransfer.bind(this,this.state),'立即转账')}
+
+                {MainTheme.renderCommonCancelButton(this._receiveAll.bind(this),'一键回收')}
             </View>
         );
     }
