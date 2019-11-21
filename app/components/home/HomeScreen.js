@@ -140,7 +140,7 @@ export default class HomeScreen extends Component<Props> {
         this.listener = DeviceEventEmitter.addListener('login', (val) => {
             this.props.navigation.navigate('LoginService')
         });
-        
+
 
         // 站内信
         this.innerMessagerListener =
@@ -157,7 +157,7 @@ export default class HomeScreen extends Component<Props> {
         // // 红包状态查询
         // this.httpRedBag();
         // 刮刮乐 与 红包;
-        this.httpScratch()
+       // this.httpScratch()
 
         // 获取未读的站内信数量
         checkLoginState().then((isLogin) => {
@@ -192,7 +192,7 @@ export default class HomeScreen extends Component<Props> {
     }
 
     noticeScreen = (blo, notice) => {
-        
+
         let noticeList = []
         for (var i = 0; i < notice.length; i++) {
             noticeList.push(notice[i].value + "\r\n" + "\r")
@@ -301,14 +301,14 @@ export default class HomeScreen extends Component<Props> {
                             console.log("刮刮乐")
                             console.log(res);
                             if (res && res.status === 10000) {
-                                
+
                                 if (res.data.status == '0') {
                                     //verifyPhone 1 是收机号 注册 无需验证， 0 是快速注册 需要验证手机号
                                     if (res.data.hasOwnProperty('activityId') && res.data.hasOwnProperty('usermoney') && res.data.hasOwnProperty('verifyPhone')) {
                                         this.setState({scratchData: res.data});
                                         this.showScrach();
                                     }
-                                    
+
                                 }else if(res.hasOwnProperty('msg') && res.msg === '用户已参与过此次活动') {
                                     //
                                     this.saveScratchStatus();
@@ -330,8 +330,8 @@ export default class HomeScreen extends Component<Props> {
             }
         });
 
-        
-        
+
+
     }
 
     saveScratchStatus = () => {
