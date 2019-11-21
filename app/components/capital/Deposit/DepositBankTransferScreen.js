@@ -120,17 +120,7 @@ export default class DepositBankTransferScreen extends Component<Props> {
                     <Text numberOfLines={5} style={{fontSize:10,color:'#8B8B8B',height:50}}>2.以上银行帐号限本次存款使用，帐号不定期更换！每次存款前请依照本页所显示的银行帐号入款。如入款至已过期帐号，公司无法查收，恕不负责！</Text>
 
                 </View>
-
-                <View style={{paddingTop:20,alignItems: 'center',height:60}}>
-                    <TouchableOpacity  onPress={() => {this.commitRequest(1)}}  activeOpacity={0.2} focusedOpacity={0.5}>
-                     <View style=  {{borderRadius:10,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 100,height:40,backgroundColor:MainTheme.commonButtonBGColor}}>
-
-                        <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:17}}>完成存款</Text>
-                     </View>
-                    </TouchableOpacity>
-                </View>
-
-                {MainTheme.renderCommonSubmitButton(this._onCommitWithdrawal.bind(this,1),'完成存款')}
+                {MainTheme.renderCommonSubmitButton(this.commitRequest.bind(this,1),'完成存款')}
                 {MainTheme.renderCommonCancelButton(this.commitRequest.bind(this,2),'取消订单')}
 
             </View>
@@ -180,6 +170,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingVertical: 0,
-        backgroundColor:'#efeff4'
+        backgroundColor:MainTheme.backgroundColor
+        
     }
 });

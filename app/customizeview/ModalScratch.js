@@ -19,6 +19,7 @@ import {Reg_phoneNum_validate} from "../utils/Validate";
 import {CAGENT} from '../utils/Config'
 import TXProgressHUB from '../tools/TXProgressHUB';
 
+
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
 let SCREEN_HEIGHT = Dimensions.get('window').height;//高
@@ -128,7 +129,8 @@ export default class ModalScratch extends Component<Props> {
         if (this.state.time == 60) {
             if (Reg_phoneNum_validate(phoneNum)) {
             let prams = {mobileNo:phoneNum,cagent:CAGENT};
-            TXProgressHUB.showSpinIndeterminate();
+            // TXProgressHUB.showSpinIndeterminate();
+            TXProgressHUB.showSpinIndeterminate('loading');
             http.post('Mobile/sendMessageCode', prams,true).then(res => {
                 console.log("获取验证码")
                 console.log(res);
@@ -240,7 +242,7 @@ export default class ModalScratch extends Component<Props> {
         }
 
         return (
-            <Modal zIndex={9999}
+            <Modal style={{ zIndex: 1 }}
                 transparent={true}
                 visible={this.props._scrachVisible}
                 onRequestClose={() => {

@@ -77,6 +77,12 @@
 		2792013E22DC5D8200B0D70F /* top_Back_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792013A22DC5D8100B0D70F /* top_Back_pre@2x.png */; };
 		2792014122DC5DC200B0D70F /* cq9_lobby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792013F22DC5DC200B0D70F /* cq9_lobby@2x.png */; };
 		2792014222DC5DC200B0D70F /* cq9_lobby@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792014022DC5DC200B0D70F /* cq9_lobby@3x.png */; };
+		27BBF8862385779C001AC422 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8482385779C001AC422 /* MBProgressHUD.m */; };
+		27BBF8872385779C001AC422 /* CQProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8492385779C001AC422 /* CQProgressHUD.m */; };
+		27BBF8882385779C001AC422 /* CQProgressHUDModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */; };
+		27BBF8892385779C001AC422 /* CQHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF84C2385779C001AC422 /* CQHUD.m */; };
+		27BBF88A2385779C001AC422 /* MBProgressHUD+CQ.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */; };
+		27BBF88B2385779C001AC422 /* MBProgressHUD+CQExtend.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -585,6 +591,19 @@
 		2792013A22DC5D8100B0D70F /* top_Back_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_Back_pre@2x.png"; sourceTree = "<group>"; };
 		2792013F22DC5DC200B0D70F /* cq9_lobby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cq9_lobby@2x.png"; sourceTree = "<group>"; };
 		2792014022DC5DC200B0D70F /* cq9_lobby@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cq9_lobby@3x.png"; sourceTree = "<group>"; };
+		27BBF8472385779C001AC422 /* MBProgressHUD+CQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+CQ.h"; sourceTree = "<group>"; };
+		27BBF8482385779C001AC422 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		27BBF8492385779C001AC422 /* CQProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQProgressHUD.m; sourceTree = "<group>"; };
+		27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQProgressHUDModule.m; sourceTree = "<group>"; };
+		27BBF84C2385779C001AC422 /* CQHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQHUD.m; sourceTree = "<group>"; };
+		27BBF84D2385779C001AC422 /* CQProgressHUDModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQProgressHUDModule.h; sourceTree = "<group>"; };
+		27BBF84E2385779C001AC422 /* CQHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQHUD.h; sourceTree = "<group>"; };
+		27BBF84F2385779C001AC422 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+CQ.m"; sourceTree = "<group>"; };
+		27BBF8512385779C001AC422 /* CQProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQProgressHUD.h; sourceTree = "<group>"; };
+		27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+CQExtend.m"; sourceTree = "<group>"; };
+		27BBF8542385779C001AC422 /* MBProgressHUD_CQExtend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD_CQExtend.h; sourceTree = "<group>"; };
+		27BBF8552385779C001AC422 /* MBProgressHUD+CQExtend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+CQExtend.h"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* AweProject-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AweProject-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* AweProject-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AweProject-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -890,6 +909,7 @@
 		2792007422DB56E400B0D70F /* RCTModule */ = {
 			isa = PBXGroup;
 			children = (
+				27BBF8462385779C001AC422 /* MBProgressHUD */,
 				2792012922DC30AC00B0D70F /* RCTGameManager.h */,
 				2792012A22DC30AC00B0D70F /* RCTGameManager.m */,
 			);
@@ -1100,6 +1120,42 @@
 				27B686852306A8DA005DEA0F /* libSplashScreen.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		27BBF8462385779C001AC422 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF84A2385779C001AC422 /* Bridge */,
+				27BBF8522385779C001AC422 /* CQExtend */,
+				27BBF8512385779C001AC422 /* CQProgressHUD.h */,
+				27BBF8492385779C001AC422 /* CQProgressHUD.m */,
+				27BBF84F2385779C001AC422 /* MBProgressHUD.h */,
+				27BBF8482385779C001AC422 /* MBProgressHUD.m */,
+				27BBF8472385779C001AC422 /* MBProgressHUD+CQ.h */,
+				27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		27BBF84A2385779C001AC422 /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF84E2385779C001AC422 /* CQHUD.h */,
+				27BBF84C2385779C001AC422 /* CQHUD.m */,
+				27BBF84D2385779C001AC422 /* CQProgressHUDModule.h */,
+				27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		27BBF8522385779C001AC422 /* CQExtend */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */,
+				27BBF8542385779C001AC422 /* MBProgressHUD_CQExtend.h */,
+				27BBF8552385779C001AC422 /* MBProgressHUD+CQExtend.h */,
+			);
+			path = CQExtend;
 			sourceTree = "<group>";
 		};
 		27BE6187237FEA03009AD17D /* Products */ = {
@@ -1856,8 +1912,10 @@
 				279200E722DB5D1100B0D70F /* MASViewConstraint.m in Sources */,
 				279200E422DB5D1100B0D70F /* NSArray+MASAdditions.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				27BBF88A2385779C001AC422 /* MBProgressHUD+CQ.m in Sources */,
 				279200E822DB5D1100B0D70F /* MASViewAttribute.m in Sources */,
 				279200AD22DB5B1900B0D70F /* HGameViewController.m in Sources */,
+				27BBF88B2385779C001AC422 /* MBProgressHUD+CQExtend.m in Sources */,
 				279200E622DB5D1100B0D70F /* MASConstraint.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				279200BB22DB5B6100B0D70F /* WKWebViewJavascriptBridge.m in Sources */,
@@ -1869,6 +1927,7 @@
 				279200E222DB5D1100B0D70F /* MASConstraintMaker.m in Sources */,
 				279200A722DB5AC300B0D70F /* HGameVC.m in Sources */,
 				273E93A622F522C3005EFF9D /* GQKeyboardManager+ToolBar.m in Sources */,
+				27BBF8892385779C001AC422 /* CQHUD.m in Sources */,
 				279200F622DB5F5000B0D70F /* UIDevice+HUtil.m in Sources */,
 				273E93A122F522C3005EFF9D /* NSArray+GQSort.m in Sources */,
 				273E939F22F522C3005EFF9D /* GQKeyboardManager.m in Sources */,
@@ -1878,13 +1937,16 @@
 				279200DF22DB5D1100B0D70F /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				273E93A322F522C3005EFF9D /* UIViewController+EndEdit.m in Sources */,
 				279200BC22DB5B6100B0D70F /* WebViewJavascriptBridge.m in Sources */,
+				27BBF8872385779C001AC422 /* CQProgressHUD.m in Sources */,
 				2792011B22DB66B800B0D70F /* SVProgressAnimatedView.m in Sources */,
 				279200E022DB5D1100B0D70F /* ViewController+MASAdditions.m in Sources */,
 				273E93A022F522C3005EFF9D /* UIView+GQKBToolBar.m in Sources */,
 				279200E122DB5D1100B0D70F /* MASCompositeConstraint.m in Sources */,
+				27BBF8862385779C001AC422 /* MBProgressHUD.m in Sources */,
 				2792011C22DB66B800B0D70F /* SVProgressHUD.m in Sources */,
 				273E93A222F522C3005EFF9D /* UIView+Responder.m in Sources */,
 				279200BE22DB5B6100B0D70F /* UIView+Gradient.m in Sources */,
+				27BBF8882385779C001AC422 /* CQProgressHUDModule.m in Sources */,
 				279200C122DB5B9D00B0D70F /* HViewController.m in Sources */,
 				279200EE22DB5ECB00B0D70F /* DKProgressLayer.m in Sources */,
 				2792012222DB66E300B0D70F /* HProgressHUD.m in Sources */,
