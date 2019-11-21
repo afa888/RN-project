@@ -77,6 +77,12 @@
 		2792013E22DC5D8200B0D70F /* top_Back_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792013A22DC5D8100B0D70F /* top_Back_pre@2x.png */; };
 		2792014122DC5DC200B0D70F /* cq9_lobby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792013F22DC5DC200B0D70F /* cq9_lobby@2x.png */; };
 		2792014222DC5DC200B0D70F /* cq9_lobby@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2792014022DC5DC200B0D70F /* cq9_lobby@3x.png */; };
+		27BBF8862385779C001AC422 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8482385779C001AC422 /* MBProgressHUD.m */; };
+		27BBF8872385779C001AC422 /* CQProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8492385779C001AC422 /* CQProgressHUD.m */; };
+		27BBF8882385779C001AC422 /* CQProgressHUDModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */; };
+		27BBF8892385779C001AC422 /* CQHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF84C2385779C001AC422 /* CQHUD.m */; };
+		27BBF88A2385779C001AC422 /* MBProgressHUD+CQ.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */; };
+		27BBF88B2385779C001AC422 /* MBProgressHUD+CQExtend.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -260,6 +266,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
 			remoteInfo = SplashScreen;
+		};
+		27BBF8D423864FDC001AC422 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5E8C81061D86A08B00F9EC58;
+			remoteInfo = RNProgressHUB;
 		};
 		27BE618A237FEA03009AD17D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -585,6 +598,19 @@
 		2792013A22DC5D8100B0D70F /* top_Back_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_Back_pre@2x.png"; sourceTree = "<group>"; };
 		2792013F22DC5DC200B0D70F /* cq9_lobby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cq9_lobby@2x.png"; sourceTree = "<group>"; };
 		2792014022DC5DC200B0D70F /* cq9_lobby@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cq9_lobby@3x.png"; sourceTree = "<group>"; };
+		27BBF8472385779C001AC422 /* MBProgressHUD+CQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+CQ.h"; sourceTree = "<group>"; };
+		27BBF8482385779C001AC422 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		27BBF8492385779C001AC422 /* CQProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQProgressHUD.m; sourceTree = "<group>"; };
+		27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQProgressHUDModule.m; sourceTree = "<group>"; };
+		27BBF84C2385779C001AC422 /* CQHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQHUD.m; sourceTree = "<group>"; };
+		27BBF84D2385779C001AC422 /* CQProgressHUDModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQProgressHUDModule.h; sourceTree = "<group>"; };
+		27BBF84E2385779C001AC422 /* CQHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQHUD.h; sourceTree = "<group>"; };
+		27BBF84F2385779C001AC422 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+CQ.m"; sourceTree = "<group>"; };
+		27BBF8512385779C001AC422 /* CQProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQProgressHUD.h; sourceTree = "<group>"; };
+		27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+CQExtend.m"; sourceTree = "<group>"; };
+		27BBF8542385779C001AC422 /* MBProgressHUD_CQExtend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD_CQExtend.h; sourceTree = "<group>"; };
+		27BBF8552385779C001AC422 /* MBProgressHUD+CQExtend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+CQExtend.h"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* AweProject-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AweProject-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* AweProject-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AweProject-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -602,6 +628,7 @@
 		9AC38E9E3354454EA6A4A8B3 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
 		9CE77DCC1EE5424A824A8E4C /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+		B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNProgressHUB.xcodeproj; path = "../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB.xcodeproj"; sourceTree = "<group>"; };
 		BD5A9560065548B58D3A99EE /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		C5835719C3374C299C1E7F54 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		CB255B85F4D54D7999930FB4 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
@@ -890,6 +917,7 @@
 		2792007422DB56E400B0D70F /* RCTModule */ = {
 			isa = PBXGroup;
 			children = (
+				27BBF8462385779C001AC422 /* MBProgressHUD */,
 				2792012922DC30AC00B0D70F /* RCTGameManager.h */,
 				2792012A22DC30AC00B0D70F /* RCTGameManager.m */,
 			);
@@ -1102,6 +1130,50 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		27BBF8462385779C001AC422 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF84A2385779C001AC422 /* Bridge */,
+				27BBF8522385779C001AC422 /* CQExtend */,
+				27BBF8512385779C001AC422 /* CQProgressHUD.h */,
+				27BBF8492385779C001AC422 /* CQProgressHUD.m */,
+				27BBF84F2385779C001AC422 /* MBProgressHUD.h */,
+				27BBF8482385779C001AC422 /* MBProgressHUD.m */,
+				27BBF8472385779C001AC422 /* MBProgressHUD+CQ.h */,
+				27BBF8502385779C001AC422 /* MBProgressHUD+CQ.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		27BBF84A2385779C001AC422 /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF84E2385779C001AC422 /* CQHUD.h */,
+				27BBF84C2385779C001AC422 /* CQHUD.m */,
+				27BBF84D2385779C001AC422 /* CQProgressHUDModule.h */,
+				27BBF84B2385779C001AC422 /* CQProgressHUDModule.m */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		27BBF8522385779C001AC422 /* CQExtend */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF8532385779C001AC422 /* MBProgressHUD+CQExtend.m */,
+				27BBF8542385779C001AC422 /* MBProgressHUD_CQExtend.h */,
+				27BBF8552385779C001AC422 /* MBProgressHUD+CQExtend.h */,
+			);
+			path = CQExtend;
+			sourceTree = "<group>";
+		};
+		27BBF8A323864FDC001AC422 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27BBF8D523864FDC001AC422 /* libRNProgressHUB.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		27BE6187237FEA03009AD17D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1170,6 +1242,7 @@
 				CCDBB1DB2BFD42C3980D090B /* CodePush.xcodeproj */,
 				E4E4E2B2577F4571AFC24F2B /* SplashScreen.xcodeproj */,
 				6C1194FC42DC4F7F9AD53742 /* RNScratch.xcodeproj */,
+				B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1408,6 +1481,10 @@
 					ProjectRef = 9CE77DCC1EE5424A824A8E4C /* RNGestureHandler.xcodeproj */;
 				},
 				{
+					ProductGroup = 27BBF8A323864FDC001AC422 /* Products */;
+					ProjectRef = B3D53E7B8D264E9E9CD73E5B /* RNProgressHUB.xcodeproj */;
+				},
+				{
 					ProductGroup = 27BE6187237FEA03009AD17D /* Products */;
 					ProjectRef = 6C1194FC42DC4F7F9AD53742 /* RNScratch.xcodeproj */;
 				},
@@ -1572,6 +1649,13 @@
 			fileType = archive.ar;
 			path = libSplashScreen.a;
 			remoteRef = 27B686842306A8DA005DEA0F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		27BBF8D523864FDC001AC422 /* libRNProgressHUB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNProgressHUB.a;
+			remoteRef = 27BBF8D423864FDC001AC422 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		27BE618B237FEA03009AD17D /* libRNScratch.a */ = {
@@ -1856,8 +1940,10 @@
 				279200E722DB5D1100B0D70F /* MASViewConstraint.m in Sources */,
 				279200E422DB5D1100B0D70F /* NSArray+MASAdditions.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				27BBF88A2385779C001AC422 /* MBProgressHUD+CQ.m in Sources */,
 				279200E822DB5D1100B0D70F /* MASViewAttribute.m in Sources */,
 				279200AD22DB5B1900B0D70F /* HGameViewController.m in Sources */,
+				27BBF88B2385779C001AC422 /* MBProgressHUD+CQExtend.m in Sources */,
 				279200E622DB5D1100B0D70F /* MASConstraint.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				279200BB22DB5B6100B0D70F /* WKWebViewJavascriptBridge.m in Sources */,
@@ -1869,6 +1955,7 @@
 				279200E222DB5D1100B0D70F /* MASConstraintMaker.m in Sources */,
 				279200A722DB5AC300B0D70F /* HGameVC.m in Sources */,
 				273E93A622F522C3005EFF9D /* GQKeyboardManager+ToolBar.m in Sources */,
+				27BBF8892385779C001AC422 /* CQHUD.m in Sources */,
 				279200F622DB5F5000B0D70F /* UIDevice+HUtil.m in Sources */,
 				273E93A122F522C3005EFF9D /* NSArray+GQSort.m in Sources */,
 				273E939F22F522C3005EFF9D /* GQKeyboardManager.m in Sources */,
@@ -1878,13 +1965,16 @@
 				279200DF22DB5D1100B0D70F /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				273E93A322F522C3005EFF9D /* UIViewController+EndEdit.m in Sources */,
 				279200BC22DB5B6100B0D70F /* WebViewJavascriptBridge.m in Sources */,
+				27BBF8872385779C001AC422 /* CQProgressHUD.m in Sources */,
 				2792011B22DB66B800B0D70F /* SVProgressAnimatedView.m in Sources */,
 				279200E022DB5D1100B0D70F /* ViewController+MASAdditions.m in Sources */,
 				273E93A022F522C3005EFF9D /* UIView+GQKBToolBar.m in Sources */,
 				279200E122DB5D1100B0D70F /* MASCompositeConstraint.m in Sources */,
+				27BBF8862385779C001AC422 /* MBProgressHUD.m in Sources */,
 				2792011C22DB66B800B0D70F /* SVProgressHUD.m in Sources */,
 				273E93A222F522C3005EFF9D /* UIView+Responder.m in Sources */,
 				279200BE22DB5B6100B0D70F /* UIView+Gradient.m in Sources */,
+				27BBF8882385779C001AC422 /* CQProgressHUDModule.m in Sources */,
 				279200C122DB5B9D00B0D70F /* HViewController.m in Sources */,
 				279200EE22DB5ECB00B0D70F /* DKProgressLayer.m in Sources */,
 				2792012222DB66E300B0D70F /* HProgressHUD.m in Sources */,
@@ -1957,6 +2047,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2005,6 +2096,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
@@ -2061,6 +2153,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2101,6 +2194,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
@@ -2190,6 +2284,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2225,6 +2320,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = AweProjectTests/Info.plist;
@@ -2281,6 +2377,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2335,6 +2432,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";
@@ -2392,6 +2490,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2448,6 +2547,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2503,6 +2603,7 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2557,6 +2658,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-scratch/ios",
+					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 					"$(SRCROOT)/../node_modules/react-native-progresshub/RNProgressHUB/RNProgressHUB",
 				);
 				INFOPLIST_FILE = "AweProject-tvOSTests/Info.plist";

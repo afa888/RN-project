@@ -11,7 +11,7 @@ import PayScan from './DepositPayScanView';
 import httpBaseManager from '../../../http/httpBaseManager'
 import {BASE_URL, CAGENT} from "../../../utils/Config";
 import http from '../../../http/httpFetch'
-import {Reg_chineseName_validate} from "../../../utils/Validate";
+import {Reg_chineseName_validate,money_validate} from "../../../utils/Validate";
 import {TXAlert} from "../../../tools/TXAlert"
 import { NavigationActions } from 'react-navigation';
 import TXToastManager from "../../../tools/TXToastManager"
@@ -208,7 +208,10 @@ export default class DepositManagerScreen extends Component<Props> {
                 TXToastManager.show('真实姓名只能为中文');
             }else if(this.state.money.length ==0){
                 TXToastManager.show('请输入存款金额');
-            }else if(cagentBankCardEntity.hasOwnProperty('minquota') && (parseInt(this.state.money) < parseInt(cagentBankCardEntity.minquota) || parseInt(this.state.money) > parseInt(cagentBankCardEntity.maxquota))){
+            }else if(!money_validate(this.state.money)){
+                TXToastManager.show('存款金额只能为数字');
+            }
+            else if(cagentBankCardEntity.hasOwnProperty('minquota') && (parseInt(this.state.money) < parseInt(cagentBankCardEntity.minquota) || parseInt(this.state.money) > parseInt(cagentBankCardEntity.maxquota))){
                 TXToastManager.show('单笔限额为'+ cagentBankCardEntity.minquota +'~'+ cagentBankCardEntity.maxquota +'元');
             }else {
                 //验证通过 调用提交银行汇款接口
@@ -225,6 +228,8 @@ export default class DepositManagerScreen extends Component<Props> {
                 TXToastManager.show('请输入订单号后四位');
             }else if(money.length ==0) {
                 TXToastManager.show('请输入存款金额');
+            }else if(!money_validate(this.state.money)){
+                TXToastManager.show('存款金额只能为数字');
             }else if(parseInt(money) < parseInt(payModel.minquota) || parseInt(money) > parseInt(payModel.maxquota)){
                 TXToastManager.show('单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'元');
             }else {
@@ -245,6 +250,8 @@ export default class DepositManagerScreen extends Component<Props> {
                     }
                     TXToastManager.show(msg);
 
+                }else if(!money_validate(this.state.money)){
+                    TXToastManager.show('存款金额只能为数字');
                 }else if(payModel.hasOwnProperty('minquota') && (parseInt(money) < parseInt(payModel.minquota) || parseInt(money) > parseInt(payModel.maxquota))){
                     TXToastManager.show('单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'元');
                 }else {
@@ -388,6 +395,11 @@ export default class DepositManagerScreen extends Component<Props> {
 
      _onShowCustomer = () => {
         this.props.navigation.navigate('CustomerService')
+        
+    }
+
+    _onShowHelpPage = () => {
+        this.props.navigation.navigate('HelpScreen')
     }
 
     //不同支付类型显示不同操作方式
@@ -395,19 +407,19 @@ export default class DepositManagerScreen extends Component<Props> {
         if (this.state.payType == 'bank') {
             return (
                 <View style={{paddingTop:10}}>
-                    <PayBank payModel={this.state.currentPayModel.cagentBankCardEntity} onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal.bind(this)} onChange={this._onChange} params={this.state} />
+                    <PayBank payModel={this.state.currentPayModel.cagentBankCardEntity} onShowCustomer={this._onShowCustomer} onShowHelp = {this._onShowHelpPage} onChange={this._onChange} params={this.state} />
                 </View>
             );
         }else if(this.state.payType == 'scan') {
             return (
                 <View style={{paddingTop:10}}>
-                    <PayScan onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal} onChange={this._onChange} params={this.state} />
+                    <PayScan onShowCustomer={this._onShowCustomer} onShowHelp = {this._onShowHelpPage} onChange={this._onChange} params={this.state} />
                 </View>
             );
         }else {
             return (
                 <View style={{paddingTop:10}}>
-                     <DepositPayCommonView onShowCustomer={this._onShowCustomer} commitRequest = {this._onCommitWithdrawal} onChange={this._onChange} params={this.state} />
+                     <DepositPayCommonView onShowCustomer={this._onShowCustomer} onShowHelp = {this._onShowHelpPage} onChange={this._onChange} params={this.state} />
                 </View>
             );
         }
@@ -416,7 +428,7 @@ export default class DepositManagerScreen extends Component<Props> {
     renderData() {
         return (
         <View style={{flex: 1}}>
-            <ScrollView style={{flex:1,height:Dimensions.get('window').height,backgroundColor:MainTheme.backgroundViewColor}}>
+            <ScrollView style={{height:Dimensions.get('window').height - 200,backgroundColor:MainTheme.backgroundViewColor}}>
 
                 <View style={{alignItems: 'center',backgroundColor:MainTheme.backgroundViewColor}}>
                     <View style={{paddingTop:15,height:35,width:Dimensions.get('window').width}}>
@@ -445,10 +457,11 @@ export default class DepositManagerScreen extends Component<Props> {
                 <View style={{height:10,width:Dimensions.get('window').width}}></View>
                 {this.renderFooter()}
                 
+                
             </ScrollView>
 
                 <View style={{ position:'absolute',bottom: 0}}>
-                    <Tips onShowCustomer={this._onShowCustomer}/>
+                    
                     {MainTheme.renderCommonBottomSubmitButton(this._onCommitWithdrawal)}
                 </View>
             </View>

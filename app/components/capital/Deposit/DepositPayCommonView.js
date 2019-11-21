@@ -38,10 +38,10 @@ export default class DepositPayCommonView extends Component<Props> {
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={this.itemClick.bind(this, item, index)}>
-                    <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
+                    <View style={{justifyContent:'center',flexDirection:'row',alignItems:'center'
                     }}>
 
-                        <Text style={{paddingLeft:10,color: textColor}}>{String(item)}</Text>
+                        <Text style={{color: textColor}}>{String(item)}</Text>
                     </View>
 
                 </TouchableOpacity>
@@ -65,7 +65,7 @@ export default class DepositPayCommonView extends Component<Props> {
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={this.handleIndexChange.bind(this, index)}>
-                    <View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'
+                    <View style={{width: 60,justifyContent:'center',alignItems:'center'
                     }}>
                     <Text style={{color:textColor}}>{String(item)}</Text>
                     </View>
@@ -156,7 +156,7 @@ export default class DepositPayCommonView extends Component<Props> {
                                 </View>
                             }
                         </View>
-                      
+                      <Tips onShowCustomer={this.props.onShowCustomer} onShowHelp={this.props.onShowHelp} />
                 </View>
 
             );

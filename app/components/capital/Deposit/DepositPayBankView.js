@@ -104,7 +104,7 @@ export default class PayBank extends Component<Props> {
 
             <View style={{height:10}}></View>
             <TXInput label="￥" forbiddenDot={true} labelTextStyle={{color:textTitleColor,fontSize:20}} keyboardType = 'numeric' placeholder={des} textAlign='right' onChange={(value) => this.props.onChange('money', value)} value={this.props.params.money || ''}/>
-            
+            <Tips onShowCustomer={this.props.onShowCustomer} onShowHelp={this.props.onShowHelp} />
         </ScrollView>
 
         </View>
