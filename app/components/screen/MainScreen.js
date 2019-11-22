@@ -38,8 +38,11 @@ import AssetDetailScreen from "../memberCenter/AssetDetailScreen"
 import HelpScreen from "../memberCenter/help/helpScreen";
 import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
-import RnWebViewScreen from "../../customizeview/RnWebViewScreen"
-import AgentManager from "../../components/agent/AgentManager"
+import RnWebViewScreen from "../../customizeview/RnWebViewScreen";
+import AgentManager from "../../components/agent/AgentManager";
+import AgentInviteRecorder from "../../components/agent/AgentInviteRecorder";
+import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
+import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -172,7 +175,7 @@ export default class MainScreen extends Component<Props> {
                             source={focused ? require('../../static/img/tab_user_hover.png') :
                                 require('../../static/img/tab_user_normal.png')}
                             style={styles.tab_icom} />;
-                    } else if (routeName === '会员中心' || routeName === '会员' ) {
+                    } else if (routeName === '会员中心' || routeName === '会员') {
                         return <Image
                             source={focused ? require('../../static/img/tab_user_hover.png') :
                                 require('../../static/img/tab_user_normal.png')}
@@ -218,8 +221,11 @@ export default class MainScreen extends Component<Props> {
             AboutPage: { screen: AboutPage },
             CustomerService: { screen: CustomerServiceScreen },
             InnerMessager: { screen: InnerMessager },
-            RnWebScreen:{screen:RnWebViewScreen },
-           AgentManager:{screen:AgentManager}
+            RnWebScreen: { screen: RnWebViewScreen },
+            AgentManager: { screen: AgentManager },
+            AgentInviteRecorder: { screen: AgentInviteRecorder },
+            AgentRewardRecorder: { screen: AgentRewardRecorder },
+            AgentWithdrawalRecorder: { screen: AgentWithdrawalRecorder },
         },
         {
             initialRouteName: this.state.initRoute,
