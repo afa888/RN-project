@@ -473,7 +473,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     <TouchableOpacity style={styles.otherSettingsVersionContainer}>
                         <Text style={styles.otherSettingsTitle}>{item}</Text>
                         <Text style={styles.otherSettingsVersionDetail}>
-                            {RN_VERSION.toLowerCase() + "-" + this.state.version}
+                            {/* {RN_VERSION.toLowerCase() + "-" + this.state.version} */}
+                            {RN_VERSION.toLowerCase()}
                         </Text>
                     </TouchableOpacity>
                 );

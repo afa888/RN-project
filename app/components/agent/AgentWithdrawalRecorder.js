@@ -25,6 +25,19 @@ export default class AgentWithdrawalRecorder extends Component<Props> {
         super(props);
     }
 
+    renderTopBanner(){
+        const items=[
+            {account:'9481.00',title:'当前未结'},
+            {account:'5次',title:'已提取'},
+            {account:'18659.00',title:'累计提取'},
+        ];
+        return (
+            <View style={{backgroundColor:MainTheme.SpecialColor}}>
+                
+            </View>
+        );
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.mainContanier}>
