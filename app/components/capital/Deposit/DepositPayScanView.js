@@ -77,7 +77,7 @@ export default class PayScan extends Component<Props> {
 
         var imgUrl = this.props.params.currentPayModel.cagentPayerPOList[this.props.params.scanSelectedIndex].accountimg;
         return (
-            <ScrollView bounces = {true} style={{flex:1}}>
+            <ScrollView bounces = {true} style={{flex:1,height:Dimensions.get('window').height - 250}}>
                 <View style={{paddingTop:0,height:25,width:Dimensions.get('window').width}}>
                         <Text style={{paddingLeft:10}}>支付渠道</Text>
                     </View>
