@@ -401,45 +401,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#000000',
         marginLeft: 12,
-    },
-    dialogContentView: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.27,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dialogContent: {
-        textAlign: 'left',
-        fontSize: 13,
-        margin: 12,
-    },
-    dialogBtnView: {
-        width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_HEIGHT * 0.04,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-
-
-    },
-    dialogBtnViewItem: {
-        width: 60,
-        height: SCREEN_HEIGHT * 0.03,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme_color,
-        borderRadius: 3,
-        marginRight: 8
-    },
-    leftButton: {
-        fontSize: 18,
-        color: '#007AFF',
-        borderBottomLeftRadius: 8,
-    },
-    rightButton: {
-
-        fontSize: 12,
-        color: 'white',
-        borderBottomRightRadius: 8,
     }
 });

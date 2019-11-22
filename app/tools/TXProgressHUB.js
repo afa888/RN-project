@@ -39,7 +39,7 @@ export default class TXProgressHUB {
      */
     static close(duration) {
         if (Platform.OS == 'ios') {
-            ProgressHUD.dismiss();
+            RNProgressHUB.dismiss();
         }else {
             RNProgressHUB.dismiss();
         }
@@ -47,7 +47,7 @@ export default class TXProgressHUB {
 
     static dismiss () {
         if (Platform.OS == 'ios') {
-            ProgressHUD.dismiss();
+            RNProgressHUB.dismiss();
         }else {
             RNProgressHUB.dismiss();
         }
