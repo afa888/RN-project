@@ -20,6 +20,7 @@ import Picker from 'react-native-picker';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 import deviceValue from "../../utils/DeviceValue";
 import TXTools from '../../utils/Htools';
+import CalendarDialog from "../../customizeview/CalendarDialog";
 
 const TYPE_TITLE_MAP = new Map([['加款', '中心钱包加款'], ['存款', '中心钱包加款'], ['彩金', '赠送彩金'],
 ['优惠', '赠送优惠'], ['提款', '中心钱包扣款'], ['扣款', '中心钱包扣款'], ['返水', '游戏返水'],
@@ -84,6 +85,7 @@ export default class FundRecordScreen extends Component<Props> {
             index: 0,
             currentData: '',
             minDate: '',
+            isModalVisible: false,   // 筛选Modal是否可见
             curSelectTypeIndex: 0,  // 用户在Modal中点选的记录类型的索引（RECORD_TYPES）
             curSelectResultIndex: 0, // 用户在Modal中段暄的记录结果类型的索引（RESULT_TYPES）
         };
@@ -102,10 +104,8 @@ export default class FundRecordScreen extends Component<Props> {
                 style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableOpacity style={{ width: 60, height: 28, alignItems: 'center' }} onPress={() => {
                     if (navigation.state.params !== undefined) {
-
                         navigation.state.params.choseType()
-                    }
-                    ;
+                    };
                 }}>
                     <Image
                         source={require('../../static/img/more.png')}
@@ -139,7 +139,7 @@ export default class FundRecordScreen extends Component<Props> {
     }
 
     componentWillUnmount() {
-        this.hideDialog()
+        this.hideModal()
         Picker.hide()
     }
 
@@ -196,7 +196,7 @@ export default class FundRecordScreen extends Component<Props> {
     }
 
     choseType = () => {
-        this.setState({ isDialogVisible: true });
+        this.setState({ isModalVisible: true });
         /*
             this.hideDialog()
             console.log('选择类型');
@@ -350,7 +350,7 @@ export default class FundRecordScreen extends Component<Props> {
                     {/* 最右侧：金额及类型 */}
                     <View style={styles.recordIetmCellRightPanel}>
                         <Text style={{ ...styles.recordItemCellAmount, color: this.getAmountColorForItem(item) }}>
-                            { TXTools.formatMoneyAmount(item.amount,false) }
+                            {TXTools.formatMoneyAmount(item.amount, false)}
                         </Text>
                         <Text style={styles.recordItemCellType}>{item.type}</Text>
                     </View>
@@ -678,20 +678,34 @@ export default class FundRecordScreen extends Component<Props> {
 
     renderFilterModal = () => {
         return (
-            <Modal visible={this.state.isDialogVisible}
+            <Modal visible={this.state.isModalVisible}
                 transparent={true}
                 animated={true}
                 animationType={'fade'}
-                onRequestClose={this.hideDialog}
+                onRequestClose={this.hideModal}
             >
                 <SafeAreaView style={{ flex: 1, flexDirection: 'row', }}>
                     <View style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
                     <View style={styles.modalRightContainer}>
                         <Text style={styles.modalRightTitle}>筛选</Text>
+                        {/* 起止时间 */}
                         <Text style={{ ...styles.modalRightSubtitle, marginTop: 40 }}>起止时间</Text>
-                        <Text style={{ ...styles.modalRightSubtitle, marginTop: 15 }}>2019-09-16 ~ 2019-09-16</Text>
+                        <View style={styles.modalTimePeriodContainer}>
+                            <TouchableOpacity onPress={() => this.showDialog(true, true)}>
+                                <Text style={styles.modalRightSubtitle}>
+                                    {this.state.startTime}
+                                </Text>
+                            </TouchableOpacity>
+                            <View style={{ marginLeft: 10, marginRight: 10 }}><Text>~</Text></View>
+                            <TouchableOpacity onPress={() => this.showDialog(true, false)}>
+                                <Text style={styles.modalRightSubtitle}>
+                                    {this.state.endTime}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        {/* 交易类型 */}
                         <Text style={{ ...styles.modalRightSubtitle, marginTop: 30 }}>交易类型</Text>
-
+                        {/* 交易的种类列表 */}
                         <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap' }}>
                             {
                                 RECORD_TYPES.map((item, index) =>
@@ -707,7 +721,7 @@ export default class FundRecordScreen extends Component<Props> {
                                 )
                             }
                         </View>
-
+                        {/* 处理结果类型 */}
                         <Text style={{ ...styles.modalRightSubtitle, marginTop: 30, }}>处理结果</Text>
                         <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap' }}>
                             {
@@ -720,7 +734,7 @@ export default class FundRecordScreen extends Component<Props> {
                                 )
                             }
                         </View>
-
+                        {/* 功能按钮 */}
                         <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'center', }}>
                             <TouchableOpacity onPress={this.cancelFilter} style={styles.modalFilterCancelButton} >
                                 <Text style={{ fontSize: 16, color: MainTheme.SpecialColor, }}>重置并取消</Text>
@@ -730,6 +744,29 @@ export default class FundRecordScreen extends Component<Props> {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    {/* 日期选择弹框 */}
+                    {this.state.currentData.length > 3 && this.state.minDate.length > 3 &&
+                        <CalendarDialog
+                            _dialogVisible={this.state.isDialogVisible}
+                            currentData={this.state.currentData}
+                            minDate={this.state.minDate}
+                            _dialogCancle={() => { this.hideDialog() }}
+                            onDayPress={(days) => {
+                                console.log("回调", days)
+                                if (isStartTag) {
+                                    this.setState({ startTime: days.year + "年" + days.month + "月" + days.day + "日" })
+                                    startTime = days.dateString + ' ' + '00' + ':' + '00' + ':' + '00'
+                                } else {
+                                    this.setState({ endTime: days.year + "年" + days.month + "月" + days.day + "日" })
+                                    endTime = days.dateString + ' ' + '23' + ':' + '59' + ':' + '59'
+
+                                }
+                                this.hideDialog();
+                                this.setState({index:-1});
+                                // this.refreshData()
+                            }}
+                        />
+                    }
                 </SafeAreaView>
             </Modal>
         );
@@ -737,7 +774,7 @@ export default class FundRecordScreen extends Component<Props> {
 
     cancelFilter = () => {
         this.setState({
-            isDialogVisible: false,
+            isModalVisible: false,
             curSelectTypeIndex: 0,
             curSelectResultIndex: 0,
         });
@@ -751,8 +788,12 @@ export default class FundRecordScreen extends Component<Props> {
     submitFilter = () => {
         type = RECORD_TYPES[this.state.curSelectTypeIndex].value;
         status = RESULT_TYPES[this.state.curSelectResultIndex].value;
-        this.setState({ isDialogVisible: false });
+        this.setState({ isModalVisible: false });
         this.refreshData();
+    }
+
+    hideModal = () => {
+        this.setState({ isModalVisible: false });
     }
 
     showDialog = (blo, b) => {
@@ -765,7 +806,8 @@ export default class FundRecordScreen extends Component<Props> {
             this.setState({ minDate: oneMonth.split(' ')[0] });
             this.setState({ currentData: endTime.split(' ')[0] });
         }
-        this.setState({ isDialogVisible: blo });
+        // this.setState({ isDialogVisible: blo });
+        this.setState({ isDialogVisible: true });
     }
 
     hideDialog = () => {
@@ -776,30 +818,6 @@ export default class FundRecordScreen extends Component<Props> {
         return (
             <View style={{ flex: 1 }}>
                 {this.renderSearchTime()}
-
-                {/* this.renderSearchTimeDetail() */}
-
-                {/* {this.state.currentData.length > 3 && this.state.minDate.length > 3 &&
-                    // <CalendarDialog
-                    //     _dialogVisible={this.state.isDialogVisible}
-                    //     currentData={this.state.currentData}
-                    //     minDate={this.state.minDate}
-                    //     _dialogCancle={() => { this.hideDialog() }}
-                    //     onDayPress={(days) => {
-                    //         console.log("回调", days)
-                    //         if (isStartTag) {
-                    //             this.setState({ startTime: days.year + "年" + days.month + "月" + days.day + "日" })
-                    //             startTime = days.dateString + ' ' + '00' + ':' + '00' + ':' + '00'
-                    //         } else {
-                    //             this.setState({ endTime: days.year + "年" + days.month + "月" + days.day + "日" })
-                    //             endTime = days.dateString + ' ' + '23' + ':' + '59' + ':' + '59'
-
-                    //         }
-                    //         this.hideDialog()
-                    //         this.refreshData()
-                    //     }}
-                    // />
-                */}
 
                 {this.renderFilterModal()}
 
@@ -980,9 +998,16 @@ const styles = StyleSheet.create({
     },
 
     modalRightSubtitle: {
-        marginLeft: 10,
         fontSize: 14,
         color: MainTheme.DarkGrayColor,
+    },
+
+    modalTimePeriodContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 15,
+        marginLeft: 10,
     },
 
     modalFilterOptionContainer: {
