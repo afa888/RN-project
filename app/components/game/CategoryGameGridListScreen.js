@@ -60,8 +60,8 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                 }}>
                     <View style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}>
                         <ImageBackground style={{
-                            width: deviceValue.windowWidth / 2 - 30,
-                            height: (deviceValue.windowWidth / 2 - 30) * (17 / 23),
+                            width: deviceValue.windowWidth / 2 - 33,
+                            height: (deviceValue.windowWidth / 2 - 33) * (17 / 23),
                             margin: 15,
                             borderRadius: 6
                         }} source={require('../../static/img/home_img_zwt.png')} resizeMode='cover'>

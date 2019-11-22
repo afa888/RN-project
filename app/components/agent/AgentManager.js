@@ -8,6 +8,7 @@ import {MainTheme, textTitleColor} from "../../utils/AllColor";
 import {getStoreData} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
+import QRCode from 'react-native-qrcode';
 
 
 export default class AgentManager extends Component<Props> {
@@ -126,17 +127,23 @@ export default class AgentManager extends Component<Props> {
             <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
-                    <View style={styles.qrImageView}/>
+                    <View style={styles.qrImageView}>
+                        <QRCode
+                            value={'https://www.twblogs.net/a/5b88ad4d2b71775d1cddbe19/zh-cn'}
+                            size={115}
+                            bgColor="white"
+                            fgColor="black"/>
+                    </View>
                     <View style={{
                         height: 120, flex: 1, marginLeft: 6
                     }}>
                         <Text style={styles.tgText}>推广链接：<Text
                             style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
-                        <Text style={styles.tgwaText}>推广链接：<Text
+                        <Text style={styles.tgwaText}>推广文案：<Text
                             style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
                     </View>
                 </View>
-                <Text style={styles.cotentTitle}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板\n</Text>
+                <Text style={[styles.cotentTitle, {height: 40}]}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
             </View>)
     }
 
@@ -144,19 +151,14 @@ export default class AgentManager extends Component<Props> {
         return (<SafeAreaView style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
 
-                    <View style={{
-                        height: 220,
-                        width: DeviceValue.windowWidth,
-                        backgroundColor: MainTheme.specialTextColor,
-                        alignItems: 'center'
-                    }}>
-                        <Text style={[styles.agentTitle, {
-                            width: DeviceValue.windowWidth,
-                            marginLeft: 15,
-                            marginTop: 15
-                        }]}>欢迎您</Text>
-                        <View style={styles.agentTitle}><Text style={[styles.agentTitle, {fontSize: 22}]}>￥234344</Text></View>
-                        <Text style={[styles.agentTitle, {margin: 15}]}>未接佣金</Text>
+                    <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
+                                     resizeMode='cover' style={styles.bgImagbg}>
+                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}><Text
+                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥234344</Text><TouchableOpacity
+                            style={[styles.agentTitle, styles.takeMonyView]}><Text
+                            style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text></TouchableOpacity></View>
+                        <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>白金代理</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>白金代理</Text>
@@ -167,9 +169,10 @@ export default class AgentManager extends Component<Props> {
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>白金代理</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>白金代理</Text>
                         </View>
-                    </View>
+                    </ImageBackground>
                     {this.createAgentBtn()}
                     {this.createQr()}
+                    <View style={{width: DeviceValue.windowWidth, height: 1000, backgroundColor: 'black'}}/>
 
                 </ScrollView>
             </SafeAreaView>
@@ -210,9 +213,10 @@ const styles = StyleSheet.create({
     },
     titleView: {
         width: DeviceValue.windowWidth - 50,
-        height: 30,
+        height: 25,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        marginTop: 3
     },
     fontSizeTitle18: {
         fontSize: 18
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
     fontSizeTitle14: {
         fontSize: 14
     },
-    cotentTitle: {marginLeft: 12, color: MainTheme.TextTitleColor,marginRight:12},
+    cotentTitle: {marginLeft: 12, color: MainTheme.TextTitleColor, marginRight: 12},
     qrView: {
         flexDirection: 'row',
         marginRight: 15,
@@ -251,7 +255,31 @@ const styles = StyleSheet.create({
     },
     qrImageView: {
         width: 120, height: 120, borderRadius: 4, padding: 1,
-        borderColor: MainTheme.theme_color, backgroundColor: 'blue',
-        borderWidth: 0.5,
+        borderColor: MainTheme.theme_color,
+        borderWidth: 0.5, alignItems: 'center', justifyContent: 'center'
+    }
+    ,
+    bgImagbg: {
+        height: 200,
+        width: DeviceValue.windowWidth,
+        backgroundColor: MainTheme.specialTextColor,
+        alignItems: 'center',
+    },
+    welcomTitle: {
+        width: DeviceValue.windowWidth,
+        marginLeft: 15,
+        marginTop: 10,
+        fontSize: 8
+    },
+    takeMonyView: {
+        borderColor: 'white',
+        borderWidth: 0.8,
+        borderRadius: 15,
+        height: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingRight: 6,
+        paddingLeft: 6,
+        marginLeft: 3,
     }
 });
