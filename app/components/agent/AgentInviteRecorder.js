@@ -11,7 +11,6 @@ import http from "../../http/httpFetch";
 import MainTheme from '../../utils/AllColor';
 import TXTools from '../../utils/Htools';
 import TXToastManager from '../../tools/TXToastManager'
-import { thisExpression } from '@babel/types';
 
 const PAGE_SIZE = 50;
 export default class AgentInviteRecorder extends Component<Props> {
@@ -104,7 +103,7 @@ export default class AgentInviteRecorder extends Component<Props> {
             // endTime:'',
             // timeIdentify:'',
         };
-        http.post('agency/getInviteRecord', {}, true).then(res => {
+        http.post('agency/getInviteRecord', params, true).then(res => {
             if (res.status == 10000) {
                 this.setState({
                     total: res.data.total,
@@ -123,7 +122,7 @@ export default class AgentInviteRecorder extends Component<Props> {
                 else {
                     this.currentPageNo += 1;
                     this.setState({
-                        data: this.state.data.push(res.data.list),
+                        data: this.state.data.concat(res.data.list),
                     });
                 }
             }
@@ -184,7 +183,7 @@ export default class AgentInviteRecorder extends Component<Props> {
                 data={this.state.data}
                 ListHeaderComponent={this.renderHeader()}
                 ListFooterComponent={this.renderFooter()}//尾巴
-                keyExtractor={item => item.key}//这里要是使用重复的key出现莫名其妙的错误
+                keyExtractor={item => item.agencyUserName}//这里要是使用重复的key出现莫名其妙的错误
                 enableEmptySections={true}//数据可以为空
                 renderItem={({ item, index }) => this.renderRecordItem(item, index)}
                 onEndReachedThreshold={0.2}//执行上啦的时候10%执行
