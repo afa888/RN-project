@@ -18,6 +18,8 @@ export const ThemeEditTextTextColor = '#666666';
 export const textTitleColor = "#333333"; //一级文字
 export const textHightTitleColor = "#111111"; //最重要文字
 export const textThreeHightTitleColor = "#999999"; //次要文字
+export const CircleGoldColor = '#FFCC99'
+export const BarBlueColor = '#3AA1FF'
 
 /**
  * 定义全局主题相关属性
