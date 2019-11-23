@@ -74,7 +74,7 @@ export default class NewBankCardScreen extends Component<Props> {
         }else if(this.state.address.length == 0){
             TXToastManager.show('请输入开户行地址');
         }else if(this.state.password.length != 4){
-            TXToastManager.show('请输入4位资金密码');
+            TXToastManager.show('请输入4位提款密码');
         }else {
             console.log('验证完成，调用接口');
             let bankType = data.indexOf(this.state.cardType) + 1;
@@ -145,7 +145,7 @@ export default class NewBankCardScreen extends Component<Props> {
                 <TXInput label="银行卡号" placeholder="请输入银行卡号" textAlign='right' onChange={(value) => this._onChange('cardNum', value)} value={this.state.cardNum || ''}/>
                 <TXInput label="真实姓名" placeholder="请输入持卡人姓名" textAlign='right' onChange={(value) => this._onChange('name', value)} value={this.state.name || ''}/>
                 <TXInput label="开户行" placeholder="请输入开户行名称" textAlign='right' onChange={(value) => this._onChange('address', value)} value={this.state.address || ''}/>
-                <TXInput label="提款密码" secureTextEntry={true} placeholder="4位资金密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
+                <TXInput label="提款密码" secureTextEntry={true} placeholder="4位提款密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
                 
                 <View style={{paddingTop:10,height:60,width:Dimensions.get('window').width}}>
                     <Text style={{paddingLeft:10,fontSize:12,color:MainTheme.tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>

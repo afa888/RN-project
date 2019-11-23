@@ -40,6 +40,7 @@ import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
 import RnWebViewScreen from "../../customizeview/RnWebViewScreen";
 import AgentManager from "../../components/agent/AgentManager";
+import AgenJoinBefore from "../../components/agent/AgenJoinBefore";
 import AgentInviteRecorder from "../../components/agent/AgentInviteRecorder";
 import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
 import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
@@ -224,6 +225,7 @@ export default class MainScreen extends Component<Props> {
             InnerMessager: { screen: InnerMessager },
             RnWebScreen: { screen: RnWebViewScreen },
             AgentManager: { screen: AgentManager },
+            AgenJoinBefore: { screen: AgenJoinBefore },
             AgentInviteRecorder: { screen: AgentInviteRecorder },
             AgentRewardRecorder: { screen: AgentRewardRecorder },
             AgentWithdrawalRecorder: { screen: AgentWithdrawalRecorder },

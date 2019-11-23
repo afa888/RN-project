@@ -218,9 +218,13 @@ export default class InnerMessager extends Component<Props> {
         return (
             <View>
                 {this.renderSeparator()}
-                <View style={styles.listTail}>
-                    <Text style={styles.listTailText}> 没有更多数据了 </Text>
-                </View>
+                {
+                    this.state.data.length > 0 && (
+                        <View style={styles.listTail}>
+                        <Text style={styles.listTailText}> 没有更多信息了 </Text>
+                    </View>
+                    )
+                }
             </View>
         );
     }
@@ -240,7 +244,7 @@ export default class InnerMessager extends Component<Props> {
                         }} />
                     <Text style={{
                         fontSize: 16
-                    }}>暂无数据</Text>
+                    }}>暂无信息</Text>
                 </View>
 
             </View>
