@@ -86,12 +86,12 @@ export default class AgentManager extends Component<Props> {
 
     // 佣金流水
     onRewardFlow = () => {
-        this.props.navigation.navigate("AgentWithdrawalRecorder");
+        this.props.navigation.navigate("AgentRewardRecorder");
     }
 
     // 提款记录
     onDrawRecord = () => {
-        this.props.navigation.navigate("AgentRewardRecorder");
+        this.props.navigation.navigate("AgentWithdrawalRecorder");
     }
 
     createAgentBtn() {
