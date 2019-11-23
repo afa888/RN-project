@@ -215,6 +215,26 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     }
 
     /**
+     * 右上角的用户设置按钮
+     */
+    renderUserSettingButton() {
+        if (this.state.isLogin) {
+            return (
+                <TouchableOpacity style={styles.userSettingsContaner}
+                    onPress={() => this.checkLoginStateThenDo(() => {
+                        this.props.navigation.navigate('PersonSetting')
+                    })}>
+                    <Image source={require('../../../static/img/person_setting.png')}
+                        style={styles.userSettingsIcon} />
+                </TouchableOpacity>
+            );
+        }
+        else {
+            return <View style={{height:40,width:0.5}} />
+        }
+    }
+
+    /**
      * 用户头像
      */
     createUserAvatar() {
@@ -453,7 +473,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     <TouchableOpacity style={styles.otherSettingsVersionContainer}>
                         <Text style={styles.otherSettingsTitle}>{item}</Text>
                         <Text style={styles.otherSettingsVersionDetail}>
-                            {RN_VERSION.toLowerCase() + "-" + this.state.version}
+                            {/* {RN_VERSION.toLowerCase() + "-" + this.state.version} */}
+                            {RN_VERSION.toLowerCase()}
                         </Text>
                     </TouchableOpacity>
                 );
@@ -475,13 +496,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                         <ImageBackground style={{ flex: 1 }} resizeMode='cover'
                             source={require('../../../static/img/centertop_bg.png')} >
                             {/* 设置按钮 */}
-                            <TouchableOpacity style={styles.userSettingsContaner}
-                                onPress={() => this.checkLoginStateThenDo(() => {
-                                    this.props.navigation.navigate('PersonSetting')
-                                })}>
-                                <Image source={require('../../../static/img/person_setting.png')}
-                                    style={styles.userSettingsIcon} />
-                            </TouchableOpacity>
+                            {this.renderUserSettingButton()}
                             {/* 用户基本信息 */}
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                                 {this.createUserAvatar()/* 头像 */}

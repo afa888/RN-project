@@ -97,17 +97,29 @@ export class MainTheme {
     }
 
     /**
+     * 生成普通页面的更多/筛选按钮
+     * 使用方式：headerRight: MainTheme.renderCommonMore(navigation, ()=>{ // todo... });
+     */
+    static renderCommonMore = (navigation, callback, icon = require('../static/img/more.png')) => {
+        return (
+            <TouchableOpacity style={{ width: 60, height: 28, alignItems: 'center' }} onPress={callback}>
+                <Image source={icon} style={{ resizeMode: 'contain', width: 25, height: 25, marginRight: 12 }} />
+            </TouchableOpacity>
+        );
+    }
+
+    /**
     * 生成底部全屏提交通用按钮
     * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
     */
-    static renderCommonBottomSubmitButton = (onPressF,title='下一步') => {
+    static renderCommonBottomSubmitButton = (onPressF, title = '下一步') => {
         return (
-            <View style={{paddingTop:7,alignItems: 'center',height:60}}>
-                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
-                 <View style=  {{justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width,height:53,backgroundColor:MainTheme.commonButtonBGColor}}>
+            <View style={{ paddingTop: 7, alignItems: 'center', height: 60 }}>
+                <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, height: 53, backgroundColor: MainTheme.commonButtonBGColor }}>
 
-                    <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:20}}>{title}</Text>
-                 </View>
+                        <Text style={{ color: MainTheme.commonButtonTitleColor, fontSize: 20 }}>{title}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -117,14 +129,14 @@ export class MainTheme {
     * 生成默认提交通用按钮
     * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
     */
-    static renderCommonSubmitButton = (onPressF,title='确定',paddingLeft=22.5) => {
+    static renderCommonSubmitButton = (onPressF, title = '确定', paddingLeft = 22.5) => {
         return (
-            <View style={{paddingTop:18,alignItems: 'center',height:60}}>
-                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
-                 <View style=  {{borderRadius:8,justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 2*paddingLeft,height:42,backgroundColor:MainTheme.commonButtonBGColor}}>
+            <View style={{ paddingTop: 18, alignItems: 'center', height: 60 }}>
+                <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
+                    <View style={{ borderRadius: 8, justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width - 2 * paddingLeft, height: 42, backgroundColor: MainTheme.commonButtonBGColor }}>
 
-                    <Text style={{color:MainTheme.commonButtonTitleColor,fontSize:16}}>{title}</Text>
-                 </View>
+                        <Text style={{ color: MainTheme.commonButtonTitleColor, fontSize: 16 }}>{title}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -134,13 +146,13 @@ export class MainTheme {
     * 生成默认通用取消按钮
     * 使用方式：MainTheme.renderCommonBottomSubmitButton(onPress,title),
     */
-    static renderCommonCancelButton = (onPressF,title='取消') => {
+    static renderCommonCancelButton = (onPressF, title = '取消') => {
         return (
-            <View style={{paddingTop:18,alignItems: 'center',height:60}}>
-                <TouchableOpacity  onPress={onPressF}  activeOpacity={0.2} focusedOpacity={0.5}>
-                    <View style=  {{borderRadius:8,borderWidth:1,borderColor:MainTheme.specialTextColor,borderStyle: 'solid',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width - 45,height:40,backgroundColor:MainTheme.backgroundColor}}>
+            <View style={{ paddingTop: 18, alignItems: 'center', height: 60 }}>
+                <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
+                    <View style={{ borderRadius: 8, borderWidth: 1, borderColor: MainTheme.specialTextColor, borderStyle: 'solid', justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width - 45, height: 40, backgroundColor: MainTheme.backgroundColor }}>
 
-                        <Text style={{color:MainTheme.specialTextColor,fontSize:16}}>{title}</Text>
+                        <Text style={{ color: MainTheme.specialTextColor, fontSize: 16 }}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -158,7 +170,7 @@ export class MainTheme {
             fontSize: 18,
             color: MainTheme.DarkGrayColor,
             fontWeight: 'bold',
-            textAlign:'center',
+            textAlign: 'center',
         },
         // 页面的返回按钮的Image样式
         PageBackImage: {

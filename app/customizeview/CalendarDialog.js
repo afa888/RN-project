@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Modal,
     Text,
@@ -7,9 +7,10 @@ import {
     StyleSheet,
     BackAndroid, TouchableOpacity, Image, ScrollView, Alert
 } from 'react-native';
-import {NavigationActions} from "react-navigation";
-import {category_group_divide_line_color, category_tab_checked_bg_color, theme_color} from "../utils/AllColor";
-import {CalendarList,Calendar} from "react-native-calendars";
+import { NavigationActions } from "react-navigation";
+import { category_group_divide_line_color, category_tab_checked_bg_color, theme_color } from "../utils/AllColor";
+import { CalendarList, Calendar } from "react-native-calendars";
+import { MainTheme } from "../utils/AllColor";
 
 let Dimensions = require('Dimensions');
 let SCREEN_WIDTH = Dimensions.get('window').width;//宽
@@ -30,8 +31,8 @@ export default class CalendarDialog extends Component<Props> {
 
     render() {
         // onPress事件直接与父组件传递进来的属性挂接
-        console.log(this.props.currentData+"   当前")
-        console.log(this.props.minDate+"    最小")
+        console.log(this.props.currentData + "   当前")
+        console.log(this.props.minDate + "    最小")
         return (
             <Modal
                 visible={this.props._dialogVisible}
@@ -47,19 +48,25 @@ export default class CalendarDialog extends Component<Props> {
                             </Text>
                             <TouchableOpacity onPress={this.props._dialogCancle}>
                                 <Image source={require('../static/img/login_x.png')}
-                                       style={{
-                                           resizeMode: 'contain',
-                                           width: 15,
-                                           height: 15,
-                                           margin: 12
-                                       }}/>
+                                    style={{
+                                        resizeMode: 'contain',
+                                        width: 15,
+                                        height: 15,
+                                        margin: 12
+                                    }} />
                             </TouchableOpacity>
                         </View>
                         <CalendarList current={this.props.currentData} pastScrollRange={1} futureScrollRange={0}
-                                      minDate={this.props.minDate} maxDate={this.props.currentData}
-                                      onDayPress={(days) => {
-                                          this.props.onDayPress(days)
-                                      }}
+                            minDate={this.props.minDate} maxDate={this.props.currentData}
+                            theme={{
+                                textDisabledColor: MainTheme.GrayColor,
+                                dayTextColor: MainTheme.DarkGrayColor,
+                                textSectionTitleColor: MainTheme.DarkGrayColor,
+                                todayTextColor: MainTheme.SpecialColor,
+                            }}
+                            onDayPress={(days) => {
+                                this.props.onDayPress(days)
+                            }}
                         />
                     </View>
                 </View>

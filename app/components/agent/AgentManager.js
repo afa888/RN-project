@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
@@ -13,54 +13,56 @@ import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} 
 
 export default class AgentManager extends Component<Props> {
 
-    static navigationOptions = {
-        headerTitle: <View
-            style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 代理管理</Text></View>,
-        headerLeft: (
-            <TouchableOpacity onPress={() => {
-                navigation.goBack()
-            }}>
-                <Image source={require('../../static/img/titlebar_back_normal.png')}
-                       style={{
-                           resizeMode: 'contain',
-                           width: 20,
-                           height: 20,
-                           margin: 12
-                       }}/>
-            </TouchableOpacity>
-        ),
-        headerRight: (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginRight: 12
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: <View
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}> 代理管理</Text></View>,
+            headerLeft: (
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack()
                 }}>
-                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                    navigation.navigate('CustomerService')
-                }}>
-                    <View style={{
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: 40,
-                        height: 48,
-                        justifyContent: 'center'
-                    }}>
-                        <Image
-                            source={require('../../static/img/agent/nav_icon_guize.png')}
-                            style={{
-                                resizeMode: 'contain',
-                                width: 18,
-                                height: 18,
-                            }}/>
-                        <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>规则介绍</Text>
-                    </View>
+                    <Image source={require('../../static/img/titlebar_back_normal.png')}
+                        style={{
+                            resizeMode: 'contain',
+                            width: 20,
+                            height: 20,
+                            margin: 12
+                        }} />
                 </TouchableOpacity>
-            </View>
-        ),
+            ),
+            headerRight: (
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: 12
+                    }}>
+                    <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center' }} onPress={() => {
+                        navigation.navigate('CustomerService')
+                    }}>
+                        <View style={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            width: 40,
+                            height: 48,
+                            justifyContent: 'center'
+                        }}>
+                            <Image
+                                source={require('../../static/img/agent/nav_icon_guize.png')}
+                                style={{
+                                    resizeMode: 'contain',
+                                    width: 18,
+                                    height: 18,
+                                }} />
+                            <Text style={{ color: textTitleColor, fontSize: 8, marginTop: 2 }}>规则介绍</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            ),
+        };
     };
 
     constructor(props) {
@@ -72,17 +74,24 @@ export default class AgentManager extends Component<Props> {
     componentWillUnmount() {
     };
 
-    // 充值
-    onRechange = () => {
+    // 邀请记录
+    onInviteRecord = () => {
+        this.props.navigation.navigate("AgentInviteRecorder");
     }
 
-    // 提款
-    onDraw = () => {
+    // 团队管理
+    onTeamManage = () => {
 
     }
 
-    // 转账
-    onTransfer = () => {
+    // 佣金流水
+    onRewardFlow = () => {
+        this.props.navigation.navigate("AgentWithdrawalRecorder");
+    }
+
+    // 提款记录
+    onDrawRecord = () => {
+        this.props.navigation.navigate("AgentRewardRecorder");
     }
 
     createAgentBtn() {
@@ -90,22 +99,22 @@ export default class AgentManager extends Component<Props> {
             {
                 icon: require('../../static/img/agent/administer_icon_yqjl.png'),
                 title: '邀请记录',
-                handler: this.onRechange,
+                handler: this.onInviteRecord,
             },
             {
                 icon: require('../../static/img/agent/administer_icon_tdgl.png'),
                 title: '团队管理',
-                handler: this.onDraw,
+                handler: this.onTeamManage,
             },
             {
                 icon: require('../../static/img/agent/administer_icon_yjls.png'),
                 title: '佣金流水',
-                handler: this.onTransfer,
+                handler: this.onRewardFlow,
             },
             {
                 icon: require('../../static/img/agent/administer_icon_tkjl.png'),
                 title: '提款记录',
-                handler: this.onTransfer,
+                handler: this.onDrawRecord,
             },
         ];
         return (
@@ -113,7 +122,7 @@ export default class AgentManager extends Component<Props> {
                 {
                     shortcutOperations.map(item =>
                         <TouchableOpacity style={styles.shortcutItem} onPress={item.handler}>
-                            <Image source={item.icon} style={styles.iconBtn}/>
+                            <Image source={item.icon} style={styles.iconBtn} />
                             <Text style={styles.shortcutTitle}> {item.title} </Text>
                         </TouchableOpacity>
                     )
@@ -124,7 +133,7 @@ export default class AgentManager extends Component<Props> {
 
     createQr = () => {
         return (
-            <View style={{position: 'relative', top: -30,}}>
+            <View style={{ position: 'relative', top: -30, }}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
@@ -134,6 +143,7 @@ export default class AgentManager extends Component<Props> {
                             bgColor="white"
                             fgColor="black"/>
                     </View>
+
                     <View style={{
                         height: 120, flex: 1, marginLeft: 6
                     }}>
@@ -141,6 +151,7 @@ export default class AgentManager extends Component<Props> {
                             style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
                         <Text style={styles.tgwaText}>推广文案：<Text
                             style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
+
                     </View>
                 </View>
                 <Text style={[styles.cotentTitle, {height: 40}]}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
@@ -250,7 +261,6 @@ export default class AgentManager extends Component<Props> {
 
         return (<SafeAreaView style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您</Text>
@@ -281,8 +291,8 @@ export default class AgentManager extends Component<Props> {
                         {this.createBar()}
                     </View>
 
-                </ScrollView>
-            </SafeAreaView>
+            </ScrollView>
+        </SafeAreaView>
         )
     }
 }
@@ -331,7 +341,9 @@ const styles = StyleSheet.create({
     fontSizeTitle14: {
         fontSize: 14
     },
+
     cotentTitle: {marginLeft: 12, color: MainTheme.TextTitleColor, marginRight: 12},
+
     qrView: {
         flexDirection: 'row',
         marginRight: 15,
