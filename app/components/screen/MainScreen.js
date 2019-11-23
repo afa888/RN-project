@@ -43,6 +43,7 @@ import AgentManager from "../../components/agent/AgentManager";
 import AgentInviteRecorder from "../../components/agent/AgentInviteRecorder";
 import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
 import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
+import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScreen"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -226,6 +227,7 @@ export default class MainScreen extends Component<Props> {
             AgentInviteRecorder: { screen: AgentInviteRecorder },
             AgentRewardRecorder: { screen: AgentRewardRecorder },
             AgentWithdrawalRecorder: { screen: AgentWithdrawalRecorder },
+            TeamManagerScreen : {screen : TeamManagerScreen},
         },
         {
             initialRouteName: this.state.initRoute,
