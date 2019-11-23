@@ -82,7 +82,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                     </View>
                     <Text style={{marginTop: -8, marginLeft: 15, fontSize: 14, color: textTitleColor}}
                           numberOfLines={1}>{item.name}</Text>
-                    <Text style={{marginTop: 1, marginLeft: 15, fontSize: 12, color: textThreeHightTitleColor}}
+                    <Text style={{marginTop: 3, marginLeft: 15, fontSize: 12, color: textThreeHightTitleColor}}
                           numberOfLines={1}>{item.remark}</Text>
                 </View>
             </TouchableOpacity>

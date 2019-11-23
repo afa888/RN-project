@@ -4,12 +4,12 @@ import {
     TouchableOpacity, ScrollView, SafeAreaView,
     DeviceEventEmitter, Alert
 } from "react-native";
-import {MainTheme, textTitleColor} from "../../utils/AllColor";
+import {MainTheme, textTitleColor, CircleGoldColor, theme_color, BarBlueColor} from "../../utils/AllColor";
 import {getStoreData} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
-
+import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} from 'react-native-tcharts'
 
 export default class AgentManager extends Component<Props> {
 
@@ -147,7 +147,107 @@ export default class AgentManager extends Component<Props> {
             </View>)
     }
 
+    createPie = () => {
+        let option = {
+            title: {},
+            legend: {},
+            color: [MainTheme.specialTextColor, CircleGoldColor], //饼图颜色
+            series: [{
+                name: '',
+                type: 'pie',
+                radius: [40, 80], //饼图半径暂支持数字
+                data: [10, 20], //饼图占用数据
+            }]
+        }
+        return (<View>
+
+            <View style={{
+                backgroundColor: 'white',
+                height: 40,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingLeft: 15,
+                paddingRight: 15
+            }}>
+                <Text style={{marginLeft: 5, color: textTitleColor}}>团队组成</Text>
+
+                <TouchableOpacity onPress={() => {
+                    // this.props.goMoreGame('navigate')
+                }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={{color: MainTheme.DarkGrayColor, fontSize: 10}}>详情</Text>
+                        <Image source={require('../../static/img/arrow_more.png')}
+                               style={{
+                                   resizeMode: 'contain',
+                                   width: 12,
+                                   height: 12,
+                                   marginLeft: 6
+                               }}/>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <Pie
+                option={option}
+                height={160}
+                width={200}
+            />
+        </View>)
+    }
+
+    createBar = () => {
+        const option = {
+            title: {
+                text: 'ECharts demo'
+            },
+            tooltip: {},
+            legend: {
+                data:['销量']
+            },
+            xAxis: {
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36, 10, 10, 20]
+            }]
+        };;
+        return (<View>
+
+            <View style={{
+                backgroundColor: 'white',
+                height: 40,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingLeft: 15,
+                paddingRight: 15
+            }}>
+                <Text style={{marginLeft: 5, color: textTitleColor}}>团队组成</Text>
+
+                <TouchableOpacity onPress={() => {
+                    // this.props.goMoreGame('navigate')
+                }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={{color: MainTheme.DarkGrayColor, fontSize: 10}}>详情</Text>
+                        <Image source={require('../../static/img/arrow_more.png')}
+                               style={{
+                                   resizeMode: 'contain',
+                                   width: 12,
+                                   height: 12,
+                                   marginLeft: 6
+                               }}/>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+        </View>)
+    }
+
     render() {
+
         return (<SafeAreaView style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
 
@@ -172,7 +272,14 @@ export default class AgentManager extends Component<Props> {
                     </ImageBackground>
                     {this.createAgentBtn()}
                     {this.createQr()}
-                    <View style={{width: DeviceValue.windowWidth, height: 1000, backgroundColor: 'black'}}/>
+                    <View style={{
+                        width: DeviceValue.windowWidth,
+                        height: 1000,
+                        backgroundColor: MainTheme.BackgroundColor
+                    }}>
+                        {this.createPie()}
+                        {this.createBar()}
+                    </View>
 
                 </ScrollView>
             </SafeAreaView>
