@@ -38,6 +38,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             agencyReward: 0,    // 无限代理的佣金
             autoTransfer: true,  // 是否自动转账
             isLogin: false,
+            agencyStatus:2  //未加入 1停用，0.加入
         };
 
         // 监听组件的四个状态回调：willFocus、didFocus、willBlur、didBlur
@@ -57,7 +58,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     refreshUserInfo() {
         http.post('User/getUserInfo', null).then(res => {
             if (res.status === 10000) {
-                const { username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time } = res.data;
+                const { username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time ,agencyStatus} = res.data;
                 this.setState({
                     userName: username.slice(CAGENT.length),
                     phoneVerify: mobileStatus == 0 ? false : true,
@@ -69,6 +70,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     agencyLevel: '会员',    // mock data
                     agencyReward: 0,        // mock data
                     version: 0,             // 版本
+                    agencyStatus:agencyStatus
                 })
             }
         })
@@ -94,7 +96,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         this._navListener.remove();//删除订阅
     };
 
-    // 
+    //
     checkLoginStateThenDo = (func) => {
         if (UserSession.isLogin) {
             func();
@@ -148,7 +150,14 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     // 无限代理
     onCheckAgencyDetail = () => {
         this.checkLoginStateThenDo(() => {
-            this.props.navigation.navigate('AgentManager');
+            if(this.state.agencyStatus===0){//已加入
+                this.props.navigation.navigate('AgentManager');
+            }else if(this.state.agencyStatus===1){//停用
+
+            }else if(this.state.agencyStatus===2){//未加入
+                this.props.navigation.navigate('AgenJoinBefore');
+
+            }
         });
         //  TXToastManager.show('暂未实现，敬请期待');
     }
