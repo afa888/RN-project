@@ -201,9 +201,12 @@ export default class ModalScratch extends Component<Props> {
         let time = this.state.time;
         let countDownTitle = time == 60 ? '获取短信验证码' : time + '秒后重新获取';
 
+        let bgImage;
         if (this.state.scrachStatus == '0') {
             buttonView =null;
+            bgImage = require('../static/img/ggl_01.png');
         }else if(this.state.scrachStatus == '1') {
+            bgImage = require('../static/img/ggl_02.png');
                buttonView = <TouchableOpacity onPress={() => {
                                         // 根据注册类型 是否需要验证手机号
                                         this.changeScratchStatus();
@@ -225,7 +228,7 @@ export default class ModalScratch extends Component<Props> {
                                         
                                 </TouchableOpacity>
         }else {
-
+            bgImage = require('../static/img/ggl_03.png');
             buttonView = <TouchableOpacity onPress={() => {
                         this.onCommitPhone();
                     }}>
@@ -256,7 +259,7 @@ export default class ModalScratch extends Component<Props> {
             >
                 <View style={styles.bg}>
                     <ImageBackground style={styles.dialog}
-                                     source={require('../static/img/ggl_01.png')}
+                                     source={bgImage}
                                      resizeMode='contain'>
                         <TouchableOpacity onPress={() => {
                                 this.hideScrach()
@@ -273,10 +276,11 @@ export default class ModalScratch extends Component<Props> {
                                 
                         </TouchableOpacity>
                         <View style={styles.dialogTitleView}>
-                            <Text style={{color:'#F5D453',fontSize:14}}>{title}</Text>
+                            <Text style={{color:'#F5D453',fontSize:14}}></Text>
 
                         </View>
                         <View style={styles.scratchView}>
+                            
                             <Image source={require('../static/img/ggl_lq.png')}
                                        style={styles.scratchViewPic}/>
                             {this.state.scrachStatus == '2' ? 
@@ -329,7 +333,7 @@ export default class ModalScratch extends Component<Props> {
                                         <Text style={{color:'#EFD55A',fontSize:15,fontWeight:'bold'}}>恭喜您获得彩金</Text>
                                         <View style={{flexDirection:'row',marginTop:10,alignItems:'center'}}>
                                             <Text style={{color:'#EFD55A',fontSize:15}}>￥</Text>
-                                            <Text style={{color:'#EFD55A',fontSize:30,fontWeight:'bold'}}>19.9</Text>
+                                            <Text style={{color:'#EFD55A',fontSize:30,fontWeight:'bold'}}>{this.props.scratchData.usermoney}</Text>
                                         </View>
                                         
                                 </View>
@@ -395,6 +399,11 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         width:180 * SCREEN_WIDTH / 375,
         height:101 * SCREEN_WIDTH / 375,
+    },
+    scratchViewRedBG:{
+        backgroundColor:'#a00000',
+        width:180 * SCREEN_WIDTH / 375+10,
+        height:101 * SCREEN_WIDTH / 375+10,
     },
     dialogTitle: {
         textAlign: 'center',
