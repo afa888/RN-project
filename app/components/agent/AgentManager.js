@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
@@ -9,26 +9,27 @@ import {getStoreData} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
-import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} from 'react-native-tcharts'
+import {Pie} from 'react-native-tcharts'
+import http from "../../http/httpFetch";
 
 export default class AgentManager extends Component<Props> {
 
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = ({navigation}) => {
         return {
             headerTitle: <View
-                style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}> 代理管理</Text></View>,
+                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 代理管理</Text></View>,
             headerLeft: (
                 <TouchableOpacity onPress={() => {
                     navigation.goBack()
                 }}>
                     <Image source={require('../../static/img/titlebar_back_normal.png')}
-                        style={{
-                            resizeMode: 'contain',
-                            width: 20,
-                            height: 20,
-                            margin: 12
-                        }} />
+                           style={{
+                               resizeMode: 'contain',
+                               width: 20,
+                               height: 20,
+                               margin: 12
+                           }}/>
                 </TouchableOpacity>
             ),
             headerRight: (
@@ -40,8 +41,8 @@ export default class AgentManager extends Component<Props> {
                         alignItems: 'center',
                         marginRight: 12
                     }}>
-                    <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center' }} onPress={() => {
-                        navigation.navigate('CustomerService')
+                    <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+                        navigation.navigate('AgenJoinBefore')
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -56,8 +57,8 @@ export default class AgentManager extends Component<Props> {
                                     resizeMode: 'contain',
                                     width: 18,
                                     height: 18,
-                                }} />
-                            <Text style={{ color: textTitleColor, fontSize: 8, marginTop: 2 }}>规则介绍</Text>
+                                }}/>
+                            <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>规则介绍</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -67,12 +68,45 @@ export default class AgentManager extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {agentData: {},inviteData:{}};
     }
 
 
-    componentWillUnmount() {
-    };
+    componentWillMount(): void {
+        this.getSelfAgentData();
+        this.getInviteMethod();
+    }
+
+    //http://192.168.107.144:400/JJF/agency/getSelfAgentData
+    getSelfAgentData = () => {
+        http.post('agency/getSelfAgentData', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if (res.data !== {} || res.data !== null) {
+                    this.setState({agentData: res.data})
+                }
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
+
+ getInviteMethod = () => {
+        http.post('agency/getInviteMethod', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if (res.data !== {} || res.data !== null) {
+                    this.setState({inviteData: res.data})
+                }
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
 
     // 邀请记录
     onInviteRecord = () => {
@@ -122,7 +156,7 @@ export default class AgentManager extends Component<Props> {
                 {
                     shortcutOperations.map(item =>
                         <TouchableOpacity style={styles.shortcutItem} onPress={item.handler}>
-                            <Image source={item.icon} style={styles.iconBtn} />
+                            <Image source={item.icon} style={styles.iconBtn}/>
                             <Text style={styles.shortcutTitle}> {item.title} </Text>
                         </TouchableOpacity>
                     )
@@ -132,13 +166,14 @@ export default class AgentManager extends Component<Props> {
     }
 
     createQr = () => {
+        let {inviteLink,agencyShare} = this.state.inviteData
         return (
-            <View style={{ position: 'relative', top: -30, }}>
+            <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
                         <QRCode
-                            value={'https://www.twblogs.net/a/5b88ad4d2b71775d1cddbe19/zh-cn'}
+                            value={inviteLink}
                             size={115}
                             bgColor="white"
                             fgColor="black"/>
@@ -147,14 +182,14 @@ export default class AgentManager extends Component<Props> {
                     <View style={{
                         height: 120, flex: 1, marginLeft: 6
                     }}>
-                        <Text style={styles.tgText}>推广链接：<Text
-                            style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
+                        <Text style={styles.tgText}>推广链接：<Text numberOfLines={1}
+                            style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
                         <Text style={styles.tgwaText}>推广文案：<Text
-                            style={{color: MainTheme.DarkGrayColor}}>dfsfsdfsdfdsfsdsdfs</Text></Text>
+                            style={{color: MainTheme.DarkGrayColor}}>{agencyShare}</Text></Text>
 
                     </View>
                 </View>
-                <Text style={[styles.cotentTitle, {height: 40}]}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
+                <Text style={[styles.cotentTitle, {height: 40, size: 8}]}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
             </View>)
     }
 
@@ -198,11 +233,11 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Pie
+            {/*    <Pie
                 option={option}
                 height={160}
                 width={200}
-            />
+            />*/}
         </View>)
     }
 
@@ -213,10 +248,10 @@ export default class AgentManager extends Component<Props> {
             },
             tooltip: {},
             legend: {
-                data:['销量']
+                data: ['销量']
             },
             xAxis: {
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
             },
             yAxis: {},
             series: [{
@@ -224,7 +259,8 @@ export default class AgentManager extends Component<Props> {
                 type: 'bar',
                 data: [5, 20, 36, 10, 10, 20]
             }]
-        };;
+        };
+        ;
         return (<View>
 
             <View style={{
@@ -258,26 +294,26 @@ export default class AgentManager extends Component<Props> {
     }
 
     render() {
-
+        let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
         return (<SafeAreaView style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
-                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您</Text>
+                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}><Text
-                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥234344</Text><TouchableOpacity
+                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥{outstandingCommissions}</Text><TouchableOpacity
                             style={[styles.agentTitle, styles.takeMonyView]}><Text
                             style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text></TouchableOpacity></View>
                         <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
                         <View style={styles.titleView}>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>白金代理</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>白金代理</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>白金代理</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
                         </View>
                         <View style={styles.titleView}>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>白金代理</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>白金代理</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>白金代理</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
                         </View>
                     </ImageBackground>
                     {this.createAgentBtn()}
@@ -291,8 +327,8 @@ export default class AgentManager extends Component<Props> {
                         {this.createBar()}
                     </View>
 
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
         )
     }
 }
@@ -318,11 +354,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     iconBtn: {
-        width: 40,
-        height: 40
+        width: 32,
+        height: 32
     },
     shortcutTitle: {
-        fontSize: 14,
+        fontSize: 10,
         color: MainTheme.DarkGrayColor,
     },
     agentTitle: {
@@ -333,13 +369,18 @@ const styles = StyleSheet.create({
         height: 25,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        alignItems:'center',
         marginTop: 3
     },
     fontSizeTitle18: {
-        fontSize: 18
+        flex:1,
+        fontSize: 18,
+        textAlign:'center',
     },
     fontSizeTitle14: {
-        fontSize: 14
+        flex:1,
+        fontSize: 14,
+        textAlign:'center',
     },
 
     cotentTitle: {marginLeft: 12, color: MainTheme.TextTitleColor, marginRight: 12},
@@ -359,7 +400,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         justifyContent: 'center',
         padding: 2,
-        color: MainTheme.theme_color
+        color: MainTheme.theme_color,
+
     },
     tgwaText: {
         height: 86,
@@ -388,7 +430,7 @@ const styles = StyleSheet.create({
         width: DeviceValue.windowWidth,
         marginLeft: 15,
         marginTop: 10,
-        fontSize: 8
+        fontSize: 10
     },
     takeMonyView: {
         borderColor: 'white',

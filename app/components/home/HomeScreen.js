@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Dimensions from 'Dimensions'
 import http from "../../http/httpFetch";
+import httpBaseManager from '../../http/httpBaseManager'
 import { NativeModules } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
@@ -148,6 +149,9 @@ export default class HomeScreen extends Component<Props> {
                 this.props.navigation.setParams({ badgeValue: val });
             });
 
+        // 获取用户基本信息
+        httpBaseManager.baseRequest();
+
         // 游戏列表：获得一二级游戏
         this.httpCategoryRefresh();
 
@@ -157,7 +161,7 @@ export default class HomeScreen extends Component<Props> {
         // // 红包状态查询
         // this.httpRedBag();
         // 刮刮乐 与 红包;
-       //this.httpScratch()
+      // this.httpScratch()
 
         // 获取未读的站内信数量
         checkLoginState().then((isLogin) => {
