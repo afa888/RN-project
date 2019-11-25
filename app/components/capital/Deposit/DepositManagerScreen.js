@@ -58,7 +58,8 @@ export default class DepositManagerScreen extends Component<Props> {
             <View style={{width:70,flexDirection:'row',alignItems:'center'}}>
                 <TouchableOpacity onPress={() => {
                     Picker.hide()
-                    navigation.navigate('FundRecord')
+                    // navigation.navigate('FundRecord')
+                    navigation.navigate('TeamManagerScreen');
                 }}>
                     <View style={{alignItems:'center',width:30}}>
                         <Image source={require('../../../static/img/nav_icon_jilu_nor.png')}

@@ -12,6 +12,7 @@ import Picker from 'react-native-picker';
 import {specialTextColor} from "../../../utils/AllColor"
 import MainTheme from "../../../utils/AllColor"
 import {ThemeEditTextTextColor} from "../../../utils/AllColor"
+import {money_validate} from "../../../utils/Validate";
 
 export default class PlatformTransfer extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
@@ -284,6 +285,8 @@ export default class PlatformTransfer extends Component<Props> {
             Alert.alert('请选择转入平台');
         }else if(this.state.money.length == 0){
             Alert.alert('请输入转入金额');
+        }else if(!money_validate(this.state.money)){
+            TXToastManager.show('品台转账金额只能为数字');
         }
         else if (parseInt(this.state.money)<1 || parseInt(this.state.money) > 100000) {
             Alert.alert('输入金额范围1~100000元');
