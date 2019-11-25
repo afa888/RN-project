@@ -30,9 +30,8 @@ export default class CalendarDialog extends Component<Props> {
     }
 
     render() {
+        const { pastScrollRange, currentData, maxDate, minDate } = this.props;
         // onPress事件直接与父组件传递进来的属性挂接
-        console.log(this.props.currentData + "   当前")
-        console.log(this.props.minDate + "    最小")
         return (
             <Modal
                 visible={this.props._dialogVisible}
@@ -56,8 +55,11 @@ export default class CalendarDialog extends Component<Props> {
                                     }} />
                             </TouchableOpacity>
                         </View>
-                        <CalendarList current={this.props.currentData} pastScrollRange={1} futureScrollRange={0}
-                            minDate={this.props.minDate} maxDate={this.props.currentData}
+                        <CalendarList current={currentData}
+                            pastScrollRange={pastScrollRange || 1}
+                            futureScrollRange={0}
+                            minDate={minDate}
+                            maxDate={maxDate || currentData}
                             theme={{
                                 textDisabledColor: MainTheme.GrayColor,
                                 dayTextColor: MainTheme.DarkGrayColor,
