@@ -21,6 +21,7 @@ import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} 
 import {MarqueeHorizontal} from "react-native-marquee-ab";
 import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
+import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 
 export default class AgenJoinBefore extends Component<Props> {
 
@@ -41,6 +42,19 @@ export default class AgenJoinBefore extends Component<Props> {
     componentWillMount(): void {
         this.postNotice()
         this.getAgentData()
+
+    }
+
+    jionAgent = () => {
+        http.post('agency/joinAgencyUser', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                this.props.navigation.goBack();
+                this.props.navigation.navigate('AgentManager');
+            }
+        }).catch(err => {
+            console.error(err)
+        });
 
     }
 
@@ -130,9 +144,11 @@ export default class AgenJoinBefore extends Component<Props> {
                         </View>
                     </ImageBackground>
 
-                    <ImageBackground source={require('../../static/img/agent/wxdlbg.webp')}
+                    <ImageBackground source={require('../../static/img/agent/wxdlbg.png')}
                                      resizeMode='cover' style={styles.bgImg}>
-                        <TouchableOpacity onPress={this.componentWillUnmount()}>
+                        <TouchableOpacity onPress={() => {
+                            this.jionAgent()
+                        }}>
                             <View style={{
                                 width: 180,
                                 height: 30,
@@ -192,6 +208,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor:'blue'
     },
-    agentTextView16: {color: AgentRedColor, fontSize: 16, fontWeight: 'bold',marginRight: 2},
+    agentTextView16: {color: AgentRedColor, fontSize: 16, fontWeight: 'bold', marginRight: 2},
     agentTextView10: {color: AgentRedColor, fontSize: 10, fontWeight: 'bold',}
 });
