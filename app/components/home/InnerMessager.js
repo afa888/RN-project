@@ -217,7 +217,7 @@ export default class InnerMessager extends Component<Props> {
     renderFooter = () => {
         return (
             <View>
-                {this.renderSeparator()}
+                { this.state.data.length > 0 && this.renderSeparator() }
                 {
                     this.state.data.length > 0 && (
                         <View style={styles.listTail}>
