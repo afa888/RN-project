@@ -9,7 +9,7 @@ import {getStoreData} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
-import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} from 'react-native-tcharts'
+import {Pie} from 'react-native-tcharts'
 
 export default class AgentManager extends Component<Props> {
 
@@ -198,11 +198,11 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Pie
+        {/*    <Pie
                 option={option}
                 height={160}
                 width={200}
-            />
+            />*/}
         </View>)
     }
 
