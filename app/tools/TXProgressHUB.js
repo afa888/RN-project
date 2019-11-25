@@ -16,7 +16,7 @@ export default class TXProgressHUB {
     static show(text, duration=3000) {
         // RNProgressHUB.showSimpleText(text,duration)
         if (Platform.OS == 'ios') {
-            RNProgressHUB.showSimpleText(text,duration);
+            ProgressHUD.showText(text,duration);
         }else {
             // MyToast.showText(text);
             RNProgressHUB.showSimpleText(text,duration);
@@ -25,7 +25,7 @@ export default class TXProgressHUB {
 
     static showSpinIndeterminate(text) {
         if (Platform.OS == 'ios') {
-            RNProgressHUB.showSpinIndeterminate(text);
+            ProgressHUD.showSpinIndeterminate();
         }else {
             RNProgressHUB.showSpinIndeterminate();
         }
@@ -39,7 +39,7 @@ export default class TXProgressHUB {
      */
     static close(duration) {
         if (Platform.OS == 'ios') {
-            RNProgressHUB.dismiss();
+            ProgressHUD.dismiss();
         }else {
             RNProgressHUB.dismiss();
         }
@@ -47,7 +47,7 @@ export default class TXProgressHUB {
 
     static dismiss () {
         if (Platform.OS == 'ios') {
-            RNProgressHUB.dismiss();
+            ProgressHUD.dismiss();
         }else {
             RNProgressHUB.dismiss();
         }
