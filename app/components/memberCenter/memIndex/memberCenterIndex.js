@@ -155,7 +155,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             }else if(this.state.agencyStatus===1){//停用
 
             }else if(this.state.agencyStatus===2){//未加入
-                this.props.navigation.navigate('AgenJoinBefore');
+                this.props.navigation.navigate('AgenJoinBefore',{isJoin: true});
 
             }
         });

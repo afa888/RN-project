@@ -23,11 +23,35 @@ import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 
+let isJoin = false
 export default class AgenJoinBefore extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
+        const {params} = navigation.state;
+        if (params !== undefined && params.isJoin !== undefined) {
+            isJoin = params.isJoin;
+        }
         return {
-            header: null
+            headerTitle: <View
+                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                <Text style={{
+                    fontSize: 18,
+                    color: 'black',
+                    fontWeight: 'bold'
+                }}>{isJoin ? '代理管理' : '代理规则'} </Text></View>,
+            headerLeft: (
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack()
+                }}>
+                    <Image source={require('../../static/img/titlebar_back_normal.png')}
+                           style={{
+                               resizeMode: 'contain',
+                               width: 20,
+                               height: 20,
+                               margin: 12
+                           }}/>
+                </TouchableOpacity>
+            ),
         };
     };
 
@@ -36,10 +60,14 @@ export default class AgenJoinBefore extends Component<Props> {
         this.state = {
             noticeData: []
             , agentData: {},
+            isJoin: false
         };
     }
 
     componentWillMount(): void {
+        /* let {navigation} = this.props;
+         let isJoin = navigation.getParam('isJoin', '');*/
+        this.setState({isJoin: isJoin})
         this.postNotice()
         this.getAgentData()
 
@@ -146,7 +174,7 @@ export default class AgenJoinBefore extends Component<Props> {
 
                     <ImageBackground source={require('../../static/img/agent/wxdlbg.png')}
                                      resizeMode='cover' style={styles.bgImg}>
-                        <TouchableOpacity onPress={() => {
+                        {this.state.isJoin && <TouchableOpacity onPress={() => {
                             this.jionAgent()
                         }}>
                             <View style={{
@@ -160,7 +188,7 @@ export default class AgenJoinBefore extends Component<Props> {
 
                                 <Text style={{color: MainTheme.commonButtonTitleColor}}>立即加入</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
 
                     </ImageBackground>
 
