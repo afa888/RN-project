@@ -9,7 +9,7 @@ import deviceValue from "../../utils/DeviceValue";
 import http from "../../http/httpFetch";
 import MainTheme from '../../utils/AllColor';
 import TXTools from '../../utils/Htools';
-import TXToastManager from '../../tools/TXToastManager'
+import TXToastManager from '../../tools/TXToastManager';
 
 const PAGE_SIZE = 50;
 

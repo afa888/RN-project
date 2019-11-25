@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import {
     View, FlatList, Text, Image,
     TouchableOpacity, SafeAreaView,
-    StyleSheet, RefreshControl,
+    StyleSheet, RefreshControl, Modal,
 } from "react-native";
 
 import deviceValue from "../../utils/DeviceValue";
-import { WEBNUM } from "../../utils/Config";
 import http from "../../http/httpFetch";
 import MainTheme from '../../utils/AllColor';
 import TXTools from '../../utils/Htools';
-import TXToastManager from '../../tools/TXToastManager'
+import TXToastManager from '../../tools/TXToastManager';
+import TXProgressHUB from '../../tools/TXProgressHUB';
+import CalendarDialog from "../../customizeview/CalendarDialog";
 
 const PAGE_SIZE = 50;
+
+// 排序方式: 1-提取时间升序 2-提取时间降序 3-提佣金额升序 4-提佣金额降序
+const ORDER_TYPES = [
+    { title: '提取时间升序', key: 'DATE_ASC', value: '1' },
+    { title: '提取时间降序 ', key: 'DATE_DESC', value: '2' },
+    { title: '提佣金额升序', key: 'REWARD_ASC', value: '3' },
+    { title: '提佣金额降序', key: 'REWARD_DESC', value: '4' },
+];
 export default class AgentRewardRecorder extends Component<Props> {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -25,7 +34,7 @@ export default class AgentRewardRecorder extends Component<Props> {
             headerRight: (
                 MainTheme.renderCommonMore(navigation, () => {
                     if (navigation.state.params) {
-                        navigation.state.params.choseType();
+                        navigation.state.params.onRightItemPressed();
                     }
                 })
             )
@@ -35,50 +44,38 @@ export default class AgentRewardRecorder extends Component<Props> {
     // 当前页码
     currentPageNo = 0;
 
+    // 是否是开始日期
+    isStartTag = false;
+
     /**
-     * 页面的状态定义
+     * 页面的状态
      */
     state = {
         isRefreshing: false,
         isLoadingMore: false,
         isNoMoreData: false,
+        isModalVisible: false,      // 过滤的弹框是否显示
+        isCalendarVisible: false,   // 日期选择弹框是否显示 
+        curSelectTypeIndex: 0,      // 当前的选择的排序类型的索引（ORDER_TYPES）
+        maxDate: '',                // 日历控件的最大可选日期
+        minDate: '',                // 日历控件的最小可选日期
 
-        startTime: '',  // 开始时间(年月日)
-        endTime: '',    // 结束时间(年月日)
-        sortType: '1',  // 排序方式: 1-提取时间升序 2-提取时间降序 3-提佣金额升序 4-提佣金额降序
-        timeIdentify: '',   // 时间标识 today-今天 week-本周 month-本月
+        // 参数请求
+        startTime: '',              // 开始时间(年月日)
+        endTime: '',                // 结束时间(年月日)
+        timeIdentify: '',           // 时间标识 today-今天 week-本周 month-本月
 
         outstandingCommissions: 0,  // 当前未结算佣金
-        extractedTimes: 0,  // 已经提取佣金次数
+        extractedTimes: 0,          // 已经提取佣金次数
         allExtractedCommissions: 0, // 累计提取佣金
-        data: [],
-        /*
-        data: [
-            {
-                date: '2019-09-28',
-                directCommissions: 15321.00,
-                teamCommissions: 2521.00,
-                outstandingCommissions: 14433.05
-            },
-            {
-                date: '2019-09-29',
-                directCommissions: 101.00,
-                teamCommissions: 211.00,
-                outstandingCommissions: -312.00
-            },
-            {
-                date: '2019-09-30',
-                directCommissions: 789.00,
-                teamCommissions: 1888.00,
-                outstandingCommissions: 3234.05
-            }
-        ],
-        */
-    }
+
+        data: [],                   // 返回的数据
+    };
 
     constructor(props) {
         super(props);
-        this.props.navigation.setParams({ choseType: this.choseType });
+
+        this.props.navigation.setParams({ onRightItemPressed: this.showModal });
     }
 
     componentDidMount() {
@@ -93,9 +90,9 @@ export default class AgentRewardRecorder extends Component<Props> {
      * 刷新数据
      */
     refreshData = () => {
-        const { isLoadingMore, isRefresh, isNoMoreData } = this.state;
+        const { isLoadingMore, isRefreshing } = this.state;
 
-        if (isLoadingMore || isRefresh || isNoMoreData) {
+        if (isLoadingMore || isRefreshing) {
             console.log("正在数据请求或没有更多数据！");
         }
         else {
@@ -127,23 +124,28 @@ export default class AgentRewardRecorder extends Component<Props> {
      *  执行数据请求
      */
     doLoadData = (isRefresh = false) => {
+        const { startTime, endTime, curSelectTypeIndex, timeIdentify } = this.state;
+
+        let sortType = ORDER_TYPES[curSelectTypeIndex].value;
         let params = {
             pageNo: isRefresh ? 1 : this.currentPageNo + 1,
             pageSize: PAGE_SIZE,
             // uid:'',
             //agencyUid:'',
-            startTime: this.state.startTime,
-            endTime: this.state.endTime,
-            sortBy: this.state.sortType,
-            timeIdentify: this.state.timeIdentify,
+            startTime: startTime,
+            endTime: endTime,
+            sortBy: sortType,
+            timeIdentify: timeIdentify,
         };
-        http.post('agency/commissionPage', params, isRefresh).then(res => {
+
+        http.post('agency/commissionPage', params).then(res => {
+            global.closeSpinner();
             if (res.status == 10000) {
                 this.setState({
                     allExtractedCommissions: res.data.allExtractedCommissions,
                     outstandingCommissions: res.data.outstandingCommissions,
                     extractedTimes: res.data.extractedTimes,
-                    isNoMoreData: res.data.list.count < PAGE_SIZE,
+                    isNoMoreData: res.data.list.length < PAGE_SIZE,
                 });
 
                 if (isRefresh) {
@@ -180,8 +182,62 @@ export default class AgentRewardRecorder extends Component<Props> {
         });
     };
 
-    choseType = () => {
-        console.log('---------------------> choseType');
+    showModal = () => {
+        this.setState({ isModalVisible: true });
+    }
+
+    hideModal = () => {
+        this.setState({ isModalVisible: false });
+    }
+
+    showCalendar = (isStart = true) => {
+        isStartTag = isStart;
+        const { startTime, endTime } = this.state;
+        let today = TXTools.formatDateToCommonString(new Date());
+
+        if (isStartTag) {
+            this.setState({
+                isCalendarVisible: true,
+                maxDate: today,
+                minDate: '',
+            });
+        }
+        else {
+            this.setState({
+                isCalendarVisible: true,
+                maxDate: today,
+                minDate: startTime,
+            });
+        }
+    }
+
+    hideCalendar = () => {
+        this.setState({ isCalendarVisible: false });
+    }
+
+    cancelFilter = () => {
+        this.setState({
+            isModalVisible: false,
+            curSelectTypeIndex: 0,
+            startTime: '',
+            endTime: '',
+        }, this.refreshData);
+    }
+
+    submitFilter = () => {
+        const { startTime, endTime } = this.state;
+        if (startTime.length > 0 || endTime.length > 0) {
+            if (startTime.length == 0) {
+                TXProgressHUB.show('请选择开始日期');
+                return;
+            }
+            else if (endTime.length == 0) {
+                TXProgressHUB.show('请选择结束日期');
+                return;
+            }
+        }
+        this.setState({ isModalVisible: false });
+        this.refreshData();
     }
 
     /***************************************   render方法族   ***************************************/
@@ -267,21 +323,29 @@ export default class AgentRewardRecorder extends Component<Props> {
      * 列表尾
      */
     renderFooter() {
-        if (this.state.data.length > 15 && this.state.isLoadingMore == 'LoreMoreing') {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'正在加载....'}</Text>
-                </View>
-            )
-        } else if (this.state.isLoadingMore == 'LoreMoreEmpty' && this.state.data.length >= 10) {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'没有更多了'}</Text>
-                </View>
-            )
-        } else {
-            return null
+        const { data, isLoadingMore, isRefreshing, isNoMoreData } = this.state;
+
+        let tailText = '';
+        if (isLoadingMore || isRefreshing) {
+            tailText = '正在加载....';
         }
+        else if (data.length > 0) {
+            tailText = isNoMoreData ? '没有更多数据了' : '上拉加载更多';
+        }
+
+        return (
+            <View>
+                {data.length > 0 && this.renderSeparator()}
+                {
+                    tailText != '' && (
+                        <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ marginTop: 10, color: MainTheme.GrayColor, fontSize: 12 }}>
+                                {tailText}
+                            </Text>
+                        </View>
+                    )}
+            </View>
+        )
     }
 
     /***
@@ -348,14 +412,142 @@ export default class AgentRewardRecorder extends Component<Props> {
         );
     }
 
+    /**
+     * 过滤器弹框
+     */
+    renderFilterModal() {
+        return (
+            <Modal visible={this.state.isModalVisible}
+                transparent={true}
+                animated={true}
+                animationType={'fade'}
+                onRequestClose={this.hideModal}
+            >
+                <SafeAreaView style={{ flex: 1, flexDirection: 'row', }}>
+
+                    <View style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+
+                    <View style={styles.modalRightContainer}>
+
+                        <Text style={styles.modalRightTitle}>筛选排序</Text>
+
+                        <Text style={{ ...styles.modalRightSubtitle, marginTop: 40 }}>计佣日期</Text>
+                        {this.renderFilterModalDatePeriod()}
+
+                        <Text style={{ ...styles.modalRightSubtitle, marginTop: 30 }}>排序方式</Text>
+                        {this.renderFilterModalOrderType()}
+
+                        <View style={{ flex: 1 }} />
+
+                        <View style={styles.modalFilterButtonContainer}>
+                            <TouchableOpacity onPress={this.cancelFilter} style={styles.modalFilterCancelButton} >
+                                <Text style={{ fontSize: 16, color: MainTheme.SpecialColor, }}>重置并取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.submitFilter} style={styles.modalFilterSubmitButton}>
+                                <Text style={{ fontSize: 16, color: MainTheme.SubmitTextColor, }}>筛选</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    {this.renderFilterModalDatePicker()}
+
+                </SafeAreaView>
+            </Modal>
+        );
+    }
+
+    /**
+     * 弹框的日期周期
+     */
+    renderFilterModalDatePeriod() {
+        const { startTime, endTime } = this.state;
+        return (
+            <View style={styles.modalTimePeriodContainer}>
+                <TouchableOpacity onPress={() => this.showCalendar(true)}>
+                    <Text style={startTime.length > 0 ? styles.modalRightSubtitle : styles.modalRightSubtitlePlaceholder}>
+                        {startTime.length > 0 ? startTime : '请选择开始日期'}
+                    </Text>
+                </TouchableOpacity>
+                <View style={{ marginLeft: 10, marginRight: 10 }}><Text>~</Text></View>
+                <TouchableOpacity onPress={() => this.showCalendar(false)}>
+                    <Text style={endTime.length > 0 ? styles.modalRightSubtitle : styles.modalRightSubtitlePlaceholder}>
+                        {endTime.length > 0 ? endTime : '请选择结束日期'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    /**
+     * 弹框的排序方式
+     */
+    renderFilterModalOrderType() {
+        return (
+            <View style={styles.modalFilterContainer}>
+                {
+                    ORDER_TYPES.map((item, index) =>
+                        <TouchableOpacity style={this.state.curSelectTypeIndex == index ?
+                            styles.modalFilterOptionContainerHighlighted : styles.modalFilterOptionContainer}
+                            onPress={() => this.setState({ curSelectTypeIndex: index })}
+                        >
+                            <Text style={this.state.curSelectTypeIndex == index ?
+                                styles.modalFilterOptionTextHighlighted : styles.modalFilterOptionText}
+                            >
+                                {item.title}
+                            </Text>
+                        </TouchableOpacity>
+                    )
+                }
+            </View>
+        );
+    }
+
+    /**
+     * 弹框的日期选择器
+     */
+    renderFilterModalDatePicker() {
+        const { maxDate, minDate, isCalendarVisible, endTime } = this.state;
+        return (
+            <CalendarDialog
+                _dialogVisible={isCalendarVisible}
+                currentData={maxDate}
+                minDate={minDate}
+                _dialogCancle={() => { this.hideCalendar() }}
+                pastScrollRange={50}
+                onDayPress={(theDate) => {
+                    if (isStartTag) {
+                        if (endTime.length > 0 && theDate.dateString > endTime) {
+                            this.setState({
+                                startTime: theDate.dateString,
+                                endTime: '',
+                            });
+                        }
+                        else {
+                            this.setState({ startTime: theDate.dateString });
+                        }
+                    }
+                    else {
+                        this.setState({ endTime: theDate.dateString });
+                    }
+                    this.hideCalendar();
+                }}
+            />
+        )
+    }
+
+
     /***
      * render方法
      */
     render() {
         return (
             <SafeAreaView style={styles.mainContanier}>
+                {/* 顶部统计框 */}
                 {this.renderTopBanner()}
+                {/* 佣金流水列表 */}
                 {this.renderFlatList()}
+                {/* 过滤筛选弹框 */}
+                {this.renderFilterModal()}
             </SafeAreaView>
         );
     }
@@ -367,6 +559,7 @@ const styles = StyleSheet.create({
         backgroundColor: MainTheme.BackgroundColor,
     },
 
+    // 以下为顶部统计框的样式
     topBannerContainer: {
         backgroundColor: MainTheme.SpecialColor,
         flexDirection: 'row',
@@ -396,7 +589,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 4,
     },
-
+    // 列表数据为空的样式
     emptyView: {
         flex: 1,
         width: deviceValue.windowWidth,
@@ -406,6 +599,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    // 以下为列表头的样式
     listHeader: {
         flexDirection: 'row',
         backgroundColor: '#F2F2F2',
@@ -466,6 +660,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
 
+    // 以下为列表项的样式
     listItemContainer: {
         flexDirection: 'row',
         backgroundColor: MainTheme.BackgroundColor,
@@ -508,6 +703,124 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         fontSize: 12,
         marginTop: 10,
+    },
+
+    // 以下为过滤弹框的样式
+    modalRightContainer: {
+        flex: 7,
+        backgroundColor: MainTheme.BackgroundColor,
+        alignItems: 'flex-start',
+    },
+
+    modalRightTitle: {
+        marginTop: 20,
+        marginLeft: 10,
+        fontSize: 15,
+        color: MainTheme.DarkGrayColor,
+    },
+
+    modalRightSubtitle: {
+        fontSize: 14,
+        marginLeft: 10,
+        minWidth: deviceValue.windowWidth * 0.25,
+        color: MainTheme.DarkGrayColor,
+    },
+
+    modalRightSubtitlePlaceholder: {
+        fontSize: 12,
+        marginLeft: 10,
+        minWidth: deviceValue.windowWidth * 0.25,
+        color: MainTheme.GrayColor,
+    },
+
+    modalTimePeriodContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 15,
+        marginLeft: 10,
+    },
+
+    modalFilterContainer: {
+        marginTop: 10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+    },
+
+    modalFilterOptionContainer: {
+        width: deviceValue.windowWidth * 0.3,
+        marginRight: 5,
+        marginBottom: 10,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        borderWidth: 0.5,
+        borderColor: MainTheme.SpecialColor,
+        backgroundColor: MainTheme.BackgroundColor,
+    },
+
+    modalFilterOptionContainerHighlighted: {
+        width: deviceValue.windowWidth * 0.3,
+        marginRight: 5,
+        marginBottom: 10,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        borderWidth: 0.5,
+        borderColor: MainTheme.BackgroundColor,
+        backgroundColor: MainTheme.SpecialColor,
+    },
+
+    modalFilterOptionText: {
+        fontSize: 12,
+        color: MainTheme.DarkGrayColor,
+        paddingTop: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 5,
+    },
+
+    modalFilterOptionTextHighlighted: {
+        fontSize: 12,
+        color: MainTheme.SubmitTextColor,
+        paddingTop: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 5,
+    },
+
+    modalFilterButtonContainer: {
+        marginTop: 20,
+        marginBottom: 80,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+
+    modalFilterCancelButton: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 10,
+        marginRight: 5,
+        backgroundColor: MainTheme.BackgroundColor,
+        borderColor: MainTheme.SpecialColor,
+        borderWidth: 0.5,
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+
+    modalFilterSubmitButton: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: MainTheme.SpecialColor,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginLeft: 5,
+        marginRight: 10,
     }
 
 });
