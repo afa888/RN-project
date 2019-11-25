@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
-    TouchableOpacity, ScrollView, SafeAreaView,
+    TouchableOpacity, ScrollView, SafeAreaView, Clipboard,
     DeviceEventEmitter, Alert
 } from "react-native";
 import {MainTheme, textTitleColor, CircleGoldColor, theme_color, BarBlueColor} from "../../utils/AllColor";
@@ -11,6 +11,9 @@ import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
 import {Pie} from 'react-native-tcharts'
 import http from "../../http/httpFetch";
+import RedBagDialog from "../../customizeview/RedBagDialog";
+import AgentBtDialog from "../../customizeview/AgentBtDialog";
+import Modal from 'react-native-modalbox';
 
 export default class AgentManager extends Component<Props> {
 
@@ -68,13 +71,15 @@ export default class AgentManager extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = {agentData: {},inviteData:{}};
+        this.state = {agentData: {}, inviteData: {}, pieData: {}, barData: {}, isRedBagVisible: false};
     }
 
 
     componentWillMount(): void {
         this.getSelfAgentData();
         this.getInviteMethod();
+        this.getTeamCompositionChart();
+        this.getRecentCommissionChart();
     }
 
     //http://192.168.107.144:400/JJF/agency/getSelfAgentData
@@ -93,7 +98,37 @@ export default class AgentManager extends Component<Props> {
 
     }
 
- getInviteMethod = () => {
+    getTeamCompositionChart = () => {
+        http.post('agency/getTeamCompositionChart', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if (res.data !== {} || res.data !== null) {
+                    this.setState({pieData: res.data})
+                }
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
+    //柱状图数据
+    getRecentCommissionChart = () => {
+        http.post('agency/getRecentCommissionChart', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                if (res.data !== {} || res.data !== null) {
+                    this.setState({barData: res.data})
+                }
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
+
+    getInviteMethod = () => {
         http.post('agency/getInviteMethod', null, true).then((res) => {
             if (res.status === 10000) {
                 console.log(res)
@@ -106,6 +141,13 @@ export default class AgentManager extends Component<Props> {
             console.error(err)
         });
 
+    }
+
+    async copyText(text) {
+        Clipboard.setString(text);
+        let str = await Clipboard.getString()
+        TXToastManager.show('复制成功');
+        // console.log(str)//我是文本
     }
 
     // 邀请记录
@@ -166,7 +208,7 @@ export default class AgentManager extends Component<Props> {
     }
 
     createQr = () => {
-        let {inviteLink,agencyShare} = this.state.inviteData
+        let {inviteLink, agencyShare} = this.state.inviteData
         return (
             <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
@@ -182,10 +224,18 @@ export default class AgentManager extends Component<Props> {
                     <View style={{
                         height: 120, flex: 1, marginLeft: 6
                     }}>
-                        <Text style={styles.tgText}>推广链接：<Text numberOfLines={1}
-                            style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
-                        <Text style={styles.tgwaText}>推广文案：<Text
-                            style={{color: MainTheme.DarkGrayColor}}>{agencyShare}</Text></Text>
+                        <TouchableOpacity onPress={() => {
+                            this.copyText(inviteLink)
+                        }}>
+                            <Text style={styles.tgText}>推广链接：<Text numberOfLines={1}
+                                                                   style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            this.copyText(agencyShare)
+                        }}>
+                            <Text style={styles.tgwaText}>推广文案：<Text
+                                style={{color: MainTheme.DarkGrayColor}}>{agencyShare}</Text></Text>
+                        </TouchableOpacity>
 
                     </View>
                 </View>
@@ -276,6 +326,8 @@ export default class AgentManager extends Component<Props> {
 
                 <TouchableOpacity onPress={() => {
                     // this.props.goMoreGame('navigate')
+                    this.refs.modal6.open()
+
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{color: MainTheme.DarkGrayColor, fontSize: 10}}>详情</Text>
@@ -301,9 +353,13 @@ export default class AgentManager extends Component<Props> {
                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}><Text
-                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥{outstandingCommissions}</Text><TouchableOpacity
-                            style={[styles.agentTitle, styles.takeMonyView]}><Text
-                            style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text></TouchableOpacity></View>
+                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥{outstandingCommissions}</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.refs.modal6.open()
+                                }}
+                                style={[styles.agentTitle, styles.takeMonyView]} onPr>
+                                <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text></TouchableOpacity></View>
                         <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
@@ -328,6 +384,25 @@ export default class AgentManager extends Component<Props> {
                     </View>
 
                 </ScrollView>
+                <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal6"}>
+
+                    <View style={styles.modalView}>
+                        <Text style={styles.choiceText}>请选择:</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                            }}
+                            style={styles.touchView}>
+                            <Text style={[styles.agentTitle, {fontSize: 14}]}>转至中心钱包</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                            }}
+                            style={styles.touchBankView}>
+                            <Text style={{fontSize: 14, color: theme_color}}>提现至银行卡</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </Modal>
             </SafeAreaView>
         )
     }
@@ -358,7 +433,7 @@ const styles = StyleSheet.create({
         height: 32
     },
     shortcutTitle: {
-        fontSize: 10,
+        fontSize: 12,
         color: MainTheme.DarkGrayColor,
     },
     agentTitle: {
@@ -369,18 +444,18 @@ const styles = StyleSheet.create({
         height: 25,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems:'center',
+        alignItems: 'center',
         marginTop: 3
     },
     fontSizeTitle18: {
-        flex:1,
+        flex: 1,
         fontSize: 18,
-        textAlign:'center',
+        textAlign: 'center',
     },
     fontSizeTitle14: {
-        flex:1,
+        flex: 1,
         fontSize: 14,
-        textAlign:'center',
+        textAlign: 'center',
     },
 
     cotentTitle: {marginLeft: 12, color: MainTheme.TextTitleColor, marginRight: 12},
@@ -442,5 +517,39 @@ const styles = StyleSheet.create({
         paddingRight: 6,
         paddingLeft: 6,
         marginLeft: 3,
+    }
+    ,
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    modal4: {
+        height: 160
+    },
+    modalView:{
+        width: DeviceValue.windowWidth,
+        height: 160,
+        alignItems: 'center'
+    },
+    choiceText:{
+        fontSize: 12,
+        marginTop: 12,
+        marginLeft: 20,
+        textAlign: 'left',
+        width: DeviceValue.windowWidth
+    },
+    touchView:{
+        alignItems: 'center', justifyContent: 'center', marginTop: 10,
+        backgroundColor: theme_color, height: 40, width: DeviceValue.windowWidth - 40
+    },
+    touchBankView:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        borderWidth: 0.5,
+        borderRadius: 4,
+        borderColor: theme_color,
+        height: 40,
+        width: DeviceValue.windowWidth - 40
     }
 });
