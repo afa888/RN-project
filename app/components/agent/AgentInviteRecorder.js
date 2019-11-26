@@ -231,21 +231,29 @@ export default class AgentInviteRecorder extends Component<Props> {
      * 列表尾
      */
     renderFooter() {
-        if (this.state.data.length > 15 && this.state.isLoadingMore) {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'正在加载....'}</Text>
-                </View>
-            )
-        } else if (this.state.isLoadingMore && this.state.data.length >= 10) {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'没有更多了'}</Text>
-                </View>
-            )
-        } else {
-            return null
+        const { data, isLoadingMore, isRefreshing, isNoMoreData } = this.state;
+
+        let tailText = '';
+        if (isLoadingMore || isRefreshing) {
+            tailText = '正在加载....';
         }
+        else if (data.length > 0) {
+            tailText = isNoMoreData ? '没有更多数据了' : '上拉加载更多';
+        }
+
+        return (
+            <View>
+                {data.length > 0 && this.renderSeparator()}
+                {
+                    tailText != '' && (
+                        <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ marginTop: 10, color: MainTheme.GrayColor, fontSize: 12 }}>
+                                {tailText}
+                            </Text>
+                        </View>
+                    )}
+            </View>
+        )
     }
 
     /***
@@ -277,7 +285,7 @@ export default class AgentInviteRecorder extends Component<Props> {
         return (
             <View style={styles.listItemContainer} >
                 <View style={styles.listHeaderIconContainer}>
-                    <Image style={styles.listHeaderIcon}
+                    <Image style={{ ...styles.listHeaderIcon, marginTop: 2.5 }}
                         source={item.memberClasses == '1' ? singleIcon : teamIcon} />
                 </View>
                 <View style={styles.recordItemCenterPanel}>
@@ -348,14 +356,14 @@ const styles = StyleSheet.create({
         color: MainTheme.BackgroundColor,
         fontSize: 15,
         textAlign: 'center',
-        marginTop: 12.5,
+        marginTop: 6,
     },
 
     topBannerItemTitle: {
         color: MainTheme.BackgroundColor,
         fontSize: 12,
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: 5,
         marginBottom: 4,
     },
 

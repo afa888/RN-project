@@ -635,14 +635,14 @@ const styles = StyleSheet.create({
         color: MainTheme.BackgroundColor,
         fontSize: 15,
         textAlign: 'center',
-        marginTop: 12.5,
+        marginTop: 6,
     },
 
     topBannerItemTitle: {
         color: MainTheme.BackgroundColor,
         fontSize: 12,
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: 5,
         marginBottom: 4,
     },
 
@@ -781,7 +781,8 @@ const styles = StyleSheet.create({
     },
 
     listItemCenterContainer: {
-        justifyContent: 'center',
+        marginLeft: 25,
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
 
