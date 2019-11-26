@@ -105,7 +105,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.txw.txwnew"
+       // applicationId "com.txw.txwnew"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -194,6 +194,9 @@ dependencies {
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'com.github.markzhai:blockcanary-android:1.5.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-4'
+
 }
 
 // Run this once to be able to run the application with BUCK
