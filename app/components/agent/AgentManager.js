@@ -156,7 +156,7 @@ export default class AgentManager extends Component<Props> {
 
     // 团队管理
     onTeamManage = () => {
-
+        this.props.navigation.navigate('TeamManagerScreen');
     }
 
     // 佣金流水
