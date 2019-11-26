@@ -226,7 +226,7 @@ export default class AgentManager extends Component<Props> {
                         <TouchableOpacity onPress={() => {
                             this.copyText(inviteLink)
                         }}>
-                            <Text style={styles.tgText}>推广链接：<Text numberOfLines={1}
+                            <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
                                                                    style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
@@ -434,6 +434,7 @@ const styles = StyleSheet.create({
     shortcutTitle: {
         fontSize: 12,
         color: MainTheme.DarkGrayColor,
+        marginTop:2
     },
     agentTitle: {
         color: MainTheme.commonButtonTitleColor
