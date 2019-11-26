@@ -69,9 +69,13 @@ export default class TXTools {
 	 * @param numString 金额字符串，如“123.50”、“-27813.00”
 	 * @param ignoreSign 是否忽略正负号(返回的字符串是否包含‘-’号)
 	 */
-	static formatMoneyAmount = (numString, ignoreSign = true) => {
+	static formatMoneyAmount = (numString, ignoreSign = true,isRoundOff = true) => {
 		let result = '';
 		let sign = '';
+
+		if (!isRoundOff && String(numString).indexOf(".") != -1) {
+			numString = String(numString).substring(0,String(numString).indexOf(".") + 3);
+		}
 
 		let temp = ((parseFloat(numString) * 100) / 100).toFixed(2);
 		
