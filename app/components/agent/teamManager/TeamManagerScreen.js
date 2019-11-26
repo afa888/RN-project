@@ -371,8 +371,13 @@ export default class TeamManagerScreen extends Component<Props> {
      */
     onRecordItemPressed = (item, index) => {
         let model = this.state.data[index];
-
-        this.props.navigation.navigate('TeamListScreen',{data:model});
+        let status = model.cagencyLevel;
+        if (status.indexOf('直属') != -1) {
+            this.props.navigation.navigate('TeamListScreen',{data:model});
+        }else {
+            this.props.navigation.navigate('TeamMemberDetailScreen',{data:model});
+        }
+        
     }
 
     /**
