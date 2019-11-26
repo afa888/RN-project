@@ -44,7 +44,6 @@ import AgenJoinBefore from "../../components/agent/AgenJoinBefore";
 import AgentInviteRecorder from "../../components/agent/AgentInviteRecorder";
 import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
 import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
-import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScreen";
 import AgentPausedPage from "../../components/agent/AgentPausedPage";
 import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScreen"
 import TeamListScreen from "../../components/agent/teamManager/TeamListScreen"
@@ -234,7 +233,6 @@ export default class MainScreen extends Component<Props> {
             AgentInviteRecorder: { screen: AgentInviteRecorder },
             AgentRewardRecorder: { screen: AgentRewardRecorder },
             AgentWithdrawalRecorder: { screen: AgentWithdrawalRecorder },
-            TeamManagerScreen: { screen: TeamManagerScreen },
             AgentPausedPage: { screen: AgentPausedPage },
             TeamManagerScreen: { screen: TeamManagerScreen },
             TeamListScreen: { screen: TeamListScreen },
