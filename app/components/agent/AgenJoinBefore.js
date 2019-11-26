@@ -21,12 +21,37 @@ import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} 
 import {MarqueeHorizontal} from "react-native-marquee-ab";
 import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
+import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 
+let isJoin = false
 export default class AgenJoinBefore extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
+        const {params} = navigation.state;
+        if (params !== undefined && params.isJoin !== undefined) {
+            isJoin = params.isJoin;
+        }
         return {
-            header: null
+            headerTitle: <View
+                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                <Text style={{
+                    fontSize: 18,
+                    color: 'black',
+                    fontWeight: 'bold'
+                }}>{isJoin ? '代理管理' : '代理规则'} </Text></View>,
+            headerLeft: (
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack()
+                }}>
+                    <Image source={require('../../static/img/titlebar_back_normal.png')}
+                           style={{
+                               resizeMode: 'contain',
+                               width: 20,
+                               height: 20,
+                               margin: 12
+                           }}/>
+                </TouchableOpacity>
+            ),
         };
     };
 
@@ -35,12 +60,29 @@ export default class AgenJoinBefore extends Component<Props> {
         this.state = {
             noticeData: []
             , agentData: {},
+            isJoin: false
         };
     }
 
     componentWillMount(): void {
+        /* let {navigation} = this.props;
+         let isJoin = navigation.getParam('isJoin', '');*/
+        this.setState({isJoin: isJoin})
         this.postNotice()
         this.getAgentData()
+
+    }
+
+    jionAgent = () => {
+        http.post('agency/joinAgencyUser', null, true).then((res) => {
+            if (res.status === 10000) {
+                console.log(res)
+                this.props.navigation.goBack();
+                this.props.navigation.navigate('AgentManager');
+            }
+        }).catch(err => {
+            console.error(err)
+        });
 
     }
 
@@ -130,9 +172,11 @@ export default class AgenJoinBefore extends Component<Props> {
                         </View>
                     </ImageBackground>
 
-                    <ImageBackground source={require('../../static/img/agent/wxdlbg.webp')}
+                    <ImageBackground source={require('../../static/img/agent/wxdlbg.png')}
                                      resizeMode='cover' style={styles.bgImg}>
-                        <TouchableOpacity onPress={this.componentWillUnmount()}>
+                        {this.state.isJoin && <TouchableOpacity onPress={() => {
+                            this.jionAgent()
+                        }}>
                             <View style={{
                                 width: 180,
                                 height: 30,
@@ -144,7 +188,7 @@ export default class AgenJoinBefore extends Component<Props> {
 
                                 <Text style={{color: MainTheme.commonButtonTitleColor}}>立即加入</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
 
                     </ImageBackground>
 
@@ -192,6 +236,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor:'blue'
     },
-    agentTextView16: {color: AgentRedColor, fontSize: 16, fontWeight: 'bold',marginRight: 2},
+    agentTextView16: {color: AgentRedColor, fontSize: 16, fontWeight: 'bold', marginRight: 2},
     agentTextView10: {color: AgentRedColor, fontSize: 10, fontWeight: 'bold',}
 });

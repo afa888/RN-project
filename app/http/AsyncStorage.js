@@ -4,11 +4,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 export const RememberUserKey = '@should_save_account_key';
 export const UserNameKey = '@saved_user_name_key';
 export const UserPwdKey = '@saved_user_password_key';
-// 用户的登录状态
+// 存储用户登录状态的key
 export const LoginStateKey = '@loginState';
 
 export const UserSession = {
-    isLogin:false,
+    isLogin: false,     // 用户是否已经登录
+    agencyStatus: 2,    // 无限代理的状态（0：正常，1：停用，2：尚未加入，-1：错误或平台尚未开通无限代理）
 }
 
 /**

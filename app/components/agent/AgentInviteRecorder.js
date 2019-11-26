@@ -61,9 +61,9 @@ export default class AgentInviteRecorder extends Component<Props> {
      * 刷新数据
      */
     refreshData = () => {
-        const { isLoadingMore, isRefresh, isNoMoreData } = this.state;
+        const { isLoadingMore, isRefresh } = this.state;
 
-        if (isLoadingMore || isRefresh || isNoMoreData) {
+        if (isLoadingMore || isRefresh) {
             console.log("正在数据请求或没有更多数据！");
         }
         else {
@@ -105,37 +105,40 @@ export default class AgentInviteRecorder extends Component<Props> {
         };
         http.post('agency/getInviteRecord', params, true).then(res => {
             if (res.status == 10000) {
+                let noMoreData = res.data.list.length < PAGE_SIZE;
                 this.setState({
                     total: res.data.total,
                     dayCount: res.data.dayCount,
                     weekCount: res.data.weekCount,
                     monthCount: res.data.monthCount,
-                    isNoMoreData: res.data.list.count < PAGE_SIZE,
+                    isNoMoreData: noMoreData,
                 });
 
                 if (isRefresh) {
-                    pageSize = 1;
+                    this.currentPageNo = 1;
                     this.setState({
+                        isRefreshing: false,
+                        isLoadingMore: false,
                         data: res.data.list,
                     });
                 }
                 else {
                     this.currentPageNo += 1;
                     this.setState({
+                        isRefreshing: false,
+                        isLoadingMore: false,
                         data: this.state.data.concat(res.data.list),
                     });
                 }
             }
             else {
+                this.setState({
+                    isRefreshing: false,
+                    isLoadingMore: false,
+                });
                 let info = res.msg || '请求失败，请重试！';
                 TXToastManager.show(info);
             }
-
-            this.setState({
-                isRefreshing: false,
-                isLoadingMore: false
-            });
-
         }).catch(err => {
             this.setState({
                 isRefreshing: false,
@@ -228,21 +231,29 @@ export default class AgentInviteRecorder extends Component<Props> {
      * 列表尾
      */
     renderFooter() {
-        if (this.state.data.length > 15 && this.state.isLoadingMore == 'LoreMoreing') {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'正在加载....'}</Text>
-                </View>
-            )
-        } else if (this.state.isLoadingMore == 'LoreMoreEmpty' && this.state.data.length >= 10) {
-            return (
-                <View style={{ height: 44, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>{'没有更多了'}</Text>
-                </View>
-            )
-        } else {
-            return null
+        const { data, isLoadingMore, isRefreshing, isNoMoreData } = this.state;
+
+        let tailText = '';
+        if (isLoadingMore || isRefreshing) {
+            tailText = '正在加载....';
         }
+        else if (data.length > 0) {
+            tailText = isNoMoreData ? '没有更多数据了' : '上拉加载更多';
+        }
+
+        return (
+            <View>
+                {data.length > 0 && this.renderSeparator()}
+                {
+                    tailText != '' && (
+                        <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ marginTop: 10, color: MainTheme.GrayColor, fontSize: 12 }}>
+                                {tailText}
+                            </Text>
+                        </View>
+                    )}
+            </View>
+        )
     }
 
     /***
@@ -260,7 +271,7 @@ export default class AgentInviteRecorder extends Component<Props> {
                         marginRight: 6,
                         padding: 3
                     }} />
-                <Text style={{ fontSize: 16 }}>暂无数据</Text>
+                <Text style={{ fontSize: 16 }}>暂无记录</Text>
             </View>
         </View>
     }
@@ -269,12 +280,12 @@ export default class AgentInviteRecorder extends Component<Props> {
      * 渲染列表项
      */
     renderRecordItem(item, index) {
-        const singleIcon = require('../../static/img/agent/administer_icon_tdgl.png');
-        const teamIcon = require('../../static/img/agent/administer_icon_zshy.png');
+        const teamIcon = require('../../static/img/agent/administer_icon_tdgl.png');
+        const singleIcon = require('../../static/img/agent/administer_icon_zshy.png');
         return (
             <View style={styles.listItemContainer} >
                 <View style={styles.listHeaderIconContainer}>
-                    <Image style={styles.listHeaderIcon}
+                    <Image style={{ ...styles.listHeaderIcon, marginTop: 2.5 }}
                         source={item.memberClasses == '1' ? singleIcon : teamIcon} />
                 </View>
                 <View style={styles.recordItemCenterPanel}>
@@ -282,11 +293,11 @@ export default class AgentInviteRecorder extends Component<Props> {
                     <Text style={styles.recordItemDate}>{item.registTime}</Text>
                 </View>
                 <View style={styles.recordItemTailPanel}>
-                    <Text style={ item.isAgency == 1 ? styles.recordItemCount : styles.recordItemNotAgency}>
+                    <Text style={item.isAgency == 1 ? styles.recordItemCount : styles.recordItemNotAgency}>
                         {item.isAgency == 1 ? item.teamNum : '未开通代理'}
                     </Text>
                     <Text style={styles.recordItemAmount}>
-                        {TXTools.formatMoneyAmount(item.teamCumulative, false)}
+                        {TXTools.formatMoneyAmount(item.accumulatedCommission, false)}
                     </Text>
                 </View>
             </View>
@@ -345,14 +356,14 @@ const styles = StyleSheet.create({
         color: MainTheme.BackgroundColor,
         fontSize: 15,
         textAlign: 'center',
-        marginTop: 12.5,
+        marginTop: 6,
     },
 
     topBannerItemTitle: {
         color: MainTheme.BackgroundColor,
         fontSize: 12,
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: 5,
         marginBottom: 4,
     },
 

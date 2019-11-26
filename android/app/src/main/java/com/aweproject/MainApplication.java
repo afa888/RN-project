@@ -8,6 +8,7 @@ import android.util.Log;
 import com.facebook.react.ReactApplication;
 import com.amsoft.RNProgressHUB.RNProgressHUBPackage;
 import com.como.RNTScratchView.ScratchViewPackage;
+import com.github.moduth.blockcanary.BlockCanary;
 import com.microsoft.codepush.react.CodePush;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -46,7 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNProgressHUBPackage(),
+                    new RNProgressHUBPackage(),
                     new ScratchViewPackage(),
                     new SplashScreenReactPackage(),
                     new RNCWebViewPackage(),
@@ -92,6 +93,8 @@ public class MainApplication extends Application implements ReactApplication {
         SoLoader.init(this, /* native exopackage */ false);
         Log.e("MainApplication", "热更新key=  " + BuildConfig.CODEPUSH_KEY);
         initBugly();
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+
     }
 
     public void initBugly() {
