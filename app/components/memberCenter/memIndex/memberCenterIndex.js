@@ -15,9 +15,15 @@ import { FlatList, Switch } from 'react-native-gesture-handler';
 import TXToastManager from "../../../tools/TXToastManager";
 import { clearAllStore } from "../../../http/AsyncStorage";
 import TXTools from '../../../utils/Htools';
+import FastImage from 'react-native-fast-image';
 
 // 是否接入了无限代理
 export const IS_INFINITE_AGENCY_ENABLE = true;
+
+// 无限代理的状态(state.agencyStatus)
+export const AGENCY_STATUS_ENABLE = 0;
+export const AGENCY_STATUS_PAUSED = 1;
+export const AGENCY_STATUS_UNJOIN = 2;
 
 export default class MemberCenterIndexScreen extends Component<Props> {
 
@@ -30,15 +36,21 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             userName: '',
             phoneVerify: false,
             cardVerify: false,
-            integral: 0,
             wallet: 0,
             totalBalance: 0,
             loginTime: '',
-            agencyLevel: '',    // 无限代理的等级
-            agencyReward: 0,    // 无限代理的佣金
-            autoTransfer: true,  // 是否自动转账
+
+            agencyStatus: 2,            // 代理状态 0-加入 1-停用 2-未加入
+            agencyLevel: '',            // 无限代理的等级
+            agencyLevelImgUrl: '',      // 无限代理的等级图片URL
+            integral: 0,                // 无限代理的积分
+            agencyReward: 0,            // 无限代理的佣金
+            outstandingCommissions: 0,  // 无限代理的未结算佣金
+
+            autoTransfer: true,         // 是否自动转账
+
             isLogin: false,
-            agencyStatus:2  //未加入 1停用，0.加入
+            version: 0,                 // APP版本
         };
 
         // 监听组件的四个状态回调：willFocus、didFocus、willBlur、didBlur
@@ -58,7 +70,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     refreshUserInfo() {
         http.post('User/getUserInfo', null).then(res => {
             if (res.status === 10000) {
-                const { username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time ,agencyStatus} = res.data;
+                const { username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time, agencyStatus } = res.data;
                 this.setState({
                     userName: username.slice(CAGENT.length),
                     phoneVerify: mobileStatus == 0 ? false : true,
@@ -67,10 +79,11 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     wallet: wallet,
                     totalBalance: totalBalance,
                     loginTime: login_time,
-                    agencyLevel: '会员',    // mock data
-                    agencyReward: 0,        // mock data
-                    version: 0,             // 版本
-                    agencyStatus:agencyStatus
+                    agencyLevel: res.data.agencyLevel,
+                    agencyLevelImgUrl: res.data.agencyLevelImgUrl,
+                    agencyReward: res.data.allExtractedCommissions,
+                    outstandingCommissions: res.data.outstandingCommissions,
+                    agencyStatus: agencyStatus,// 代理状态 0-加入 1-停用 2-未加入
                 })
             }
         })
@@ -150,12 +163,12 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     // 无限代理
     onCheckAgencyDetail = () => {
         this.checkLoginStateThenDo(() => {
-            if(this.state.agencyStatus===0){//已加入
+            if (this.state.agencyStatus === AGENCY_STATUS_ENABLE) {//已加入
                 this.props.navigation.navigate('AgentManager');
-            }else if(this.state.agencyStatus===1){//停用
+            } else if (this.state.agencyStatus === AGENCY_STATUS_PAUSED) {//停用
 
-            }else if(this.state.agencyStatus===2){//未加入
-                this.props.navigation.navigate('AgenJoinBefore',{isJoin: true});
+            } else if (this.state.agencyStatus === AGENCY_STATUS_UNJOIN) {//未加入
+                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true });
 
             }
         });
@@ -239,7 +252,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             );
         }
         else {
-            return <View style={{height:40,width:0.5}} />
+            return <View style={{ height: 40, width: 0.5 }} />
         }
     }
 
@@ -264,18 +277,46 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 用户名称等信息
      */
     createUserInfo() {
-        const { userName, phoneVerify, cardVerify, integral, loginTime } = this.state;
+        const { userName, phoneVerify, cardVerify, integral,
+            loginTime, agencyStatus, agencyLevel, agencyLevelImgUrl } = this.state;
 
         if (IS_INFINITE_AGENCY_ENABLE) {
             if (this.state.isLogin) {
-                return (
-                    <View>
-                        <Text style={styles.loginName}>{userName}</Text>
-                        <Text style={styles.userInfo}>代理等级：{this.state.agencyLevel}</Text>
-                        <Text style={styles.userInfo}>当前积分：{integral}</Text>
-                        <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
-                    </View>
-                );
+                if (agencyStatus == AGENCY_STATUS_ENABLE &&
+                    agencyLevelImgUrl != undefined &&
+                    agencyLevelImgUrl.toLowerCase().startsWith('http')) {
+                    // 代理等级显示成图片
+                    return (
+                        <View>
+                            <Text style={styles.loginName}>{userName}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={styles.userInfo}>代理等级：</Text>
+                                <FastImage source={{ uri: agencyLevelImgUrl }}
+                                    style={{ width: 64, height: 16 }} />
+                            </View>
+                            <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                            <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                        </View>
+                    );
+                }
+                else {
+                    let levelText = agencyLevel;
+                    if (agencyStatus == AGENCY_STATUS_PAUSED) {
+                        levelText = '已停用';
+                    }
+                    else if (agencyStatus == AGENCY_STATUS_UNJOIN) {
+                        levelText = '未加入';
+                    }
+
+                    return (
+                        <View>
+                            <Text style={styles.loginName}>{userName}</Text>
+                            <Text style={styles.userInfo}>代理等级：{levelText}</Text>
+                            <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                            <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                        </View>
+                    );
+                }
             }
             else {
                 return (
@@ -316,9 +357,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 用户资产
      */
     crateAssetsInfo() {
-        const { wallet, totalBalance, agencyReward, agencyLevel } = this.state;
+        const { wallet, totalBalance, agencyReward, agencyStatus } = this.state;
         let assertsItems = [];
-        if (agencyLevel.length > 0) { // 判断用户是否加入无线代理（这里是模拟实现）
+        if (agencyStatus == AGENCY_STATUS_ENABLE) { // 判断用户是否加入无线代理
             assertsItems = [['钱包余额', wallet], ['代理佣金', agencyReward], ['总共资产', totalBalance]];
         }
         else {
@@ -361,7 +402,6 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 查看代理佣金的详情
      */
     gotoAgencyRewardDetail = () => {
-        TXToastManager.show('暂未实现，敬请期待');
     }
 
     /**
