@@ -12,7 +12,6 @@ import QRCode from 'react-native-qrcode';
 import {Pie} from 'react-native-tcharts'
 import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
-import AgentBtDialog from "../../customizeview/AgentBtDialog";
 import Modal from 'react-native-modalbox';
 
 export default class AgentManager extends Component<Props> {
