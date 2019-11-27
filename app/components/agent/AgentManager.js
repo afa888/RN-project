@@ -226,8 +226,8 @@ export default class AgentManager extends Component<Props> {
                         <TouchableOpacity onPress={() => {
                             this.copyText(inviteLink)
                         }}>
-                            <Text style={styles.tgText}>推广链接：<Text numberOfLines={1}
-                                                                   style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
+                            <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
+                                                                                     style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             this.copyText(agencyShare)
@@ -344,6 +344,30 @@ export default class AgentManager extends Component<Props> {
         </View>)
     }
 
+    onShowBank = () => {
+        let {agentData} = this.state;
+        getStoreData('userInfoState').then((userInfo) => {
+            if (userInfo && !userInfo.settedqkpwd) {
+                //尚未设置提款密码
+                TXToastManager.show('请先设置提款密码');
+                this.props.navigation.navigate('SettingCapitalPwdScreen');
+            } else if (userInfo && userInfo.bankList && userInfo.bankList.length == 0) {
+                //还没有绑定银行卡
+                TXToastManager.show('请先绑定银行卡');
+                this.props.navigation.navigate('AddBankScreen');
+            } else if (userInfo.bankList && userInfo.bankList.length > 0) {
+                this.refs.modal6.close();
+                if (parseInt(agentData.outstandingCommissions) > 0) {
+                    this.props.navigation.navigate('AgentCommissionExtract',{agentData:agentData,bankInfo:userInfo.bankList[0]})
+                }else {
+                    TXToastManager.show('您当前没有佣金可以提取');
+                }
+                
+            }
+        });
+        
+    }
+
     render() {
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
         return (<SafeAreaView style={{flex: 1}}>
@@ -389,13 +413,14 @@ export default class AgentManager extends Component<Props> {
                         <Text style={styles.choiceText}>请选择:</Text>
                         <TouchableOpacity
                             onPress={() => {
+                                this.refs.modal6.close()
+                                this.props.navigation.navigate('AgentCommissionTransfer');
                             }}
                             style={styles.touchView}>
                             <Text style={[styles.agentTitle, {fontSize: 14}]}>转至中心钱包</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => {
-                            }}
+                            onPress={this.onShowBank.bind(this)}
                             style={styles.touchBankView}>
                             <Text style={{fontSize: 14, color: theme_color}}>提现至银行卡</Text>
                         </TouchableOpacity>
@@ -434,6 +459,7 @@ const styles = StyleSheet.create({
     shortcutTitle: {
         fontSize: 12,
         color: MainTheme.DarkGrayColor,
+        marginTop: 2
     },
     agentTitle: {
         color: MainTheme.commonButtonTitleColor
@@ -525,23 +551,23 @@ const styles = StyleSheet.create({
     modal4: {
         height: 160
     },
-    modalView:{
+    modalView: {
         width: DeviceValue.windowWidth,
         height: 160,
         alignItems: 'center'
     },
-    choiceText:{
+    choiceText: {
         fontSize: 12,
         marginTop: 12,
         marginLeft: 20,
         textAlign: 'left',
         width: DeviceValue.windowWidth
     },
-    touchView:{
+    touchView: {
         alignItems: 'center', justifyContent: 'center', marginTop: 10,
         backgroundColor: theme_color, height: 40, width: DeviceValue.windowWidth - 40
     },
-    touchBankView:{
+    touchBankView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10,

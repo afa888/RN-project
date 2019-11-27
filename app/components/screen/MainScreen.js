@@ -40,15 +40,19 @@ import AboutPage from '../memberCenter/help/AboutPage';
 import InnerMessager from "../home/InnerMessager";
 import RnWebViewScreen from "../../customizeview/RnWebViewScreen";
 import AgentManager from "../../components/agent/AgentManager";
+import AgentCommissionSuccess from "../../components/agent/AgentCommissionSuccess";
 import AgenJoinBefore from "../../components/agent/AgenJoinBefore";
 import AgentInviteRecorder from "../../components/agent/AgentInviteRecorder";
+import AgentCommissionTransfer from "../../components/agent/AgentCommissionTransfer";
 import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
 import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
+import AgentStop from "../../components/agent/AgentStop";
 import AgentPausedPage from "../../components/agent/AgentPausedPage";
 import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScreen"
 import TeamListScreen from "../../components/agent/teamManager/TeamListScreen"
 import TeamMemberScreen from "../../components/agent/teamManager/TeamMemberScreen"
 import TeamMemberDetailScreen from "../../components/agent/teamManager/TeamMemberDetailScreen"
+import AgentCommissionExtract from "../../components/agent/AgentCommissionExtract"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -233,11 +237,15 @@ export default class MainScreen extends Component<Props> {
             AgentInviteRecorder: { screen: AgentInviteRecorder },
             AgentRewardRecorder: { screen: AgentRewardRecorder },
             AgentWithdrawalRecorder: { screen: AgentWithdrawalRecorder },
+            AgentCommissionTransfer: { screen: AgentCommissionTransfer },
+            AgentCommissionSuccess: { screen: AgentCommissionSuccess },
+            AgentStop: { screen: AgentStop },
+            TeamManagerScreen : {screen : TeamManagerScreen},
             AgentPausedPage: { screen: AgentPausedPage },
-            TeamManagerScreen: { screen: TeamManagerScreen },
             TeamListScreen: { screen: TeamListScreen },
             TeamMemberScreen: { screen: TeamMemberScreen },
             TeamMemberDetailScreen: { screen: TeamMemberDetailScreen },
+            AgentCommissionExtract : {screen : AgentCommissionExtract},
         },
         {
             initialRouteName: this.state.initRoute,
