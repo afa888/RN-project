@@ -1,4 +1,6 @@
 rootProject.name = 'AweProject'
+include ':react-native-svg'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
 include ':react-native-progresshub'
 project(':react-native-progresshub').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-progresshub/android')
 include ':react-native-scratch'

@@ -171,6 +171,7 @@ def static buildTime(def release = false) {
 }
 
 dependencies {
+    implementation project(':react-native-svg')
     implementation project(':react-native-progresshub')
     implementation project(':react-native-scratch')
     implementation project(':react-native-code-push')

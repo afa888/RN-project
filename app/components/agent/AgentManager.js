@@ -14,6 +14,9 @@ import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
+import { PieChart } from 'react-native-svg-charts'
+
+
 let userName=''
 export default class AgentManager extends Component<Props> {
 
@@ -260,17 +263,20 @@ export default class AgentManager extends Component<Props> {
     }
 
     createPie = () => {
-        let option = {
-            title: {},
-            legend: {},
-            color: [MainTheme.specialTextColor, CircleGoldColor], //饼图颜色
-            series: [{
-                name: '',
-                type: 'pie',
-                radius: [40, 80], //饼图半径暂支持数字
-                data: [10, 20], //饼图占用数据
-            }]
-        }
+        const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+
+        const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+
+        const pieData = data
+            .filter((value) => value > 0)
+            .map((value, index) => ({
+                value,
+                svg: {
+                    fill: randomColor(),
+                    onPress: () => console.log('press', index),
+                },
+                key: `pie-${index}`,
+            }))
         return (<View>
 
             <View style={{
@@ -299,11 +305,7 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            {/*    <Pie
-                option={option}
-                height={160}
-                width={200}
-            />*/}
+            <PieChart style={{ height: 100,width:100,backgroundColor:'red' }} data={pieData} />
         </View>)
     }
 
