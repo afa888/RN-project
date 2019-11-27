@@ -14,10 +14,10 @@ import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
-import { PieChart } from 'react-native-svg-charts'
+import {PieChart} from 'react-native-svg-charts'
 
 
-let userName=''
+let userName = ''
 export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
@@ -258,26 +258,27 @@ export default class AgentManager extends Component<Props> {
 
                     </View>
                 </View>
-                <Text style={[styles.cotentTitle, {height: 40, size: 8}]}>长安二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
+                <Text
+                    style={[styles.textGray, {marginLeft: 15, marginRight: 15}]}>长按二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
             </View>)
     }
 
     createPie = () => {
-        const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
-
-        const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
-
+        let {directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum} = this.state.pieData
+        let diPercent = (diPercent / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        const data = [40, 60]
+        const randomColor = [theme_color, CircleGoldColor]
         const pieData = data
             .filter((value) => value > 0)
             .map((value, index) => ({
                 value,
                 svg: {
-                    fill: randomColor(),
+                    fill: randomColor[index],
                     onPress: () => console.log('press', index),
                 },
                 key: `pie-${index}`,
             }))
-        return (<View>
+        return (<View style={{position: 'relative', top: -17,}}>
 
             <View style={{
                 backgroundColor: 'white',
@@ -291,7 +292,7 @@ export default class AgentManager extends Component<Props> {
                 <Text style={{marginLeft: 5, color: textTitleColor}}>团队组成</Text>
 
                 <TouchableOpacity onPress={() => {
-                    // this.props.goMoreGame('navigate')
+                    this.onTeamManage();
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{color: MainTheme.DarkGrayColor, fontSize: 10}}>详情</Text>
@@ -305,30 +306,56 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            <PieChart style={{ height: 100,width:100,backgroundColor:'red' }} data={pieData} />
+            <View style={{flexDirection: 'row'}}>
+                {directNum !== 0 && teamNum !== 0 ? <PieChart
+                    style={styles.pieView}
+                    data={pieData}/>:<View style={styles.pieView}/>}
+                <View style={styles.pieRightView}>
+                    <View style={styles.pieRightItemView}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}><Image
+                            source={require('../../static/img/administer_icon_zshy.png')}
+                            style={{
+                                resizeMode: 'contain',
+                                width: 12,
+                                height: 12,
+                                marginRight: 6
+                            }}/>
+                            <Text style={styles.textGray}>直属会员</Text></View>
+                        <Text style={styles.textGray}>{diPercent} %</Text>
+                        <Text style={styles.textGray}>{directNum}人</Text>
+
+                    </View>
+                    <View style={styles.pieRightItemTwoView}>
+                        <Text style={styles.textGray}>昨日+{yesterdayDirectNum}</Text>
+                        <Text style={styles.textGray}>本周+{weekDirectNum}</Text>
+                    </View>
+
+                    <View style={styles.pieRightItemView}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}><Image
+                            source={require('../../static/img/administer_icon_tdhy.png')}
+                            style={{
+                                resizeMode: 'contain',
+                                width: 12,
+                                height: 12,
+                                marginRight: 6
+                            }}/>
+                            <Text style={styles.textGray}>团队会员</Text></View>
+                        <Text style={styles.textGray}>32</Text>
+                        <Text style={styles.textGray}>{teamNum}人</Text>
+
+                    </View>
+                    <View style={styles.pieRightItemTwoView}>
+                        <Text style={styles.textGray}>昨日+{yesterdayTeamNum}</Text>
+                        <Text style={styles.textGray}>本周+{weekTeamNum}</Text>
+                    </View>
+
+
+                </View>
+            </View>
         </View>)
     }
 
     createBar = () => {
-        const option = {
-            title: {
-                text: 'ECharts demo'
-            },
-            tooltip: {},
-            legend: {
-                data: ['销量']
-            },
-            xAxis: {
-                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
-            }]
-        };
-        ;
         return (<View>
 
             <View style={{
@@ -340,11 +367,11 @@ export default class AgentManager extends Component<Props> {
                 paddingLeft: 15,
                 paddingRight: 15
             }}>
-                <Text style={{marginLeft: 5, color: textTitleColor}}>团队组成</Text>
+                <Text style={{marginLeft: 5, color: textTitleColor}}>近期佣金</Text>
 
                 <TouchableOpacity onPress={() => {
                     // this.props.goMoreGame('navigate')
-                    this.refs.modal6.open()
+                    this.onRewardFlow()
 
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -398,15 +425,17 @@ export default class AgentManager extends Component<Props> {
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={[styles.agentTitle, {fontSize: 22, marginLeft: 20}]}>￥{outstandingCommissions}</Text>
-                            {this.state.outstandingCommissions > 0 && <TouchableOpacity
+                        <View style={{flexDirection: 'row', alignItems: 'center',width:DeviceValue.windowWidth}}>
+                            <Text style={[styles.agentTitle, {
+                                fontSize: 22,marginLeft:DeviceValue.windowWidth/2-22
+                            }]}>￥{outstandingCommissions}</Text>
+                           <TouchableOpacity
                                 onPress={() => {
                                     this.refs.modal6.open()
                                 }}
-                                style={[styles.agentTitle, styles.takeMonyView]} onPr>
+                                style={[styles.agentTitle, styles.takeMonyView]} >
                                 <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text>
-                            </TouchableOpacity>}
+                            </TouchableOpacity>
                         </View>
                         <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
                         <View style={styles.titleView}>
@@ -427,7 +456,7 @@ export default class AgentManager extends Component<Props> {
                         height: 1000,
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
-                        {this.createPie()}
+                        {this.state.pieData !== {} && this.createPie()}
                         {this.createBar()}
                     </View>
 
@@ -564,6 +593,7 @@ const styles = StyleSheet.create({
         height: 18,
         alignItems: 'center',
         justifyContent: 'center',
+
         paddingRight: 6,
         paddingLeft: 6,
         marginLeft: 3,
@@ -601,5 +631,32 @@ const styles = StyleSheet.create({
         borderColor: theme_color,
         height: 40,
         width: DeviceValue.windowWidth - 40
-    }
+    },
+    textGray: {
+        color: MainTheme.ThemeEditTextTextColor,
+        fontSize: 10
+    },
+    pieView: {
+        height: DeviceValue.windowWidth * 0.3,
+        width: DeviceValue.windowWidth * 0.3,
+        margin: 15,
+    },
+    pieRightView: {
+        height: DeviceValue.windowWidth * 0.3,
+        flex: 1,
+        justifyContent: 'space-between',
+        marginTop: 8,
+        marginLeft: 15,
+        padding: 8
+    }, pieRightItemView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 30,
+    }, pieRightItemTwoView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 30,
+    },
 });
