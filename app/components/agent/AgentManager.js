@@ -5,7 +5,7 @@ import {
     DeviceEventEmitter, Alert
 } from "react-native";
 import {MainTheme, textTitleColor, CircleGoldColor, theme_color, BarBlueColor} from "../../utils/AllColor";
-import {getStoreData} from "../../http/AsyncStorage";
+import {getStoreData, LoginStateKey, UserNameKey, UserPwdKey} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
@@ -13,7 +13,8 @@ import {Pie} from 'react-native-tcharts'
 import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
-
+import AsyncStorage from "@react-native-community/async-storage";
+let userName=''
 export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
@@ -70,11 +71,27 @@ export default class AgentManager extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = {agentData: {}, inviteData: {}, pieData: {}, barData: {}, isRedBagVisible: false};
+        this.state = {
+            agentData: {},
+            inviteData: {},
+            pieData: {},
+            barData: {},
+            isRedBagVisible: false,
+            outstandingCommissions: 0.00
+        };
     }
 
 
     componentWillMount(): void {
+        AsyncStorage.multiGet([UserNameKey, UserPwdKey])
+            .then((results) => {
+                console.log('用户信息');
+                console.log(results)
+                userName = results[0][1]
+
+            }).catch(() => {
+            console.error("Load account info error.");
+        });
         this.getSelfAgentData();
         this.getInviteMethod();
         this.getTeamCompositionChart();
@@ -87,7 +104,7 @@ export default class AgentManager extends Component<Props> {
             if (res.status === 10000) {
                 console.log(res)
                 if (res.data !== {} || res.data !== null) {
-                    this.setState({agentData: res.data})
+                    this.setState({agentData: res.data, outstandingCommissions: res.data.outstandingCommissions})
                 }
 
             }
@@ -345,6 +362,7 @@ export default class AgentManager extends Component<Props> {
     }
 
     onShowBank = () => {
+        this.refs.modal6.close()
         let {agentData} = this.state;
         getStoreData('userInfoState').then((userInfo) => {
             if (userInfo && !userInfo.settedqkpwd) {
@@ -358,14 +376,17 @@ export default class AgentManager extends Component<Props> {
             } else if (userInfo.bankList && userInfo.bankList.length > 0) {
                 this.refs.modal6.close();
                 if (parseInt(agentData.outstandingCommissions) > 0) {
-                    this.props.navigation.navigate('AgentCommissionExtract',{agentData:agentData,bankInfo:userInfo.bankList[0]})
-                }else {
+                    this.props.navigation.navigate('AgentCommissionExtract', {
+                        agentData: agentData,
+                        bankInfo: userInfo.bankList[0]
+                    })
+                } else {
                     TXToastManager.show('您当前没有佣金可以提取');
                 }
-                
+
             }
         });
-        
+
     }
 
     render() {
@@ -374,15 +395,17 @@ export default class AgentManager extends Component<Props> {
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
-                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}><Text
-                            style={[styles.agentTitle, {fontSize: 22, marginLeft: 40}]}>￥{outstandingCommissions}</Text>
-                            <TouchableOpacity
+                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={[styles.agentTitle, {fontSize: 22, marginLeft: 20}]}>￥{outstandingCommissions}</Text>
+                            {this.state.outstandingCommissions > 0 && <TouchableOpacity
                                 onPress={() => {
                                     this.refs.modal6.open()
                                 }}
                                 style={[styles.agentTitle, styles.takeMonyView]} onPr>
-                                <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text></TouchableOpacity></View>
+                                <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text>
+                            </TouchableOpacity>}
+                        </View>
                         <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
@@ -530,7 +553,7 @@ const styles = StyleSheet.create({
         width: DeviceValue.windowWidth,
         marginLeft: 15,
         marginTop: 10,
-        fontSize: 10
+        fontSize: 12
     },
     takeMonyView: {
         borderColor: 'white',

@@ -14,12 +14,12 @@ import {
     AgentBlueColor,
 } from "../../utils/AllColor";
 import {getStoreData} from "../../http/AsyncStorage";
-import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import {MarqueeHorizontal} from "react-native-marquee-ab";
 import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
+import TXToastManager from "../../tools/TXToastManager";
 
 let isJoin = false
 export default class AgentCommissionTransfer extends Component<Props> {
@@ -48,16 +48,21 @@ export default class AgentCommissionTransfer extends Component<Props> {
     }
 
     componentWillMount(): void {
-
+        this.getUserInfo();
 
     }
 
-    jionAgent = () => {
-        http.post('agency/joinAgencyUser', null, true).then((res) => {
+    /*
+        http://192.168.107.144:400/JJF/agency/withdrawlCommission
+    */
+
+    withdrawlCommission = () => {
+        http.post('agency/withdrawlCommission', null, true).then((res) => {
             if (res.status === 10000) {
-                console.log(res)
-                this.props.navigation.goBack();
-                this.props.navigation.navigate('AgentManager');
+                this.props.navigation.navigate('AgentCommissionSuccess');
+
+            } else {
+                TXToastManager.show('申请失败')
             }
         }).catch(err => {
             console.error(err)
@@ -65,38 +70,54 @@ export default class AgentCommissionTransfer extends Component<Props> {
 
     }
 
-    _onShowCustomer  = () => {
+    getUserInfo = () => {
+        http.post('User/getUserInfo', null, true).then((res) => {
+            if (res.status === 10000) {
+                if (res.data !== undefined && res.data !== null && res.data !== {})
+                    this.setState({agentData: res.data})
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
+
+    _onShowCustomer = () => {
         this.props.navigation.navigate('CustomerService')
     }
+
     render() {
+        let {outstandingCommissions, commissionBeginDate, commissionEndDate, allExtractedCommissions} = this.state.agentData
+        let allEx = allExtractedCommissions.toFixed(2)
         return (<View style={{flex: 1, alignItems: 'center'}}>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>转存金额</Text>
-                    <Text style={styles.itemtTileThemeColorText}>20000</Text>
+                    <Text style={styles.itemtTileThemeColorText}>{outstandingCommissions}</Text>
                 </View>
                 <View style={styles.devidelineView}/>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>计拥周期</Text>
-                    <Text style={styles.itemtTileGrayColorText}>20000</Text>
+                    <Text style={styles.itemtTileGrayColorText}>{commissionBeginDate}~{commissionEndDate}</Text>
                 </View>
                 <View style={styles.devidelineView}/>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>提取类型</Text>
-                    <Text style={styles.itemtTileGrayColorText}>20000</Text>
+                    <Text style={styles.itemtTileGrayColorText}>转存到中心钱包</Text>
                 </View>
                 <View style={styles.devidelineView}/>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>当前余额</Text>
-                    <Text style={styles.itemtTileGrayColorText}>20000</Text>
+                    <Text style={styles.itemtTileGrayColorText}>{allEx}</Text>
                 </View>
                 <View style={styles.devidelineView}/>
 
                 <Text
-                    style={styles.itemtTileColorText}>将佣金提现到钱包余额，需先提交平台审核，审核完成后将立即转入您的中心钱包，可直接用于游戏，且不要求打码量，若有任何疑问，请联系<Text style={{fontSize:12,color:'red'}} onPress={this._onShowCustomer}> 在线客服 </Text>
+                    style={styles.itemtTileColorText}>将佣金提现到钱包余额，需先提交平台审核，审核完成后将立即转入您的中心钱包，可直接用于游戏，且不要求打码量，若有任何疑问，请联系<Text
+                    style={{fontSize: 12, color: 'red'}} onPress={this._onShowCustomer}> 在线客服 </Text>
                 </Text>
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate('AgentCommissionSuccess');
+                        this.withdrawlCommission();
                     }}
                     style={styles.touchView}>
                     <Text style={[styles.agentTitle, {fontSize: 14}]}>确认提交</Text>
@@ -125,7 +146,7 @@ const styles = StyleSheet.create({
     },
     itemtTileThemeColorText: {width: DeviceValue.windowWidth / 2 - 30, textAlign: 'right', color: theme_color}
     ,
-    itemtTileGrayColorText: {width: DeviceValue.windowWidth/ 2 - 30, textAlign: 'right', color: MainTheme.GrayColor}
+    itemtTileGrayColorText: {width: DeviceValue.windowWidth / 2 - 30, textAlign: 'right', color: MainTheme.GrayColor}
     ,
     itemtTileColorText: {
         width: DeviceValue.windowWidth - 30,
