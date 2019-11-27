@@ -49,6 +49,7 @@ import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScr
 import TeamListScreen from "../../components/agent/teamManager/TeamListScreen"
 import TeamMemberScreen from "../../components/agent/teamManager/TeamMemberScreen"
 import TeamMemberDetailScreen from "../../components/agent/teamManager/TeamMemberDetailScreen"
+import AgentCommissionExtract from "../../components/agent/AgentCommissionExtract"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -238,6 +239,7 @@ export default class MainScreen extends Component<Props> {
             TeamListScreen: { screen: TeamListScreen },
             TeamMemberScreen: { screen: TeamMemberScreen },
             TeamMemberDetailScreen: { screen: TeamMemberDetailScreen },
+            AgentCommissionExtract : {screen : AgentCommissionExtract},
         },
         {
             initialRouteName: this.state.initRoute,

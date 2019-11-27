@@ -24,9 +24,9 @@ import CalendarDialog from "../../../customizeview/CalendarDialog";
 
 //0：全部 ;直属：加款 ;2：团队;
 const RECORD_TYPES = [
-    { title: '全部', key: 'all', value: 0 },
-    { title: '直属', key: 'ck', value: 1 },
-    { title: '团队', key: 'tk', value: 2 },
+    { title: '全部', key: 'all', value: '0' },
+    { title: '直属', key: 'ck', value: '1' },
+    { title: '团队', key: 'tk', value: '2' },
 ];
 //0：注册时间降序;1：注册时间升序;2：累计产佣降序;3：累计产佣升序;4：旗下会员降序;5：旗下会员升序
 const RESULT_TYPES = [
@@ -54,6 +54,7 @@ let status = 2;
 let isStartTag = true;
 let selectDetailIndex = -1
 
+const PAGE_SIZE = 20;
 
 export default class TeamManagerScreen extends Component<Props> {
 
@@ -65,6 +66,7 @@ export default class TeamManagerScreen extends Component<Props> {
             isDialogVisible: false,
             teamPeopleCount:56,
             refreshing: false,
+            isNoMoreData: false,
             isLoreMoreing: 'LoreMoreing',
             listPosition: 0,
             data: [],
@@ -144,7 +146,7 @@ export default class TeamManagerScreen extends Component<Props> {
     postList = () => {
         let prams = {
             pageNo: pageSize,
-            pageSize: 20,
+            pageSize: PAGE_SIZE,
             startTime: this.state.startTime,
             endTime: this.state.endTime,
             sortBy: status,
@@ -156,6 +158,8 @@ export default class TeamManagerScreen extends Component<Props> {
             this.setState({ refreshing: false })
             if (res.status === 10000) {
                 total = res.data.total
+                let noMoreData = res.data.list.length < PAGE_SIZE;
+
                 this.isLoreMore = false;
                 if (pageSize > 1) {
                     if (res.data.list !== null) {
@@ -168,12 +172,14 @@ export default class TeamManagerScreen extends Component<Props> {
                         }
                         this.setState({
                             data: more,
+                            isNoMoreData:noMoreData,
                         });
                     }
 
                 } else {
                     this.setState({
                         data: res.data.list,
+                        isNoMoreData:noMoreData,
                     });
                 }
                 console.log("data")
@@ -219,29 +225,29 @@ export default class TeamManagerScreen extends Component<Props> {
 
     renderFooter = () => {
 
-        if (this.state.data.length > 15 && this.state.isLoreMoreing == 'LoreMoreing') {
-            return (
-                <View style={{
-                    height: 44,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text>{'正在加载....'}</Text>
-                </View>
-            )
-        } else if (this.state.isLoreMoreing == 'LoreMoreEmpty' && this.state.data.length >= 10) {
-            return (
-                <View style={{
-                    height: 44,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text>{'没有更多了'}</Text>
-                </View>
-            )
-        } else {
-            return null
+        const { data, isLoadingMore, isRefreshing, isNoMoreData } = this.state;
+
+        let tailText = '';
+        if (isLoadingMore || isRefreshing) {
+            tailText = '正在加载....';
         }
+        else if (data.length > 0) {
+            tailText = isNoMoreData ? '没有更多数据了' : '上拉加载更多';
+        }
+
+        return (
+            <View>
+                {data.length > 0 && this.separatorComponent()}
+                {
+                    tailText != '' && (
+                        <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ marginTop: 10, color: MainTheme.GrayColor, fontSize: 12 }}>
+                                {tailText}
+                            </Text>
+                        </View>
+                    )}
+            </View>
+        )
 
     }
 

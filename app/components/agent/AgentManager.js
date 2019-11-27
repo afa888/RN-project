@@ -344,6 +344,30 @@ export default class AgentManager extends Component<Props> {
         </View>)
     }
 
+    onShowBank = () => {
+        let {agentData} = this.state;
+        getStoreData('userInfoState').then((userInfo) => {
+            if (userInfo && !userInfo.settedqkpwd) {
+                //尚未设置提款密码
+                TXToastManager.show('请先设置提款密码');
+                this.props.navigation.navigate('SettingCapitalPwdScreen');
+            } else if (userInfo && userInfo.bankList && userInfo.bankList.length == 0) {
+                //还没有绑定银行卡
+                TXToastManager.show('请先绑定银行卡');
+                this.props.navigation.navigate('AddBankScreen');
+            } else if (userInfo.bankList && userInfo.bankList.length > 0) {
+                this.refs.modal6.close();
+                if (parseInt(agentData.outstandingCommissions) > 0) {
+                    this.props.navigation.navigate('AgentCommissionExtract',{agentData:agentData,bankInfo:userInfo.bankList[0]})
+                }else {
+                    TXToastManager.show('您当前没有佣金可以提取');
+                }
+                
+            }
+        });
+        
+    }
+
     render() {
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
         return (<SafeAreaView style={{flex: 1}}>
@@ -394,8 +418,7 @@ export default class AgentManager extends Component<Props> {
                             <Text style={[styles.agentTitle, {fontSize: 14}]}>转至中心钱包</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => {
-                            }}
+                            onPress={this.onShowBank.bind(this)}
                             style={styles.touchBankView}>
                             <Text style={{fontSize: 14, color: theme_color}}>提现至银行卡</Text>
                         </TouchableOpacity>
