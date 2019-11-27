@@ -227,7 +227,7 @@ export default class AgentManager extends Component<Props> {
                             this.copyText(inviteLink)
                         }}>
                             <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
-                                                                   style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
+                                                                                     style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             this.copyText(agencyShare)
@@ -389,6 +389,8 @@ export default class AgentManager extends Component<Props> {
                         <Text style={styles.choiceText}>请选择:</Text>
                         <TouchableOpacity
                             onPress={() => {
+                                this.refs.modal6.close()
+                                this.props.navigation.navigate('AgentCommissionTransfer');
                             }}
                             style={styles.touchView}>
                             <Text style={[styles.agentTitle, {fontSize: 14}]}>转至中心钱包</Text>
@@ -434,7 +436,7 @@ const styles = StyleSheet.create({
     shortcutTitle: {
         fontSize: 12,
         color: MainTheme.DarkGrayColor,
-        marginTop:2
+        marginTop: 2
     },
     agentTitle: {
         color: MainTheme.commonButtonTitleColor
@@ -526,23 +528,23 @@ const styles = StyleSheet.create({
     modal4: {
         height: 160
     },
-    modalView:{
+    modalView: {
         width: DeviceValue.windowWidth,
         height: 160,
         alignItems: 'center'
     },
-    choiceText:{
+    choiceText: {
         fontSize: 12,
         marginTop: 12,
         marginLeft: 20,
         textAlign: 'left',
         width: DeviceValue.windowWidth
     },
-    touchView:{
+    touchView: {
         alignItems: 'center', justifyContent: 'center', marginTop: 10,
         backgroundColor: theme_color, height: 40, width: DeviceValue.windowWidth - 40
     },
-    touchBankView:{
+    touchBankView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10,

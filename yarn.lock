@@ -1645,10 +1645,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-code-push@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/code-push/-/code-push-2.0.7.tgz#aa2303376552a15ea3c2092ff2f19e4d6666ab9e"
-  integrity sha512-8cEO60OYPiDj4vaSBxRAySzShYrKLi8GXdxcbJhTJ25PAvMUkf9rC/IQxgRK01EqWcGwKvIAGvz+Xk9YJcMM+A==
+code-push@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/code-push/-/code-push-3.0.1.tgz#d6d48b1e112a49148b2244b0213afaf3f818645b"
+  integrity sha512-UgktdhS47nxtUdGB1l4D6JBnuGB20hMT7QswGj6gQgQbiTjSmOBJ0MK/09fyeYzWKjUnJBEmUud08rC7WzKFMw==
   dependencies:
     q "^1.4.1"
     recursive-fs "^1.1.2"
@@ -5391,12 +5391,12 @@ react-native-check-box@^2.1.7:
   dependencies:
     prop-types "^15.5.7"
 
-react-native-code-push@^5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-5.6.1.tgz#d08d5a05ec619c6909822c2f6c4130da5d264d93"
-  integrity sha512-3iAKPeVCiqOdpBes7KQ4mUXjFTYiY2YdNR5smFfebGZQTgMj1hDWknQfIULaIwr7yE7+UiBe+WsnoAzepoNOIA==
+react-native-code-push@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-5.7.0.tgz#38667c1ba5a5e1a6dd1b4271468c6ef6284b3ca4"
+  integrity sha512-Sy54tRfV9kKH9gcu4mVlcmpGLzPinw3fuSlxxmOdndIH03zZdclys2QU9ipk1zYEgmYhT7ls/MjXFz84YdJL2w==
   dependencies:
-    code-push "^2.0.7"
+    code-push "^3.0.1"
     glob "^5.0.15"
     hoist-non-react-statics "^2.3.1"
     inquirer "^1.1.2"
@@ -5437,6 +5437,18 @@ react-native-marquee-ab@^1.2.6:
   resolved "https://registry.yarnpkg.com/react-native-marquee-ab/-/react-native-marquee-ab-1.2.6.tgz#5bbbed6f48894d84926210b68453f815b7d38380"
   integrity sha512-2/XJ3qCiyaY6n69mQ1hb7FLhEPz2ZsAr3W3JlL1Jxk+wwOnzfuZcSbnEUAzjuXon8srebgu9W+TgmPkLxan9uA==
 
+react-native-modalbox@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-modalbox/-/react-native-modalbox-2.0.0.tgz#ff3cddfb73a740e7669c2d2cc80d03cbd4890731"
+  integrity sha512-j0gJTgSGaP+VbOIWPzrHPVNEEaB/TpuY6+KlEZNtdTDEFGp8BNbsZMTr4NPMkioRgZXUvT8bClqaeD63N/BF0g==
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-password-pay@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-password-pay/-/react-native-password-pay-1.0.5.tgz#09f66a15aadc1e198c7eb8438ac57d68f1077a6c"
+  integrity sha512-rfoMt2JZFJrjV1ox2BAUFWAK6WYZuMMr+Ya7OMfCHYKIb0C7663h1qYCIc/58DtfpPMCqFiN/B5ovoeSEy945g==
+
 react-native-picker@^4.3.7:
   version "4.3.7"
   resolved "https://registry.yarnpkg.com/react-native-picker/-/react-native-picker-4.3.7.tgz#9842e8c62ff0d8b676e9514d9f9172413c0518a8"
@@ -5448,6 +5460,11 @@ react-native-progress@^3.6.0:
   integrity sha512-zzTe595xaaskyfR5OzaGrU4O0R+YkgdEw+EspgGD7wh8Hu0fs6ue3xLW+HEbTjOCn62pCRivwi3NxbpWNBCC7Q==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-progresshub@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-progresshub/-/react-native-progresshub-0.1.3.tgz#db58a82fb2dd1d595e5f9c7696c7a9bd6aa74264"
+  integrity sha512-tZHdhHVqeZdpg9O7Xow2MOdsFvg7Urg4zYNYQV6bNQi5Jy/gbFqWVi+b+1X77SXjXKvzwAwW3cj9MEsn3eeCPA==
 
 react-native-qrcode@^0.2.7:
   version "0.2.7"
@@ -5464,6 +5481,11 @@ react-native-safe-area-view@^0.14.1:
   integrity sha512-1NxWK1G0gzwCOuyNV/zf4n18s6FWsiqgwkzU3P9C0Iu8AErjhstK1jUqpRwzLH8+/7hGLsrQedmn+ZbQTOrJPg==
   dependencies:
     hoist-non-react-statics "^2.3.1"
+
+react-native-scratch@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-scratch/-/react-native-scratch-1.2.1.tgz#cedc180261946de4ce21dc1ab394413e5868ed21"
+  integrity sha512-oBOIMZ5YC/ytxaxmOYsTXDy0hckoq4arGKWN0F2Q22OlHhaBYTsNLez/HDbQIWLFQOhyWU9d1HNlq7wZM7vlYg==
 
 "react-native-screens@^1.0.0 || ^1.0.0-alpha":
   version "1.0.0-alpha.22"
@@ -5497,19 +5519,17 @@ react-native-storage@^1.0.1:
     opencollective "^1.0.3"
     opencollective-postinstall "^2.0.2"
 
-react-native-swiper@^1.5.14:
-  version "1.5.14"
-  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.14.tgz#1c6f949ca377186300f972bb0f30d24062c899aa"
-  integrity sha512-Kn0fxKooN7Shwu1qJYHB+Y8ssXXnvrIwReHXU5jCdyYNfz2QbBv0Cv3sa2Mqzr+XgzORCFFIokc8uCCUITDrVA==
-  dependencies:
-    prop-types "^15.5.10"
-
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-1.4.1.tgz#f113cd87485808f0c991abec937f70fa380478b9"
   integrity sha512-Bke8KkDcDhvB/z0AS7MnQKMD2p6Kwfc1rSKlMOvg9CC5CnClQ2QEnhPSbwegKDYhUkBI92iH/BYy7hNSm5kbUQ==
   dependencies:
     prop-types "^15.6.1"
+
+react-native-tcharts@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/react-native-tcharts/-/react-native-tcharts-1.7.9.tgz#a6735d03c8b1ebadc9bd12b185a73dc362837477"
+  integrity sha512-g1eK8zCyNx0A2wKkQrZ0DkTVM0R0+aOMPwFjVjPWwhMD86BPfbcbNlqcRiGByL299zfWYxRO3T+5fJLWKrq26A==
 
 react-native-webview@^5.12.1:
   version "5.12.1"
