@@ -81,7 +81,8 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     loginTime: login_time,
                     agencyLevel: res.data.agencyLevel,
                     agencyLevelImgUrl: res.data.agencyLevelImgUrl,
-                    agencyReward: res.data.allExtractedCommissions,
+                    // agencyReward: res.data.allExtractedCommissions,
+                    agencyReward: res.data.outstandingCommissions,
                     outstandingCommissions: res.data.outstandingCommissions,
                     agencyStatus: agencyStatus,// 代理状态 0-加入 1-停用 2-未加入
                 })
@@ -282,17 +283,41 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
         if (IS_INFINITE_AGENCY_ENABLE) {
             if (this.state.isLogin) {
-                if (agencyStatus == AGENCY_STATUS_ENABLE &&
-                    agencyLevelImgUrl != undefined &&
-                    agencyLevelImgUrl.toLowerCase().startsWith('http')) {
-                    // 代理等级显示成图片
+                if (agencyStatus == AGENCY_STATUS_ENABLE) {
+                    if (agencyLevelImgUrl != undefined &&
+                        agencyLevelImgUrl.toLowerCase().startsWith('http')) {
+                        // 代理等级显示成图片
+                        return (
+                            <View>
+                                <Text style={styles.loginName}>{userName}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={styles.userInfo}>代理等级：</Text>
+                                    <FastImage source={{ uri: agencyLevelImgUrl }}
+                                        style={{ width: 64, height: 16 }} />
+                                </View>
+                                <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                                <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                            </View>
+                        );
+                    }
+                    else {
+                        return (
+                            <View>
+                                <Text style={styles.loginName}>{userName}</Text>
+                                <Text style={styles.userInfo}>代理等级：{agencyLevel}</Text>
+                                <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                                <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                            </View>
+                        );
+                    }
+                }
+                else if (agencyStatus == AGENCY_STATUS_PAUSED) {
                     return (
                         <View>
                             <Text style={styles.loginName}>{userName}</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.userInfo}>代理等级：</Text>
-                                <FastImage source={{ uri: agencyLevelImgUrl }}
-                                    style={{ width: 64, height: 16 }} />
+                                <Text style={styles.userInfo}>已停用</Text>
                             </View>
                             <Text style={styles.userInfo}>当前积分：{integral}</Text>
                             <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
@@ -300,18 +325,10 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     );
                 }
                 else {
-                    let levelText = agencyLevel;
-                    if (agencyStatus == AGENCY_STATUS_PAUSED) {
-                        levelText = '已停用';
-                    }
-                    else if (agencyStatus == AGENCY_STATUS_UNJOIN) {
-                        levelText = '未加入';
-                    }
-
                     return (
                         <View>
                             <Text style={styles.loginName}>{userName}</Text>
-                            <Text style={styles.userInfo}>代理等级：{levelText}</Text>
+                            <Text style={styles.userInfo}>代理等级：未加入</Text>
                             <Text style={styles.userInfo}>当前积分：{integral}</Text>
                             <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
                         </View>
@@ -359,7 +376,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     crateAssetsInfo() {
         const { wallet, totalBalance, agencyReward, agencyStatus } = this.state;
         let assertsItems = [];
-        if (agencyStatus == AGENCY_STATUS_ENABLE) { // 判断用户是否加入无线代理
+        if (agencyStatus != AGENCY_STATUS_UNJOIN) { // 判断用户是否加入无线代理
             assertsItems = [['钱包余额', wallet], ['代理佣金', agencyReward], ['总共资产', totalBalance]];
         }
         else {
