@@ -47,7 +47,12 @@ import AgentCommissionTransfer from "../../components/agent/AgentCommissionTrans
 import AgentRewardRecorder from "../../components/agent/AgentRewardRecorder";
 import AgentWithdrawalRecorder from "../../components/agent/AgentWithdrawalRecorder";
 import AgentStop from "../../components/agent/AgentStop";
+import AgentPausedPage from "../../components/agent/AgentPausedPage";
 import TeamManagerScreen from "../../components/agent/teamManager/TeamManagerScreen"
+import TeamListScreen from "../../components/agent/teamManager/TeamListScreen"
+import TeamMemberScreen from "../../components/agent/teamManager/TeamMemberScreen"
+import TeamMemberDetailScreen from "../../components/agent/teamManager/TeamMemberDetailScreen"
+import AgentCommissionExtract from "../../components/agent/AgentCommissionExtract"
 
 import { theme_color } from "../../utils/AllColor";
 
@@ -236,6 +241,11 @@ export default class MainScreen extends Component<Props> {
             AgentCommissionSuccess: { screen: AgentCommissionSuccess },
             AgentStop: { screen: AgentStop },
             TeamManagerScreen : {screen : TeamManagerScreen},
+            AgentPausedPage: { screen: AgentPausedPage },
+            TeamListScreen: { screen: TeamListScreen },
+            TeamMemberScreen: { screen: TeamMemberScreen },
+            TeamMemberDetailScreen: { screen: TeamMemberDetailScreen },
+            AgentCommissionExtract : {screen : AgentCommissionExtract},
         },
         {
             initialRouteName: this.state.initRoute,

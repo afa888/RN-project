@@ -50,6 +50,8 @@ export class MainTheme {
     static GrayColor = '#999999';
     // 深灰色
     static DarkGrayColor = '#333333';
+    // 二级文字颜色
+    static ThemeEditTextTextColor = '#666666';
     // 普通文本颜色
     static TextTitleColor = textTitleColor;
     // 视图的背景色
@@ -66,6 +68,10 @@ export class MainTheme {
     static BankTransgerBGColor = '#EB6F5A';
     //银行信息文字颜色
     static BankInfoFontColor = '#FFFFFF';
+    //银行信息文字颜色
+    static AgentInfoBGColor = '#F2F2F2';
+    //代理等级文字颜色
+    static AgentLevelTextColor = '#F5CEC8';
 
 
     /* ============================= 以下为一些通用控件的定义 ============================= */
@@ -89,7 +95,7 @@ export class MainTheme {
     static renderCommonBack = (navigation) => {
         return (
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <TouchableOpacity style={{width: 60, height: 20, alignItems: 'center'}}
+                <TouchableOpacity style={{width: 60, height: 20, alignItems: 'flex-start'}}
                                   onPress={() => {
                                       navigation.goBack()
                                   }}>
@@ -202,7 +208,7 @@ export class MainTheme {
         // 页面的返回按钮的Image样式
         PageBackImage: {
             resizeMode: 'contain',
-            width: 25,
+            width: 20,
             height: 20,
             marginLeft: 12,
         },

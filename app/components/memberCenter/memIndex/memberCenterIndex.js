@@ -1,45 +1,56 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
     DeviceEventEmitter, Alert
 } from "react-native";
 import httpBaseManager from "../../../http/httpBaseManager";
-import {MainTheme} from "../../../utils/AllColor";
-import {getStoreData, checkLoginState, UserSession} from "../../../http/AsyncStorage";
+import { MainTheme } from "../../../utils/AllColor";
+import { getStoreData, checkLoginState, UserSession } from "../../../http/AsyncStorage";
 import AndroidIosNativeGameActiviy from "../../../customizeview/AndroidIosNativeGameActiviy";
 import http from "../../../http/httpFetch";
-import {CAGENT, RN_VERSION} from "../../../utils/Config";
+import { CAGENT, RN_VERSION } from "../../../utils/Config";
 import DeviceValue from "../../../utils/DeviceValue";
-import {FlatList, Switch} from 'react-native-gesture-handler';
+import { FlatList, Switch } from 'react-native-gesture-handler';
 import TXToastManager from "../../../tools/TXToastManager";
-import {clearAllStore} from "../../../http/AsyncStorage";
+import { clearAllStore } from "../../../http/AsyncStorage";
 import TXTools from '../../../utils/Htools';
+import FastImage from 'react-native-fast-image';
 
 // 是否接入了无限代理
 export const IS_INFINITE_AGENCY_ENABLE = true;
+
+// 无限代理的状态(state.agencyStatus)
+export const AGENCY_STATUS_ENABLE = 0;
+export const AGENCY_STATUS_PAUSED = 1;
+export const AGENCY_STATUS_UNJOIN = 2;
 
 export default class MemberCenterIndexScreen extends Component<Props> {
 
     static navigationOptions = {
         header: null
     };
-
     constructor(props) {
         super(props);
         this.state = {
             userName: '',
             phoneVerify: false,
             cardVerify: false,
-            integral: 0,
             wallet: 0,
             totalBalance: 0,
             loginTime: '',
-            agencyLevel: '',    // 无限代理的等级
-            agencyReward: 0,    // 无限代理的佣金
-            autoTransfer: true,  // 是否自动转账
+
+            agencyStatus: 2,            // 代理状态 0-加入 1-停用 2-未加入
+            agencyLevel: '',            // 无限代理的等级
+            agencyLevelImgUrl: '',      // 无限代理的等级图片URL
+            integral: 0,                // 无限代理的积分
+            agencyReward: 0,            // 无限代理的佣金
+            outstandingCommissions: 0,  // 无限代理的未结算佣金
+
+            autoTransfer: true,         // 是否自动转账
+
             isLogin: false,
-            agencyStatus: 2  //未加入 1停用，0.加入
+            version: 0,                 // APP版本
         };
 
         // 监听组件的四个状态回调：willFocus、didFocus、willBlur、didBlur
@@ -47,7 +58,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         if (this.props.navigation) {
             this._navListener = this.props.navigation.addListener("willFocus", () => {
                 checkLoginState().then((isLogined) => {
-                    this.setState({isLogin: isLogined});
+                    this.setState({ isLogin: isLogined });
                     if (isLogined) {
                         this.refreshUserInfo();
                     }
@@ -59,7 +70,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     refreshUserInfo() {
         http.post('User/getUserInfo', null).then(res => {
             if (res.status === 10000) {
-                const {username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time, agencyStatus} = res.data;
+                const { username, mobileStatus, cardStatus, integral, wallet, totalBalance, login_time, agencyStatus } = res.data;
                 this.setState({
                     userName: username.slice(CAGENT.length),
                     phoneVerify: mobileStatus == 0 ? false : true,
@@ -68,10 +79,11 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     wallet: wallet,
                     totalBalance: totalBalance,
                     loginTime: login_time,
-                    agencyLevel: '会员',    // mock data
-                    agencyReward: 0,        // mock data
-                    version: 0,             // 版本
-                    agencyStatus: agencyStatus
+                    agencyLevel: res.data.agencyLevel,
+                    agencyLevelImgUrl: res.data.agencyLevelImgUrl,
+                    agencyReward: res.data.allExtractedCommissions,
+                    outstandingCommissions: res.data.outstandingCommissions,
+                    agencyStatus: agencyStatus,// 代理状态 0-加入 1-停用 2-未加入
                 })
             }
         })
@@ -89,7 +101,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
         // 获取版本
         AndroidIosNativeGameActiviy.getVersion().then((andriodVersionCode) => {
-            this.setState({version: andriodVersionCode})
+            this.setState({ version: andriodVersionCode })
         });
     }
 
@@ -101,14 +113,15 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     checkLoginStateThenDo = (func) => {
         if (UserSession.isLogin) {
             func();
-        } else {
-            this.props.navigation.navigate('LoginService', {backRoute: '会员'});
+        }
+        else {
+            this.props.navigation.navigate('LoginService', { backRoute: '会员' });
         }
     }
 
     // 充值
     onRechange = () => {
-        this.props.navigation.navigate('DepositManagerScreen', {isNotFromHome: true});
+        this.props.navigation.navigate('DepositManagerScreen', { isNotFromHome: true });
     }
 
     // 提款
@@ -150,13 +163,13 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     // 无限代理
     onCheckAgencyDetail = () => {
         this.checkLoginStateThenDo(() => {
-            if (this.state.agencyStatus === 0) {//已加入
+            const { agencyStatus } = this.state;
+            if (agencyStatus === AGENCY_STATUS_ENABLE) {//已加入
                 this.props.navigation.navigate('AgentManager');
-            } else if (this.state.agencyStatus === 1) {//停用
-                this.props.navigation.navigate('AgentStop');
-            } else if (this.state.agencyStatus === 2) {//未加入
-                this.props.navigation.navigate('AgenJoinBefore', {isJoin: true});
-
+            } else if (agencyStatus === AGENCY_STATUS_PAUSED) {//停用
+                this.props.navigation.navigate('AgentPausedPage');
+            } else if (agencyStatus === AGENCY_STATUS_UNJOIN) {//未加入
+                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true });
             }
         });
         //  TXToastManager.show('暂未实现，敬请期待');
@@ -164,7 +177,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     // 自动转账选项发生变化
     onChangeAutoTransferOption = (value) => {
-        this.setState({autoTransfer: value});
+        this.setState({ autoTransfer: value });
         TXToastManager.show('暂未实现，敬请期待');
     }
 
@@ -203,7 +216,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     onLogout = () => {
         if (UserSession.isLogin) {
             Alert.alert('温馨提示', '退出账户，是否继续？', [
-                {text: '取消', onPress: () => console.log('Cancel loginOut')},
+                { text: '取消', onPress: () => console.log('Cancel loginOut') },
                 {
                     text: '确定', onPress: () => {
                         http.post('logout.do', {}, true).then(res => {
@@ -217,8 +230,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     }
                 },
             ]);
-        } else {
-            this.props.navigation.navigate('LoginService', {backRoute: '会员'});
+        }
+        else {
+            this.props.navigation.navigate('LoginService', { backRoute: '会员' });
         }
     }
 
@@ -229,15 +243,16 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         if (this.state.isLogin) {
             return (
                 <TouchableOpacity style={styles.userSettingsContaner}
-                                  onPress={() => this.checkLoginStateThenDo(() => {
-                                      this.props.navigation.navigate('PersonSetting')
-                                  })}>
+                    onPress={() => this.checkLoginStateThenDo(() => {
+                        this.props.navigation.navigate('PersonSetting')
+                    })}>
                     <Image source={require('../../../static/img/person_setting.png')}
-                           style={styles.userSettingsIcon}/>
+                        style={styles.userSettingsIcon} />
                 </TouchableOpacity>
             );
-        } else {
-            return <View style={{height: 40, width: 0.5}}/>
+        }
+        else {
+            return <View style={{ height: 40, width: 0.5 }} />
         }
     }
 
@@ -246,14 +261,14 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      */
     createUserAvatar() {
         return (
-            <View style={{width: 90, alignItems: 'center', paddingTop: 5}}>
+            <View style={{ width: 90, alignItems: 'center', paddingTop: 5 }}>
                 <Image source={require('../../../static/img/ic_launcher.png')}
-                       style={{
-                           resizeMode: 'cover',
-                           width: 70,
-                           height: 70,
-                           borderRadius: 35
-                       }}/>
+                    style={{
+                        resizeMode: 'cover',
+                        width: 70,
+                        height: 70,
+                        borderRadius: 35
+                    }} />
             </View>
         );
     }
@@ -262,46 +277,74 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 用户名称等信息
      */
     createUserInfo() {
-        const {userName, phoneVerify, cardVerify, integral, loginTime} = this.state;
+        const { userName, phoneVerify, cardVerify, integral,
+            loginTime, agencyStatus, agencyLevel, agencyLevelImgUrl } = this.state;
 
         if (IS_INFINITE_AGENCY_ENABLE) {
             if (this.state.isLogin) {
-                return (
-                    <View>
-                        <Text style={styles.loginName}>{userName}</Text>
-                        <Text style={styles.userInfo}>代理等级：{this.state.agencyLevel}</Text>
-                        <Text style={styles.userInfo}>当前积分：{integral}</Text>
-                        <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
-                    </View>
-                );
-            } else {
+                if (agencyStatus == AGENCY_STATUS_ENABLE &&
+                    agencyLevelImgUrl != undefined &&
+                    agencyLevelImgUrl.toLowerCase().startsWith('http')) {
+                    // 代理等级显示成图片
+                    return (
+                        <View>
+                            <Text style={styles.loginName}>{userName}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={styles.userInfo}>代理等级：</Text>
+                                <FastImage source={{ uri: agencyLevelImgUrl }}
+                                    style={{ width: 64, height: 16 }} />
+                            </View>
+                            <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                            <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                        </View>
+                    );
+                }
+                else {
+                    let levelText = agencyLevel;
+                    if (agencyStatus == AGENCY_STATUS_PAUSED) {
+                        levelText = '已停用';
+                    }
+                    else if (agencyStatus == AGENCY_STATUS_UNJOIN) {
+                        levelText = '未加入';
+                    }
+
+                    return (
+                        <View>
+                            <Text style={styles.loginName}>{userName}</Text>
+                            <Text style={styles.userInfo}>代理等级：{levelText}</Text>
+                            <Text style={styles.userInfo}>当前积分：{integral}</Text>
+                            <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
+                        </View>
+                    );
+                }
+            }
+            else {
                 return (
                     <TouchableOpacity style={{
                         justifyContent: 'center',
                         width: DeviceValue.windowWidth * 0.5,
                         height: 80,
                     }}
-                                      onPress={this.onLogout}>
+                        onPress={this.onLogout}>
                         <Text style={{
                             fontSize: 20,
                             fontWeight: 'bold',
                             color: MainTheme.SubmitTextColor
-                        }}>立即登录</Text>
+                        }} >立即登录</Text>
                     </TouchableOpacity>
                 );
             }
-        } else {
+        }
+        else {
             return (
                 <View>
                     <Text style={styles.loginName}>{userName},欢迎您！</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={styles.userInfo}>认证状态：</Text>
-                        <Image
-                            source={phoneVerify ? require('../../../static/img/iphone_pass.png') : require('../../../static/img/iphone_nov.png')}
-                            style={{resizeMode: 'contain', height: 24, width: 30}}/>
-                        <Image
-                            source={cardVerify ? require('../../../static/img/bank_pass.png') : require('../../../static/img/bank_nov.png')}
-                            style={{resizeMode: 'contain', height: 20, width: 30}}/>
+                        <Image source={phoneVerify ? require('../../../static/img/iphone_pass.png') : require('../../../static/img/iphone_nov.png')}
+                            style={{ resizeMode: 'contain', height: 24, width: 30 }} />
+                        <Image source={cardVerify ? require('../../../static/img/bank_pass.png') : require('../../../static/img/bank_nov.png')}
+                            style={{ resizeMode: 'contain', height: 20, width: 30 }} />
                     </View>
                     <Text style={styles.userInfo}>当前积分：{integral}</Text>
                     <Text style={styles.userInfo}>上次登录时间：{loginTime}</Text>
@@ -314,11 +357,12 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 用户资产
      */
     crateAssetsInfo() {
-        const {wallet, totalBalance, agencyReward, agencyLevel} = this.state;
+        const { wallet, totalBalance, agencyReward, agencyStatus } = this.state;
         let assertsItems = [];
-        if (agencyLevel.length > 0) { // 判断用户是否加入无线代理（这里是模拟实现）
+        if (agencyStatus == AGENCY_STATUS_ENABLE) { // 判断用户是否加入无线代理
             assertsItems = [['钱包余额', wallet], ['代理佣金', agencyReward], ['总共资产', totalBalance]];
-        } else {
+        }
+        else {
             assertsItems = [['钱包余额', wallet], ['总共资产', totalBalance]];
         }
         return (
@@ -327,7 +371,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                     assertsItems.map((items) => {
                         return (
                             <TouchableOpacity style={styles.assertsItems}
-                                              onPress={() => this.gotoAssetDetails(items[0])}>
+                                onPress={() => this.gotoAssetDetails(items[0])}>
                                 <Text style={styles.assetsNumber}>{TXTools.formatMoneyAmount(items[1])}</Text>
                                 <Text style={styles.assetsCategory}>{items[0]}</Text>
                             </TouchableOpacity>
@@ -343,16 +387,14 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      */
     gotoAssetDetails = (title) => {
         switch (title) {
-            case '钱包余额':
-                break;
+            case '钱包余额': break;
             case '代理佣金':
                 this.gotoAgencyRewardDetail();
                 break;
             case '总共资产':
                 this.gotoAllAssetDetail();
                 break;
-            default:
-                break;
+            default: break;
         }
     }
 
@@ -360,12 +402,11 @@ export default class MemberCenterIndexScreen extends Component<Props> {
      * 查看代理佣金的详情
      */
     gotoAgencyRewardDetail = () => {
-        TXToastManager.show('暂未实现，敬请期待');
     }
 
     /**
-     * 查看总资产的详情
-     */
+    * 查看总资产的详情
+    */
     gotoAllAssetDetail = () => {
         this.props.navigation.navigate('AssetDetailScreen');
     }
@@ -398,9 +439,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             }}>
                 {
                     shortcutOperations.map(item =>
-                        <TouchableOpacity style={styles.shortcutItem} onPress={item.handler}>
-                            <Image source={item.icon} style={styles.shortcutIcon}/>
-                            <Text style={styles.shortcutTitle}> {item.title} </Text>
+                        <TouchableOpacity style={styles.shortcutItem} onPress={item.handler} >
+                            <Image source={item.icon} style={styles.shortcutIcon} />
+                            <Text style={styles.shortcutTitle} > {item.title} </Text>
                         </TouchableOpacity>
                     )
                 }
@@ -434,7 +475,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                 {
                     assetsOperations.map(item =>
                         <TouchableOpacity onPress={item.handler}>
-                            <Image source={item.image}/>
+                            <Image source={item.image} />
                         </TouchableOpacity>
                     )
                 }
@@ -448,9 +489,9 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     createOtherSettings() {
         return (
             <FlatList renderItem={this.createOtherSettingsItem}
-                      data={['自动转账', '安全设置', '帮助中心', '在线客服', '版本', '关于']}
-                      style={styles.otherSettingsContainer}
-                      keyExtractor={({item}) => item}
+                data={['自动转账', '安全设置', '帮助中心', '在线客服', '版本', '关于']}
+                style={styles.otherSettingsContainer}
+                keyExtractor={({ item }) => item}
             />
         );
     }
@@ -458,22 +499,22 @@ export default class MemberCenterIndexScreen extends Component<Props> {
     /**
      * 创建其它的设置的列表项
      */
-    createOtherSettingsItem = ({item, index}) => {
+    createOtherSettingsItem = ({ item, index }) => {
         switch (index) {
             case 0:
                 return ( // 自动转账设置
                     <TouchableOpacity style={styles.otherSettingsAutoTransferContainer}>
-                        <Text style={{...styles.otherSettingsTitle, textAlign: 'center'}}>{item}</Text>
+                        <Text style={{ ...styles.otherSettingsTitle, textAlign: 'center' }}>{item}</Text>
                         <TouchableOpacity style={styles.otherSettingsAutoTransferMark}
-                                          onPress={this.onShowAutoTransferHelp}>
+                            onPress={this.onShowAutoTransferHelp}>
                             <Text style={styles.otherSettingsAutoTransferQuestion}>?</Text>
                         </TouchableOpacity>
-                        <View style={{flex: 1}}/>
+                        <View style={{ flex: 1 }} />
                         <Switch onValueChange={this.onChangeAutoTransferOption}
-                                thumbColor={'white'}
-                                ios_backgroundColor={MainTheme.GrayColor}
-                                trackColor={{false: MainTheme.GrayColor, true: MainTheme.SpecialColor}}
-                                value={this.state.autoTransfer}/>
+                            thumbColor={'white'}
+                            ios_backgroundColor={MainTheme.GrayColor}
+                            trackColor={{ false: MainTheme.GrayColor, true: MainTheme.SpecialColor }}
+                            value={this.state.autoTransfer} />
                     </TouchableOpacity>
                 );
             case 4:
@@ -489,7 +530,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
             default:
                 return (
                     <TouchableOpacity style={styles.otherSettingsItem}
-                                      onPress={() => this.onOtherOperation(item)}>
+                        onPress={() => this.onOtherOperation(item)}>
                         <Text style={styles.otherSettingsTitle}>{item}</Text>
                     </TouchableOpacity>
                 );
@@ -498,15 +539,15 @@ export default class MemberCenterIndexScreen extends Component<Props> {
 
     render() {
         return (
-            <SafeAreaView style={{flex: 1}}>
-                <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-                    <View style={{height: 220, position: 'relative'}}>
-                        <ImageBackground style={{flex: 1}} resizeMode='cover'
-                                         source={require('../../../static/img/centertop_bg.png')}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
+                    <View style={{ height: 220, position: 'relative' }}>
+                        <ImageBackground style={{ flex: 1 }} resizeMode='cover'
+                            source={require('../../../static/img/centertop_bg.png')} >
                             {/* 设置按钮 */}
                             {this.renderUserSettingButton()}
                             {/* 用户基本信息 */}
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                                 {this.createUserAvatar()/* 头像 */}
                                 {this.createUserInfo()/* 用户名称等信息 */}
                             </View>

@@ -22,24 +22,20 @@ import deviceValue from "../../../utils/DeviceValue";
 import TXTools from '../../../utils/Htools';
 import CalendarDialog from "../../../customizeview/CalendarDialog";
 
-const TYPE_TITLE_MAP = new Map([['加款', '中心钱包加款'], ['存款', '中心钱包加款'], ['彩金', '赠送彩金'],
-['优惠', '赠送优惠'], ['提款', '中心钱包扣款'], ['扣款', '中心钱包扣款'], ['返水', '游戏返水'],
-['转存', '代理佣金 -> 中心钱包'], ['活动', '活动奖励'],
-]);
 //0：全部 ;直属：加款 ;2：团队;
 const RECORD_TYPES = [
     { title: '全部', key: 'all', value: '0' },
     { title: '直属', key: 'ck', value: '1' },
-    { title: '团队', key: 'tk', value: '2' },,
+    { title: '团队', key: 'tk', value: '2' },
 ];
 //0：注册时间降序;1：注册时间升序;2：累计产佣降序;3：累计产佣升序;4：旗下会员降序;5：旗下会员升序
 const RESULT_TYPES = [
-    { title: '注册时间降序', key: 'all', value: '0' },
-    { title: '注册时间升序', key: 'ck', value: '1' },
-    { title: '累计产佣降序', key: 'tk', value: '2' },
-    { title: '累计产佣升序', key: 'zz', value: '3' },
-    { title: '旗下会员降序', key: 'tk', value: '4' },
-    { title: '旗下会员升序', key: 'zz', value: '5' },
+    { title: '注册时间降序', key: 'all', value: 2 },
+    { title: '注册时间升序', key: 'ck', value: 1 },
+    { title: '累计产佣降序', key: 'tk', value: 4 },
+    { title: '累计产佣升序', key: 'zz', value: 3 },
+    { title: '旗下会员降序', key: 'tk', value: 6 },
+    { title: '旗下会员升序', key: 'zz', value: 5 },
 ];
 
 let pageSize = 1;
@@ -55,10 +51,10 @@ let lastEndTime = '';//这里因为点击了日历，如果选择了结束时间
 let lastminData = '';//这里因为先点击结束时间就会重新设置mindata，那再点击开始时间，日历要重新设置会这种
 let type = 0; //默认全部
 let status = 2;
-let textType = ['全部', '处理中', '成功', '失败']
 let isStartTag = true;
 let selectDetailIndex = -1
 
+const PAGE_SIZE = 20;
 
 export default class TeamManagerScreen extends Component<Props> {
 
@@ -70,6 +66,7 @@ export default class TeamManagerScreen extends Component<Props> {
             isDialogVisible: false,
             teamPeopleCount:56,
             refreshing: false,
+            isNoMoreData: false,
             isLoreMoreing: 'LoreMoreing',
             listPosition: 0,
             data: [],
@@ -149,9 +146,9 @@ export default class TeamManagerScreen extends Component<Props> {
     postList = () => {
         let prams = {
             pageNo: pageSize,
-            pageSize: 20,
-            startTime: startTime,
-            endTime: endTime,
+            pageSize: PAGE_SIZE,
+            startTime: this.state.startTime,
+            endTime: this.state.endTime,
             sortBy: status,
             hierarchicalType: type,
         };
@@ -161,6 +158,8 @@ export default class TeamManagerScreen extends Component<Props> {
             this.setState({ refreshing: false })
             if (res.status === 10000) {
                 total = res.data.total
+                let noMoreData = res.data.list.length < PAGE_SIZE;
+
                 this.isLoreMore = false;
                 if (pageSize > 1) {
                     if (res.data.list !== null) {
@@ -173,12 +172,14 @@ export default class TeamManagerScreen extends Component<Props> {
                         }
                         this.setState({
                             data: more,
+                            isNoMoreData:noMoreData,
                         });
                     }
 
                 } else {
                     this.setState({
                         data: res.data.list,
+                        isNoMoreData:noMoreData,
                     });
                 }
                 console.log("data")
@@ -190,38 +191,63 @@ export default class TeamManagerScreen extends Component<Props> {
     }
 
     choseType = () => {
+        if (this.state.startTime.length == 0) {
+            this.getmyDate();
+        }
         this.setState({ isModalVisible: true });
     };
 
     renderHeader = () => {
-        return <Text style={[styles.txt,{backgroundColor:'black'}]}>这是头部</Text>;
+        return (
+            <View>
+                
+                <View style={{...styles.recordItemCellContainer}} >
+                <View style={{marginLeft:20,marginRight:20,marginTop:10,width:deviceValue.windowWidth - 40,height:60,position:'absolute',backgroundColor:MainTheme.AgentInfoBGColor}}></View>
+                    <Image source={require('../../../static/img/administer_icon_zshy.png')}
+                        style={styles.recordItemCellLeftImage} />
+                    <View style={styles.recordItemCelCenterPanel}>
+                        <Text style={styles.recordItemCellTitle}>会员id</Text>
+                        <Text style={{...styles.recordItemCellDate,color: MainTheme.DarkGrayColor,marginBottom: 10}}>代理关系</Text>
+                    </View>
+                    <View style={styles.recordIetmCellRightPanel}>
+                        <Text style={{...styles.recordItemCellTitle,color: MainTheme.DarkGrayColor}}>
+                            旗下会员/上级id
+                        </Text>
+                        <Text style={{...styles.recordItemCellType,color: MainTheme.DarkGrayColor,marginBottom: 10}}>累计提供佣金</Text>
+                    </View>
+                    <View style={styles.recordIetmCellDetailPanel}>
+                        <Text style={{textAlign:'right',color: MainTheme.DarkGrayColor}}>查看佣金详情 ></Text>
+                    </View>
+                </View>
+            </View>
+            );
     }
 
     renderFooter = () => {
 
-        if (this.state.data.length > 15 && this.state.isLoreMoreing == 'LoreMoreing') {
-            return (
-                <View style={{
-                    height: 44,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text>{'正在加载....'}</Text>
-                </View>
-            )
-        } else if (this.state.isLoreMoreing == 'LoreMoreEmpty' && this.state.data.length >= 10) {
-            return (
-                <View style={{
-                    height: 44,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text>{'没有更多了'}</Text>
-                </View>
-            )
-        } else {
-            return null
+        const { data, isLoadingMore, isRefreshing, isNoMoreData } = this.state;
+
+        let tailText = '';
+        if (isLoadingMore || isRefreshing) {
+            tailText = '正在加载....';
         }
+        else if (data.length > 0) {
+            tailText = isNoMoreData ? '没有更多数据了' : '上拉加载更多';
+        }
+
+        return (
+            <View>
+                {data.length > 0 && this.separatorComponent()}
+                {
+                    tailText != '' && (
+                        <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ marginTop: 10, color: MainTheme.GrayColor, fontSize: 12 }}>
+                                {tailText}
+                            </Text>
+                        </View>
+                    )}
+            </View>
+        )
 
     }
 
@@ -255,29 +281,23 @@ export default class TeamManagerScreen extends Component<Props> {
                     {/* 最左侧小图标 */}
                     <Image source={this.getIconForItem(item)}
                         style={styles.recordItemCellLeftImage} />
-                    {/* 中间部分：标题和日期 */}
+                    {/* 左部分：会员ID/代理关系 */}
                     <View style={styles.recordItemCelCenterPanel}>
-                        <Text style={styles.recordItemCellTitle}> {this.switchTypeToTitle(item)} </Text>
-                        <Text style={styles.recordItemCellDate}> {item.createDate} </Text>
+                        <Text style={styles.recordItemCellTitle}> {item.username} </Text>
+                        <Text style={styles.recordItemCellDate}> {item.cagencyLevel} </Text>
                     </View>
-                    {/* 最右侧：金额及类型 */}
+                    {/* 中间：旗下会员/上级id 累计产出佣金 */}
                     <View style={styles.recordIetmCellRightPanel}>
-                        <Text style={{ ...styles.recordItemCellAmount, color: this.getAmountColorForItem(item) }}>
-                            {TXTools.formatMoneyAmount(item.amount, false)}
+                        <Text style={{...styles.recordItemCellTitle, color: this.getAmountColorForItem(item) }}>
+                            {this.getTeamInfo(item)}
                         </Text>
-                        <Text style={styles.recordItemCellType}>{item.type}</Text>
+                        <Text style={{...styles.recordItemCellType,color:MainTheme.theme_color}}>{this.getAllMoney(item)}</Text>
+                    </View>
+                    <View style={styles.recordIetmCellDetailPanel}>
+                        <Text style={{textAlign:'right',color:MainTheme.theme_color}}>详情 ></Text>
                     </View>
                 </TouchableOpacity>
-                {/* 下半部分：记录的详细信息 */}
-                {item.select !== undefined && item.select && (
-                    <View style={styles.recordItemCellDetailsPanel}>
-                        <Text style={styles.itemTextRemark}>订单号 {"         " + item.orderNo}</Text>
-                        <Text style={styles.itemTextRemark}>订单类型 {"       " + item.type}</Text>
-                        <Text style={styles.itemTextRemark}>订单金额 {"       " + item.amount}</Text>
-                        <Text style={styles.itemTextRemark}>订单状态 {"       " + item.status}</Text>
-                        <Text style={styles.itemTextRemark}>创建时间 {"       " + item.createDate}</Text>
-                    </View>
-                )}
+                
             </View>
         )
     }
@@ -291,87 +311,79 @@ export default class TeamManagerScreen extends Component<Props> {
             backgroundColor: MainTheme.DivideLineColor
         }} />
     }
+    
     /**
-     * 根据记录的type产生对应的标题
-     */
-    switchTypeToTitle = (item) => {
-        if (item != undefined) {
-            let title = TYPE_TITLE_MAP.get(item.type);
-
-            if (title == undefined) {
-                if (item.remark.length > 0) {
-                    return item.remark;
-                }
-                return item.type;
-            }
-
-            return title;
-        }
-        return '';
-    }
-    /**
-     * 根据记录的status返回对应的图标
+     * 根据记录的会员类型返回对应的图标
      */
     getIconForItem = (item) => {
-        let status = item.status;
-        if (status.indexOf('成功') != -1) {
-            return require('../../../static/img/UserCenter/userCenter_fund_success.png');
+        let status = item.cagencyLevel;
+        if (status.indexOf('直属') != -1) {
+            return require('../../../static/img/administer_icon_zshy.png');
         }
-        else if (status.indexOf('失败') != -1 ||
-            status.indexOf('错误') != -1 ||
-            status.indexOf('取消') != -1) {
-            return require('../../../static/img/UserCenter/userCenter_fund_failed.png');
+        else if (status.indexOf('团队') != -1) {
+            return require('../../../static/img/administer_icon_tdhy.png');
         }
 
-        return require('../../../static/img/UserCenter/userCenter_fund_wait.png');
+        return require('../../../static/img/administer_icon_tdhy.png');
     }
+
+    /**
+     * 根据记录的cagencyLevel 旗下会员/上级ID
+     */
+    getTeamInfo = (item) => {
+        let status = item.cagencyLevel;
+        if (status.indexOf('直属') != -1) {
+            if (item.isAgency === 1) {
+                //已经开通代理
+                return item.directUserNum;
+            }else {
+                return '未开通代理';
+            }
+        }
+        else if (status.indexOf('团队') != -1) {
+            return item.topUserName;
+        }
+    }
+
+    /**
+     * 会员累计产出佣金
+     */
+    getAllMoney = (item) => {
+        return TXTools.formatMoneyAmount(item.totalCommission, false);;
+    }
+
     /**
      * 根据记录的type及amount返回相应的字体颜色
      */
     getAmountColorForItem = (item) => {
-        if (item.type === '转存') {
-            return MainTheme.DarkGrayColor;
+
+        let status = item.cagencyLevel;
+        if (status.indexOf('直属') != -1) {
+            if (item.isAgency === 1) {
+                //已经开通代理
+                return MainTheme.theme_color;
+            }else {
+                return MainTheme.GrayColor;
+            }
         }
-        else if (item.amount.startsWith('-')) {
-            return MainTheme.FundGreenColor;
+        else if (status.indexOf('团队') != -1) {
+            return MainTheme.GrayColor;
         }
-        return MainTheme.SpecialColor;
+        
+        return MainTheme.GrayColor;
     }
     /**
      * 响应记录被点击事件
      */
     onRecordItemPressed = (item, index) => {
-        let clickData = []
-        for (var i = 0; i < this.state.data.length; i++) {
-            clickData[i] = this.state.data[i]
-            if (i === index) {
-                if (clickData[i].select !== undefined) {
-                    clickData[i].select = !clickData[i].select;
-                } else {
-                    var key = "select";
-                    var value = true
-
-                    var key2 = "key"
-                    var value2 = i
-                    clickData[i][key2] = value2;
-                    clickData[i][key] = value;
-                }
-
-            } else {
-                if (clickData[i].select !== undefined) {
-                    clickData[i].select = false;
-                } else {
-                    var key = "select";
-                    var value = false
-
-                    var key2 = "key"
-                    var value2 = i
-                    clickData[i][key2] = value2;
-                    clickData[i][key] = value;
-                }
-            }
+        let model = this.state.data[index];
+        let status = model.cagencyLevel;
+        if (status.indexOf('直属') != -1) {
+            this.props.navigation.navigate('TeamListScreen',{data:model});
+        }else {
+            this.props.navigation.navigate('TeamMemberDetailScreen',{data:model});
         }
-        this.setState({ data: clickData });
+        
     }
 
     /**
@@ -386,7 +398,7 @@ export default class TeamManagerScreen extends Component<Props> {
             year = year - 1;
         }
         var lastDay = new Date(year, month, 0);
-        var yyyyMMdd = year + "年" + month + "月" + lastDay.getDate() + "日";
+        var yyyyMMdd = year + "-" + month + "-" + lastDay.getDate();
         console.log(yyyyMMdd);
     }
 
@@ -407,7 +419,7 @@ export default class TeamManagerScreen extends Component<Props> {
         let second = date.getSeconds().toString();
 
         endTime = year + '-' + month + '-' + day + ' ' + '23' + ':' + '59' + ':' + '59'
-        lastEndTime = year + '年' + month + '月' + day + '日'
+        lastEndTime = year + '-' + month + '-' + day
         if (date.getMonth() + 1 === 1) {//当是一月的时候年要-1
             this.setState({ minDate: (date.getFullYear() - 1).toString() + '-' + 12 + '-' + day })
             lastminData = (date.getFullYear() - 1).toString() + '-' + 12 + '-' + day
@@ -425,11 +437,11 @@ export default class TeamManagerScreen extends Component<Props> {
         /* Alert.alert(month.length + "month")*/
         /*  Alert.alert(year.length + "year")
         Alert.alert(day.length + "day")*/
-        this.setState({ endTime: year + '年' + month + '月' + day + '日', currentData: year + '-' + month + '-' + day })
+        this.setState({ endTime: year + '-' + month + '-' + day, currentData: year + '-' + month + '-' + day })
         console.log('看日期', year + '-' + month + '-' + day + "          " + year + '-' + date.getMonth() + '-' + day)
         oneDay = year + '-' + month + '-' + day + ' ' + '00' + ':' + '00' + ':' + '00'
         startTime = oneDay
-        this.setState({ startTime: year + '年' + month + '月' + day + '日' })
+        this.setState({ startTime: year + '-' + month + '-' + day })
 
 
         var treeDaydate = new Date(date - 2 * 24 * 3600 * 1000);
@@ -487,7 +499,7 @@ export default class TeamManagerScreen extends Component<Props> {
         }
         let yearMonthDay = startTime.split(' ')[0].split('-')
         this.setState({
-            startTime: yearMonthDay[0] + '年' + yearMonthDay[1] + '月' + yearMonthDay[2] + '日',
+            startTime: yearMonthDay[0] + '-' + yearMonthDay[1] + '-' + yearMonthDay[2],
             endTime: lastEndTime
         })
         console.log("this.state.startTime.length=" + this.state.startTime + "  " + treeDay)
@@ -530,8 +542,10 @@ export default class TeamManagerScreen extends Component<Props> {
                         <TouchableOpacity onPress={() => {
 
                             if (this.state.index != cur) {
+                                type = RECORD_TYPES[cur].value;
                                 this.setState({ index: cur, data: [] });
-                                this.selectTime(cur);
+                                this.refreshData();
+
                             }
                         }} style={this.state.index == cur ? styles.timeSelectContainer : styles.timeTextContainer}>
                             <Text style={this.state.index == cur ? styles.timeSelectText : styles.timeText}>{item}</Text>
@@ -629,7 +643,10 @@ export default class TeamManagerScreen extends Component<Props> {
                             {
                                 RECORD_TYPES.map((item, index) =>
                                     <TouchableOpacity style={{...styles.modalFilterOptionContainer}}
-                                        onPress={() => this.setState({ curSelectTypeIndex: index })}>
+                                        onPress={() => {
+                                            this.setState({ curSelectTypeIndex: index });
+                                            
+                                        }}>
                                         <View  style={this.state.curSelectTypeIndex == index ? styles.modalFilterSelectedViewStyle:styles.modalFilterViewStyle}>
                                             <Text style={this.state.curSelectTypeIndex == index ? styles.modalFilterOptionTextHighlighted:styles.modalFilterOptionText}>
                                                     {item.title}
@@ -676,10 +693,10 @@ export default class TeamManagerScreen extends Component<Props> {
                             onDayPress={(days) => {
                                 console.log("回调", days)
                                 if (isStartTag) {
-                                    this.setState({ startTime: days.year + "年" + days.month + "月" + days.day + "日" })
+                                    this.setState({ startTime: days.year + "-" + days.month + "-" + days.day })
                                     startTime = days.dateString + ' ' + '00' + ':' + '00' + ':' + '00'
                                 } else {
-                                    this.setState({ endTime: days.year + "年" + days.month + "月" + days.day + "日" })
+                                    this.setState({ endTime: days.year + "-" + days.month + "-" + days.day })
                                     endTime = days.dateString + ' ' + '23' + ':' + '59' + ':' + '59'
 
                                 }
@@ -867,16 +884,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
 
-    recordItemCelCenterPanel: {
-        flex: 1,
-        width: deviceValue.windowWidth / 2,
-    },
+    
 
     recordItemCellTitle: {
         color: MainTheme.DarkGrayColor,
         marginTop: 10,
         marginBottom: 10,
-        fontSize: 14,
+        fontSize: 12,
     },
 
     recordItemCellDate: {
@@ -885,19 +899,27 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
 
+    recordItemCelCenterPanel: {
+        flex: 1,
+        width: deviceValue.windowWidth / 2 -60,
+    },
+
     recordIetmCellRightPanel: {
-        marginRight: 20,
+        flex: 1,
+        width: deviceValue.windowWidth / 3 + 20,
+    },
+
+    recordIetmCellDetailPanel: {
+        width: deviceValue.windowWidth - 20 - (deviceValue.windowWidth / 2 - 80) - (deviceValue.windowWidth / 3),
+        marginRight:20,
     },
 
     recordItemCellAmount: {
-        fontSize: 18,
-        marginBottom: 10,
+        fontSize: 12,
     },
 
     recordItemCellType: {
-        color: MainTheme.GrayColor,
         fontSize: 12,
-        textAlign: 'right',
     },
     // 记录的下半部分（详细信息)的背景
     recordItemCellDetailsPanel: {
