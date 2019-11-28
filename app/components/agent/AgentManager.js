@@ -379,7 +379,14 @@ export default class AgentManager extends Component<Props> {
             directNum.push(0)
             directNum.push(this.state.barData[i].directCommissions)
         }
-        console.log("属猪")
+        let maxDirectNum = directNum.reduce(function (a, b) {
+            return b > a ? b : a;
+        });
+        let maxTeemNum = teemNum.reduce(function (a, b) {
+            return b > a ? b : a;
+        });
+        let maxNum = Math.round(maxDirectNum > maxTeemNum ? maxDirectNum : maxTeemNum)//四色五入
+        console.log("属猪" + Math.round(maxNum))
         console.log(teemNum)
         console.log(directNum)
 
@@ -427,33 +434,61 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
+            <View style={{flexDirection: 'row'}}>
+                <View style={{width: 30, height: 170, marginLeft: 15, marginTop: 15, backgroundColor: 'red'}}>
+                    <Text style={{
+                        fontSize: 10,
+                        width: 30,
+                        textAlign: 'right',
+                        height:15,
+                        marginTop: (170 / 11.5) * 1.4-7,
+                    }}>{Math.round(maxNum)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
+                    <Text  style={styles.barText}>0</Text>
+                </View>
 
-            <BarChart
-                style={{
-                    height: 170,
-                    width: DeviceValue.windowWidth - 30,
-                    marginLeft: 15,
-                    marginRight: 15,
-                    marginTop: 15
-                }}
-                data={barData}
-                yAccessor={({item}) => item.value}
-                svg={{
-                    fill: BarGreenColor,
-                }}
-                contentInset={{top: 0, bottom: 10}}
-                {...this.props}
-            >
-                <Grid/>
-            </BarChart>
-            <View style={{flexDirection: 'row', width: DeviceValue.windowWidth, justifyContent: 'center'}}>
+                <BarChart
+                    style={{
+                        height: 171,
+                        width: DeviceValue.windowWidth - 30 - 30,
+                        marginRight: 15,
+                        marginTop: 15,
+                        backgroundColor: 'yellow'
+                    }}
+                    data={barData}
+                    yAccessor={({item}) => item.value}
+                    svg={{
+                        fill: BarGreenColor,
+                    }}
+                    contentInset={{top: 0, bottom: 1}}
+                    {...this.props}
+                >
+                    <Grid/>
+                </BarChart>
+            </View>
 
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{flexDirection:'row',width:DeviceValue.windowWidth - 30 - 30,height:30,backgroundColor:'red',marginLeft:45, marginRight: 15,}}>
+                <Text style={styles.barRowText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+                <Text style={styles.barRowTwoText}>30</Text>
+
+            </View>
+            <View
+                style={{flexDirection: 'row', width: DeviceValue.windowWidth, justifyContent: 'center', marginTop: 10,alignItems:'center'}}>
+
+                <View style={{flexDirection: 'row', alignItems: 'center',height:30}}>
                     <View
                         style={{
                             resizeMode: 'contain',
-                            width: 10,
-                            height: 10,
+                            width: 8,
+                            height: 8,
                             marginRight: 6,
                             backgroundColor: BarGreenColor
                         }}/>
@@ -462,9 +497,10 @@ export default class AgentManager extends Component<Props> {
                 <View
                     style={{
                         resizeMode: 'contain',
-                        width: 10,
-                        height: 10,
+                        width: 8,
+                        height: 8,
                         marginRight: 6,
+                        marginLeft: 12,
                         backgroundColor: BarBlueColor
                     }}/>
                 <Text style={styles.textGray}>团队</Text>
@@ -753,4 +789,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 30,
     },
+    barText: {
+        marginTop: (170 / 11.5) * 2 - 15,
+        fontSize: 10,
+        width: 30,
+        textAlign: 'right',
+        height:15
+    },
+    barRowText:{width:15,height:15,fontSize:10,marginLeft:(DeviceValue.windowWidth - 30 - 30)/7-7-(DeviceValue.windowWidth - 30 - 30)/28,backgroundColor:'blue',textAlign:'center'},
+    barRowTwoText:{width:15,height:15,fontSize:10,marginLeft:(DeviceValue.windowWidth - 30 - 30)/7-7,backgroundColor:'blue',textAlign:'center'}
 });
