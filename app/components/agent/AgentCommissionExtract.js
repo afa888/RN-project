@@ -53,12 +53,13 @@ export default class AgentCommissionExtract extends Component {
         http.post('agency/withdrawlCommission', params).then(res => {
             console.log(res);
             if (res) {
+                TXToastManager.show(res.msg);
                 if (res.status === 10000) {
                     //重新查询用户信息
                     httpBaseManager.queryUserInfo();
-                    this.props.navigation.goBack();
+                    //关闭当前界面并显示成功界面 防止返回时又回到次界面
+                    this.props.navigation.replace('AgentCommissionSuccess');
                 }
-                TXToastManager.show(res.msg);
             }else {
                 TXToastManager.netError();
             }
