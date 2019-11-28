@@ -36,10 +36,8 @@ export default class TeamMemberScreen extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            teamPeopleCount:56,
             refreshing: false,
             isLoreMoreing: 'LoreMoreing',
-            listPosition: 0,
             data: [],
             total: 0,
             index: 0,
