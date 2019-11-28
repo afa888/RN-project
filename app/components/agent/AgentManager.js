@@ -21,7 +21,7 @@ import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
-import {PieChart, BarChart, Grid} from 'react-native-svg-charts'
+import {PieChart, BarChart, Grid, XAxis} from 'react-native-svg-charts'
 
 
 let userName = ''
@@ -373,11 +373,13 @@ export default class AgentManager extends Component<Props> {
 
         let teemNum = new Array();
         let directNum = new Array();
+        let dataNum = new Array();
         for (var i = 0; i < this.state.barData.length; i++) {
             teemNum.push(0)
             teemNum.push(this.state.barData[i].teamCommissions)
             directNum.push(0)
             directNum.push(this.state.barData[i].directCommissions)
+            dataNum.push(this.state.barData[i].date)
         }
         let maxDirectNum = directNum.reduce(function (a, b) {
             return b > a ? b : a;
@@ -435,19 +437,19 @@ export default class AgentManager extends Component<Props> {
                 </TouchableOpacity>
             </View>
             <View style={{flexDirection: 'row'}}>
-                <View style={{width: 30, height: 170, marginLeft: 15, marginTop: 15, backgroundColor: 'red'}}>
+                <View style={{width: 30, height: 170, marginLeft: 15,}}>
                     <Text style={{
                         fontSize: 10,
                         width: 30,
                         textAlign: 'right',
-                        height:15,
-                        marginTop: (170 / 11.5) * 1.4-7,
+                        height: 15,
+                        marginTop: (170 / 11.5) * 1.4 - 7,
                     }}>{Math.round(maxNum)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
-                    <Text  style={styles.barText}>0</Text>
+                    <Text style={styles.barText}>0</Text>
                 </View>
 
                 <BarChart
@@ -455,8 +457,6 @@ export default class AgentManager extends Component<Props> {
                         height: 171,
                         width: DeviceValue.windowWidth - 30 - 30,
                         marginRight: 15,
-                        marginTop: 15,
-                        backgroundColor: 'yellow'
                     }}
                     data={barData}
                     yAccessor={({item}) => item.value}
@@ -468,22 +468,29 @@ export default class AgentManager extends Component<Props> {
                 >
                     <Grid/>
                 </BarChart>
-            </View>
-
-            <View style={{flexDirection:'row',width:DeviceValue.windowWidth - 30 - 30,height:30,backgroundColor:'red',marginLeft:45, marginRight: 15,}}>
-                <Text style={styles.barRowText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
-                <Text style={styles.barRowTwoText}>30</Text>
 
             </View>
+            <XAxis
+                style={{marginLeft: 45, width: DeviceValue.windowWidth - 30 - 30, height: 20, marginTop: 6}}
+                data={teemNum}
+                formatLabel={(value, index) => {
+                    if ((index + 1) % 2 === 0) {
+                        return dataNum[(index + 1) / 2-1]
+                    }
+                }}
+                contentInset={{left: 10, right: 10}}
+                svg={{fontSize: 10, fill: 'black'}}
+            />
             <View
-                style={{flexDirection: 'row', width: DeviceValue.windowWidth, justifyContent: 'center', marginTop: 10,alignItems:'center'}}>
+                style={{
+                    flexDirection: 'row',
+                    width: DeviceValue.windowWidth,
+                    justifyContent: 'center',
+                    marginTop: 5,
+                    alignItems: 'center'
+                }}>
 
-                <View style={{flexDirection: 'row', alignItems: 'center',height:30}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
                     <View
                         style={{
                             resizeMode: 'contain',
@@ -794,8 +801,22 @@ const styles = StyleSheet.create({
         fontSize: 10,
         width: 30,
         textAlign: 'right',
-        height:15
+        height: 15
     },
-    barRowText:{width:15,height:15,fontSize:10,marginLeft:(DeviceValue.windowWidth - 30 - 30)/7-7-(DeviceValue.windowWidth - 30 - 30)/28,backgroundColor:'blue',textAlign:'center'},
-    barRowTwoText:{width:15,height:15,fontSize:10,marginLeft:(DeviceValue.windowWidth - 30 - 30)/7-7,backgroundColor:'blue',textAlign:'center'}
+    barRowText: {
+        width: 15,
+        height: 15,
+        fontSize: 10,
+        marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7 - (DeviceValue.windowWidth - 30 - 30) / 28,
+        backgroundColor: 'blue',
+        textAlign: 'center'
+    },
+    barRowTwoText: {
+        width: 15,
+        height: 15,
+        fontSize: 10,
+        marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7,
+        backgroundColor: 'blue',
+        textAlign: 'center'
+    }
 });
