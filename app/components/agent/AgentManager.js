@@ -497,7 +497,7 @@ export default class AgentManager extends Component<Props> {
                             width: 8,
                             height: 8,
                             marginRight: 6,
-                            backgroundColor: BarGreenColor
+                            backgroundColor: BarBlueColor
                         }}/>
                     <Text style={styles.textGray}>直属</Text>
                 </View>
@@ -508,7 +508,7 @@ export default class AgentManager extends Component<Props> {
                         height: 8,
                         marginRight: 6,
                         marginLeft: 12,
-                        backgroundColor: BarBlueColor
+                        backgroundColor: BargreenColor
                     }}/>
                 <Text style={styles.textGray}>团队</Text>
             </View>
@@ -590,7 +590,6 @@ export default class AgentManager extends Component<Props> {
                     {this.createQr()}
                     <View style={{
                         width: DeviceValue.windowWidth,
-                        height: 1000,
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
                         {this.state.pieData !== {} && this.createPie()}
