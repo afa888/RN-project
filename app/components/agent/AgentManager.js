@@ -10,7 +10,7 @@ import {
     CircleGoldColor,
     theme_color,
     BarBlueColor,
-    BarGreenColor
+    BarGreenColor,
 } from "../../utils/AllColor";
 import {getStoreData, LoginStateKey, UserNameKey, UserPwdKey} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
@@ -508,7 +508,7 @@ export default class AgentManager extends Component<Props> {
                         height: 8,
                         marginRight: 6,
                         marginLeft: 12,
-                        backgroundColor: BargreenColor
+                        backgroundColor: BarGreenColor
                     }}/>
                 <Text style={styles.textGray}>团队</Text>
             </View>
