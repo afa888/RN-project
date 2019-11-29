@@ -38,7 +38,7 @@ export default class AgentWithdrawalRecorder extends Component<Props> {
                 MainTheme.renderCommonBack(navigation)
             ),
             headerRight: (
-                MainTheme.renderCommonMore(navigation, () => {
+                MainTheme.renderCommonMore(() => {
                     if (navigation.state.params) {
                         navigation.state.params.onRightItemPressed();
                     }
