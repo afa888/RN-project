@@ -29,21 +29,11 @@ export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
         return {
-            headerTitle: <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 代理管理</Text></View>,
+            headerTitle: (
+                MainTheme.renderCommonTitle('代理管理')
+            ),
             headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Image source={require('../../static/img/titlebar_back_normal.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               margin: 12
-                           }}/>
-                </TouchableOpacity>
+                MainTheme.renderCommonBack(navigation)
             ),
             headerRight: (
                 <View

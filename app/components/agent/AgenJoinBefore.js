@@ -172,7 +172,7 @@ export default class AgenJoinBefore extends Component<Props> {
                         </View>
                     </ImageBackground>
 
-                    <ImageBackground source={require('../../static/img/agent/wxdlbg.png')}
+                    <ImageBackground source={require('../../static/img/agent/wxdlbg.jpg')}
                                      resizeMode='cover' style={styles.bgImg}>
                         {this.state.isJoin && <TouchableOpacity onPress={() => {
                             this.jionAgent()
