@@ -20,6 +20,7 @@ export const textHightTitleColor = "#111111"; //最重要文字
 export const textThreeHightTitleColor = "#999999"; //次要文字
 export const CircleGoldColor = '#FFCC99'
 export const BarBlueColor = '#3AA1FF'
+export const BarGreenColor = '#4ECB73'
 export const AgentRedColor = '#950023'
 export const AgentBlueColor = '#5250B2'
 

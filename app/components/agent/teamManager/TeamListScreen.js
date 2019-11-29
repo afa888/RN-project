@@ -25,9 +25,6 @@ import CalendarDialog from "../../../customizeview/CalendarDialog";
 
 let pageSize = 1;
 let total = 0;
-let oldIndex = 10;
-let isStartTag = true;
-let selectDetailIndex = -1
 
 
 export default class TeamListScreen extends Component<Props> {
@@ -36,10 +33,8 @@ export default class TeamListScreen extends Component<Props> {
         super(props);
         this.state = {
             isDialogVisible: false,
-            teamPeopleCount:56,
             refreshing: false,
             isLoreMoreing: 'LoreMoreing',
-            listPosition: 0,
             data: [],
             total: 0,
             index: 0,
@@ -63,7 +58,7 @@ export default class TeamListScreen extends Component<Props> {
     };
 
     componentWillMount() {
-        oldIndex = 0
+        
     }
 
     componentDidMount() {

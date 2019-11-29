@@ -4,7 +4,14 @@ import {
     TouchableOpacity, ScrollView, SafeAreaView, Clipboard,
     DeviceEventEmitter, Alert
 } from "react-native";
-import {MainTheme, textTitleColor, CircleGoldColor, theme_color, BarBlueColor} from "../../utils/AllColor";
+import {
+    MainTheme,
+    textTitleColor,
+    CircleGoldColor,
+    theme_color,
+    BarBlueColor,
+    BarGreenColor
+} from "../../utils/AllColor";
 import {getStoreData, LoginStateKey, UserNameKey, UserPwdKey} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
@@ -14,7 +21,7 @@ import http from "../../http/httpFetch";
 import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
-import {PieChart} from 'react-native-svg-charts'
+import {PieChart, BarChart, Grid, XAxis} from 'react-native-svg-charts'
 
 
 let userName = ''
@@ -78,7 +85,7 @@ export default class AgentManager extends Component<Props> {
             agentData: {},
             inviteData: {},
             pieData: {},
-            barData: {},
+            barData: [],
             isRedBagVisible: false,
             outstandingCommissions: 0.00
         };
@@ -135,8 +142,9 @@ export default class AgentManager extends Component<Props> {
     getRecentCommissionChart = () => {
         http.post('agency/getRecentCommissionChart', null, true).then((res) => {
             if (res.status === 10000) {
+                console.log("柱状图数据")
                 console.log(res)
-                if (res.data !== {} || res.data !== null) {
+                if (res.data !== [] || res.data !== null) {
                     this.setState({barData: res.data})
                 }
 
@@ -265,7 +273,9 @@ export default class AgentManager extends Component<Props> {
 
     createPie = () => {
         let {directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum} = this.state.pieData
-        let diPercent = (diPercent / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let diPercent = directNum === 0 ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let teamNumPercent = teamNum === 0 ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+
         const data = [40, 60]
         const randomColor = [theme_color, CircleGoldColor]
         const pieData = data
@@ -309,7 +319,7 @@ export default class AgentManager extends Component<Props> {
             <View style={{flexDirection: 'row'}}>
                 {directNum !== 0 && teamNum !== 0 ? <PieChart
                     style={styles.pieView}
-                    data={pieData}/>:<View style={styles.pieView}/>}
+                    data={pieData}/> : <View style={styles.pieView}/>}
                 <View style={styles.pieRightView}>
                     <View style={styles.pieRightItemView}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}><Image
@@ -340,7 +350,7 @@ export default class AgentManager extends Component<Props> {
                                 marginRight: 6
                             }}/>
                             <Text style={styles.textGray}>团队会员</Text></View>
-                        <Text style={styles.textGray}>32</Text>
+                        <Text style={styles.textGray}>{teamNumPercent}%</Text>
                         <Text style={styles.textGray}>{teamNum}人</Text>
 
                     </View>
@@ -355,9 +365,49 @@ export default class AgentManager extends Component<Props> {
         </View>)
     }
 
-    createBar = () => {
-        return (<View>
 
+    createBar = () => {
+        if (this.state.barData.length <= 0) {
+            return
+        }
+
+        let teemNum = new Array();
+        let directNum = new Array();
+        let dataNum = new Array();
+        for (var i = 0; i < this.state.barData.length; i++) {
+            teemNum.push(0)
+            teemNum.push(this.state.barData[i].teamCommissions)
+            directNum.push(0)
+            directNum.push(this.state.barData[i].directCommissions)
+            dataNum.push(this.state.barData[i].date)
+        }
+        let maxDirectNum = directNum.reduce(function (a, b) {
+            return b > a ? b : a;
+        });
+        let maxTeemNum = teemNum.reduce(function (a, b) {
+            return b > a ? b : a;
+        });
+        let maxNum = Math.round(maxDirectNum > maxTeemNum ? maxDirectNum : maxTeemNum)//四色五入
+        console.log("属猪" + Math.round(maxNum))
+        console.log(teemNum)
+        console.log(directNum)
+
+        const data1 = directNum
+            .map((value) => ({value}))
+        const data2 = teemNum
+            .map((value) => ({value}))
+        const barData = [
+            {
+                data: data1,
+                svg: {
+                    fill: BarBlueColor,
+                },
+            },
+            {
+                data: data2,
+            },
+        ]
+        return (<View style={{position: 'relative', top: -17,}}>
             <View style={{
                 backgroundColor: 'white',
                 height: 40,
@@ -386,6 +436,83 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
+            <View style={{flexDirection: 'row'}}>
+                <View style={{width: 30, height: 170, marginLeft: 15,}}>
+                    <Text style={{
+                        fontSize: 10,
+                        width: 30,
+                        textAlign: 'right',
+                        height: 15,
+                        marginTop: (170 / 11.5) * 1.4 - 7,
+                    }}>{Math.round(maxNum)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
+                    <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
+                    <Text style={styles.barText}>0</Text>
+                </View>
+
+                <BarChart
+                    style={{
+                        height: 171,
+                        width: DeviceValue.windowWidth - 30 - 30,
+                        marginRight: 15,
+                    }}
+                    data={barData}
+                    yAccessor={({item}) => item.value}
+                    svg={{
+                        fill: BarGreenColor,
+                    }}
+                    contentInset={{top: 0, bottom: 1}}
+                    {...this.props}
+                >
+                    <Grid/>
+                </BarChart>
+
+            </View>
+            <XAxis
+                style={{marginLeft: 45, width: DeviceValue.windowWidth - 30 - 30, height: 20, marginTop: 6}}
+                data={teemNum}
+                formatLabel={(value, index) => {
+                    if ((index + 1) % 2 === 0) {
+                        return dataNum[(index + 1) / 2-1]
+                    }
+                }}
+                contentInset={{left: 10, right: 10}}
+                svg={{fontSize: 10, fill: 'black'}}
+            />
+            <View
+                style={{
+                    flexDirection: 'row',
+                    width: DeviceValue.windowWidth,
+                    justifyContent: 'center',
+                    marginTop: 5,
+                    alignItems: 'center'
+                }}>
+
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 30}}>
+                    <View
+                        style={{
+                            resizeMode: 'contain',
+                            width: 8,
+                            height: 8,
+                            marginRight: 6,
+                            backgroundColor: BarGreenColor
+                        }}/>
+                    <Text style={styles.textGray}>直属</Text>
+                </View>
+                <View
+                    style={{
+                        resizeMode: 'contain',
+                        width: 8,
+                        height: 8,
+                        marginRight: 6,
+                        marginLeft: 12,
+                        backgroundColor: BarBlueColor
+                    }}/>
+                <Text style={styles.textGray}>团队</Text>
+            </View>
+
 
         </View>)
     }
@@ -418,22 +545,32 @@ export default class AgentManager extends Component<Props> {
 
     }
 
+    //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.barData.length <= 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     render() {
+        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
         return (<SafeAreaView style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center',width:DeviceValue.windowWidth}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth}}>
                             <Text style={[styles.agentTitle, {
-                                fontSize: 22,marginLeft:DeviceValue.windowWidth/2-22
+                                fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
                             }]}>￥{outstandingCommissions}</Text>
-                           <TouchableOpacity
+                            <TouchableOpacity
                                 onPress={() => {
                                     this.refs.modal6.open()
                                 }}
-                                style={[styles.agentTitle, styles.takeMonyView]} >
+                                style={[styles.agentTitle, styles.takeMonyView]}>
                                 <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text>
                             </TouchableOpacity>
                         </View>
@@ -457,7 +594,7 @@ export default class AgentManager extends Component<Props> {
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
                         {this.state.pieData !== {} && this.createPie()}
-                        {this.createBar()}
+                        {this.state.barData.length > 0 && this.createBar()}
                     </View>
 
                 </ScrollView>
@@ -659,4 +796,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 30,
     },
+    barText: {
+        marginTop: (170 / 11.5) * 2 - 15,
+        fontSize: 10,
+        width: 30,
+        textAlign: 'right',
+        height: 15
+    },
+    barRowText: {
+        width: 15,
+        height: 15,
+        fontSize: 10,
+        marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7 - (DeviceValue.windowWidth - 30 - 30) / 28,
+        backgroundColor: 'blue',
+        textAlign: 'center'
+    },
+    barRowTwoText: {
+        width: 15,
+        height: 15,
+        fontSize: 10,
+        marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7,
+        backgroundColor: 'blue',
+        textAlign: 'center'
+    }
 });

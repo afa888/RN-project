@@ -64,7 +64,7 @@ export default class TeamManagerScreen extends Component<Props> {
         status = 2;
         this.state = {
             isDialogVisible: false,
-            teamPeopleCount:56,
+            teamPeopleCount:0,
             refreshing: false,
             isNoMoreData: false,
             isLoreMoreing: 'LoreMoreing',
@@ -173,6 +173,7 @@ export default class TeamManagerScreen extends Component<Props> {
                         this.setState({
                             data: more,
                             isNoMoreData:noMoreData,
+                            teamPeopleCount:total,
                         });
                     }
 
@@ -180,6 +181,7 @@ export default class TeamManagerScreen extends Component<Props> {
                     this.setState({
                         data: res.data.list,
                         isNoMoreData:noMoreData,
+                        teamPeopleCount:total,
                     });
                 }
                 console.log("data")
