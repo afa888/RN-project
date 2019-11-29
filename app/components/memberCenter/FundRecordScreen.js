@@ -762,7 +762,7 @@ export default class FundRecordScreen extends Component<Props> {
 
                                 }
                                 this.hideDialog();
-                                this.setState({index:-1});
+                                this.setState({ index: -1 });
                                 // this.refreshData()
                             }}
                         />
@@ -826,7 +826,7 @@ export default class FundRecordScreen extends Component<Props> {
                     style={{ backgroundColor: 'white' }}
                     data={this.state.data}
                     ListFooterComponent={this.renderFooter}//尾巴
-                    keyExtractor={item => item.key}//这里要是使用重复的key出现莫名其妙的错误
+                    keyExtractor={item => item.createDate}//这里要是使用重复的key出现莫名其妙的错误
                     enableEmptySections={true}//数据可以为空
                     renderItem={this.renderItem}
                     onEndReachedThreshold={0.2}//执行上啦的时候10%执行

@@ -318,7 +318,7 @@ export default class BettingRecordScreen extends Component<Props> {
                     </View>
 
                     <Text style={item.netAmount.startsWith('-') ? styles.betRecordAmountLose : styles.betRecordAmountWin}>
-                        { TXTools.formatMoneyAmount(item.netAmount,false)}
+                        {TXTools.formatMoneyAmount(item.netAmount, false)}
                     </Text>
                 </TouchableOpacity>
 
@@ -617,7 +617,7 @@ export default class BettingRecordScreen extends Component<Props> {
                     style={{ backgroundColor: MainTheme.BackgroundColor }}
                     data={this.state.data}
                     ListFooterComponent={this.renderFooter}//尾巴
-                    keyExtractor={item => item.key}//这里要是使用重复的key出现莫名其妙的错误
+                    keyExtractor={item => item.bettime}//这里要是使用重复的key出现莫名其妙的错误
                     enableEmptySections={true}//数据可以为空
                     renderItem={this.renderBetItem}
                     onEndReachedThreshold={0.2}//执行上啦的时候10%执行
