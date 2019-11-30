@@ -10,7 +10,7 @@ import {
     CircleGoldColor,
     theme_color,
     BarBlueColor,
-    BarGreenColor
+    BarGreenColor,
 } from "../../utils/AllColor";
 import {getStoreData, LoginStateKey, UserNameKey, UserPwdKey} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
@@ -29,21 +29,11 @@ export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
         return {
-            headerTitle: <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 代理管理</Text></View>,
+            headerTitle: (
+                MainTheme.renderCommonTitle('代理管理')
+            ),
             headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Image source={require('../../static/img/titlebar_back_normal.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               margin: 12
-                           }}/>
-                </TouchableOpacity>
+                MainTheme.renderCommonBack(navigation)
             ),
             headerRight: (
                 <View
@@ -318,8 +308,9 @@ export default class AgentManager extends Component<Props> {
             </View>
             <View style={{flexDirection: 'row'}}>
                 {directNum !== 0 && teamNum !== 0 ? <PieChart
-                    style={styles.pieView}
-                    data={pieData}/> : <View style={styles.pieView}/>}
+                        style={styles.pieView}
+                        data={pieData}/> :
+                    <Image source={require('../../static/img/agent/circle.png')} style={styles.pieView}/>}
                 <View style={styles.pieRightView}>
                     <View style={styles.pieRightItemView}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}><Image
@@ -436,15 +427,11 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            <View style={{flexDirection: 'row'}}>
+
+            {maxNum !== 0 ?
+                <View style={{flexDirection: 'row'}}>
                 <View style={{width: 30, height: 170, marginLeft: 15,}}>
-                    <Text style={{
-                        fontSize: 10,
-                        width: 30,
-                        textAlign: 'right',
-                        height: 15,
-                        marginTop: (170 / 11.5) * 1.4 - 7,
-                    }}>{Math.round(maxNum)}</Text>
+                    <Text style={styles.barTextOne}>{Math.round(maxNum)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
                     <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
@@ -453,11 +440,7 @@ export default class AgentManager extends Component<Props> {
                 </View>
 
                 <BarChart
-                    style={{
-                        height: 171,
-                        width: DeviceValue.windowWidth - 30 - 30,
-                        marginRight: 15,
-                    }}
+                    style={styles.barView}
                     data={barData}
                     yAccessor={({item}) => item.value}
                     svg={{
@@ -469,18 +452,19 @@ export default class AgentManager extends Component<Props> {
                     <Grid/>
                 </BarChart>
 
-            </View>
-            <XAxis
+                </View> : <Image source={require('../../static/img/agent/table.png')}
+                             style={styles.barBg}/>}
+            {maxNum !== 0 ? <XAxis
                 style={{marginLeft: 45, width: DeviceValue.windowWidth - 30 - 30, height: 20, marginTop: 6}}
                 data={teemNum}
                 formatLabel={(value, index) => {
                     if ((index + 1) % 2 === 0) {
-                        return dataNum[(index + 1) / 2-1]
+                        return dataNum[(index + 1) / 2 - 1]
                     }
                 }}
                 contentInset={{left: 10, right: 10}}
                 svg={{fontSize: 10, fill: 'black'}}
-            />
+            /> : null}
             <View
                 style={{
                     flexDirection: 'row',
@@ -497,7 +481,7 @@ export default class AgentManager extends Component<Props> {
                             width: 8,
                             height: 8,
                             marginRight: 6,
-                            backgroundColor: BarGreenColor
+                            backgroundColor: BarBlueColor
                         }}/>
                     <Text style={styles.textGray}>直属</Text>
                 </View>
@@ -508,7 +492,7 @@ export default class AgentManager extends Component<Props> {
                         height: 8,
                         marginRight: 6,
                         marginLeft: 12,
-                        backgroundColor: BarBlueColor
+                        backgroundColor: BarGreenColor
                     }}/>
                 <Text style={styles.textGray}>团队</Text>
             </View>
@@ -590,7 +574,6 @@ export default class AgentManager extends Component<Props> {
                     {this.createQr()}
                     <View style={{
                         width: DeviceValue.windowWidth,
-                        height: 1000,
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
                         {this.state.pieData !== {} && this.createPie()}
@@ -818,5 +801,24 @@ const styles = StyleSheet.create({
         marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7,
         backgroundColor: 'blue',
         textAlign: 'center'
+    },
+    barView: {
+        height: 171,
+        width: DeviceValue.windowWidth - 30 - 30-3,
+        marginRight: 15,
+        marginLeft:3
+    },
+    barBg: {
+        resizeMode: 'contain',
+        width: DeviceValue.windowWidth - 30,
+        height: (DeviceValue.windowWidth - 30) * (557 / 729),
+        margin: 15
+    },
+    barTextOne: {
+        fontSize: 10,
+        width: 30,
+        textAlign: 'right',
+        height: 15,
+        marginTop: (170 / 11.5) * 1.4 - 7,
     }
 });
