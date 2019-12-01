@@ -443,7 +443,8 @@ export default class HomeScreen extends Component<Props> {
                         <HomeMidView data={this.state.data.gameClassifyEntities}
                                      goMoreGame={this.goMoreGame.bind(this)}/>
                         <TouchableOpacity style={styles.agentView} onPress={() => {
-                            this.props.navigation.navigate('AgenJoinBefore')
+                            this.props.navigation.navigate('AgenJoinBefore', { isJoin: false ,isMe : false});
+
 
                         }}>
                             <Image source={require('../../static/img/agent/img_home_qxdl.png')}

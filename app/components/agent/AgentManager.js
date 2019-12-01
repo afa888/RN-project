@@ -45,7 +45,8 @@ export default class AgentManager extends Component<Props> {
                         marginRight: 12
                     }}>
                     <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                        navigation.navigate('AgenJoinBefore')
+                        navigation.navigate('AgenJoinBefore', {isJoin: false, isMe: false})
+                        // navigation.navigate('AgenJoinBefore', { isJoin: true ,isMe : true });
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -226,6 +227,7 @@ export default class AgentManager extends Component<Props> {
 
     createQr = () => {
         let {inviteLink, agencyShare} = this.state.inviteData
+        console.log('输出邀请')
         return (
             <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
@@ -263,8 +265,8 @@ export default class AgentManager extends Component<Props> {
 
     createPie = () => {
         let {directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum} = this.state.pieData
-        let diPercent = directNum === 0 ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
-        let teamNumPercent = teamNum === 0 ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let diPercent = directNum === 0 || directNum === NaN ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let teamNumPercent = teamNum === 0 || teamNum === NaN ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
 
         const data = [40, 60]
         const randomColor = [theme_color, CircleGoldColor]
@@ -430,30 +432,30 @@ export default class AgentManager extends Component<Props> {
 
             {maxNum !== 0 ?
                 <View style={{flexDirection: 'row'}}>
-                <View style={{width: 30, height: 170, marginLeft: 15,}}>
-                    <Text style={styles.barTextOne}>{Math.round(maxNum)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
-                    <Text style={styles.barText}>0</Text>
-                </View>
+                    <View style={{width: 30, height: 170, marginLeft: 15,}}>
+                        <Text style={styles.barTextOne}>{Math.round(maxNum)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
+                        <Text style={styles.barText}>0</Text>
+                    </View>
 
-                <BarChart
-                    style={styles.barView}
-                    data={barData}
-                    yAccessor={({item}) => item.value}
-                    svg={{
-                        fill: BarGreenColor,
-                    }}
-                    contentInset={{top: 0, bottom: 1}}
-                    {...this.props}
-                >
-                    <Grid/>
-                </BarChart>
+                    <BarChart
+                        style={styles.barView}
+                        data={barData}
+                        yAccessor={({item}) => item.value}
+                        svg={{
+                            fill: BarGreenColor,
+                        }}
+                        contentInset={{top: 0, bottom: 1}}
+                        {...this.props}
+                    >
+                        <Grid/>
+                    </BarChart>
 
                 </View> : <Image source={require('../../static/img/agent/table.png')}
-                             style={styles.barBg}/>}
+                                 style={styles.barBg}/>}
             {maxNum !== 0 ? <XAxis
                 style={{marginLeft: 45, width: DeviceValue.windowWidth - 30 - 30, height: 20, marginTop: 6}}
                 data={teemNum}
@@ -668,25 +670,25 @@ const styles = StyleSheet.create({
         height: 120
     },
     tgText: {
-        height: 28,
+        height: 26,
         borderRadius: 4,
         borderColor: MainTheme.theme_color,
         borderWidth: 0.5,
         justifyContent: 'center',
         padding: 2,
         color: MainTheme.theme_color,
+        marginTop: 1
 
     },
     tgwaText: {
         height: 86,
+        width: DeviceValue.windowWidth - 30 - 6 - 4 - 115,
         borderRadius: 4,
         borderColor: MainTheme.theme_color,
         borderWidth: 0.5,
-        justifyContent: 'center',
         padding: 2,
         marginTop: 6,
-        color: MainTheme.theme_color
-
+        color: MainTheme.theme_color,
     },
     qrImageView: {
         width: 120, height: 120, borderRadius: 4, padding: 1,
@@ -804,9 +806,9 @@ const styles = StyleSheet.create({
     },
     barView: {
         height: 171,
-        width: DeviceValue.windowWidth - 30 - 30-3,
+        width: DeviceValue.windowWidth - 30 - 30 - 3,
         marginRight: 15,
-        marginLeft:3
+        marginLeft: 3
     },
     barBg: {
         resizeMode: 'contain',

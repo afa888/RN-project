@@ -23,13 +23,19 @@ import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 
-let isJoin = false
+let isJoin = false//控制是否显示按钮
+let isMe = false //控制那个按钮的文字和逻辑调转
 export default class AgenJoinBefore extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
         if (params !== undefined && params.isJoin !== undefined) {
             isJoin = params.isJoin;
+            isMe = params.isMe;
+            console.log("加入钱")
+
+            console.log(isJoin)
+            console.log(isMe)
         }
         return {
             headerTitle: <View
@@ -38,7 +44,7 @@ export default class AgenJoinBefore extends Component<Props> {
                     fontSize: 18,
                     color: 'black',
                     fontWeight: 'bold'
-                }}>{isJoin ? '代理管理' : '代理规则'} </Text></View>,
+                }}>{isJoin ? '我的代理' : '代理规则'} </Text></View>,
             headerLeft: (
                 <TouchableOpacity onPress={() => {
                     navigation.goBack()
@@ -52,6 +58,7 @@ export default class AgenJoinBefore extends Component<Props> {
                            }}/>
                 </TouchableOpacity>
             ),
+            headerRight: <View/>
         };
     };
 
@@ -175,7 +182,14 @@ export default class AgenJoinBefore extends Component<Props> {
                     <ImageBackground source={require('../../static/img/agent/wxdlbg.jpg')}
                                      resizeMode='cover' style={styles.bgImg}>
                         {this.state.isJoin && <TouchableOpacity onPress={() => {
-                            this.jionAgent()
+                            if (isMe) {
+                                this.props.navigation.goBack()
+                                this.props.navigation.navigate('AgentManager')
+
+                            } else {
+                                this.jionAgent()
+
+                            }
                         }}>
                             <View style={{
                                 width: 180,
@@ -186,7 +200,7 @@ export default class AgenJoinBefore extends Component<Props> {
                                 marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9)
                             }}>
 
-                                <Text style={{color: MainTheme.commonButtonTitleColor}}>立即加入</Text>
+                                <Text style={{color: MainTheme.commonButtonTitleColor}}>{isMe ? '我的代理' : '立即加入'}</Text>
                             </View>
                         </TouchableOpacity>}
 

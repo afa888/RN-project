@@ -166,11 +166,12 @@ export default class MemberCenterIndexScreen extends Component<Props> {
         this.checkLoginStateThenDo(() => {
             const { agencyStatus } = this.state;
             if (agencyStatus === AGENCY_STATUS_ENABLE) {//已加入
-                this.props.navigation.navigate('AgentManager');
+                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true ,isMe : true });
+               // this.props.navigation.navigate('AgentManager');
             } else if (agencyStatus === AGENCY_STATUS_PAUSED) {//停用
                 this.props.navigation.navigate('AgentPausedPage');
             } else if (agencyStatus === AGENCY_STATUS_UNJOIN) {//未加入
-                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true });
+                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true ,isMe : false});
             }
         });
         //  TXToastManager.show('暂未实现，敬请期待');
