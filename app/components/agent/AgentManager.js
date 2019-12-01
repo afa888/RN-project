@@ -45,8 +45,8 @@ export default class AgentManager extends Component<Props> {
                         marginRight: 12
                     }}>
                     <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                        navigation.navigate('AgenJoinBefore', {isJoin: false, isMe: false})
-                        // navigation.navigate('AgenJoinBefore', { isJoin: true ,isMe : true });
+                        // navigation.navigate('AgenJoinBefore', {isJoin: false, isMe: false})
+                        navigation.navigate('AgenJoinBefore', {isJoin: true, isMe: true});
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -78,7 +78,8 @@ export default class AgentManager extends Component<Props> {
             pieData: {},
             barData: [],
             isRedBagVisible: false,
-            outstandingCommissions: 0.00
+            outstandingCommissions: 0.00,
+
         };
     }
 
@@ -98,6 +99,11 @@ export default class AgentManager extends Component<Props> {
         this.getTeamCompositionChart();
         this.getRecentCommissionChart();
     }
+
+
+
+
+
 
     //http://192.168.107.144:400/JJF/agency/getSelfAgentData
     getSelfAgentData = () => {
@@ -233,11 +239,11 @@ export default class AgentManager extends Component<Props> {
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
-                        <QRCode
+                        {<QRCode
                             value={inviteLink}
                             size={115}
                             bgColor="white"
-                            fgColor="black"/>
+                            fgColor="black"/>}
                     </View>
 
                     <View style={{
@@ -532,19 +538,22 @@ export default class AgentManager extends Component<Props> {
     }
 
     //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.barData.length <= 0) {
-            return false
-        } else {
-            return true
-        }
-    }
+    /*  shouldComponentUpdate(nextProps, nextState) {
+          if (this.state.barData===nextState.barData) {
+              return false
+          } else {
+              return true
+          }
+      }*/
 
     render() {
         console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
-        return (<SafeAreaView style={{flex: 1}}>
+        return (<View style={{flex: 1}}>
+                {this.state.agentData !== {} && this.state.pieData !== {} && this.state.barData.length > 0 &&
+                this.state.inviteData !== {} &&
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
+                    {this.state.agentData !== {} &&
                     <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
@@ -571,9 +580,9 @@ export default class AgentManager extends Component<Props> {
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
                         </View>
-                    </ImageBackground>
-                    {this.createAgentBtn()}
-                    {this.createQr()}
+                    </ImageBackground>}
+                    {this.state.agentData !== {} && this.createAgentBtn()}
+                    {this.state.inviteData !== {} && this.createQr()}
                     <View style={{
                         width: DeviceValue.windowWidth,
                         backgroundColor: MainTheme.BackgroundColor
@@ -582,7 +591,7 @@ export default class AgentManager extends Component<Props> {
                         {this.state.barData.length > 0 && this.createBar()}
                     </View>
 
-                </ScrollView>
+                </ScrollView>}
                 <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal6"}>
 
                     <View style={styles.modalView}>
@@ -603,7 +612,7 @@ export default class AgentManager extends Component<Props> {
                     </View>
 
                 </Modal>
-            </SafeAreaView>
+            </View>
         )
     }
 }

@@ -184,7 +184,7 @@ export default class AgenJoinBefore extends Component<Props> {
                         {this.state.isJoin && <TouchableOpacity onPress={() => {
                             if (isMe) {
                                 this.props.navigation.goBack()
-                                this.props.navigation.navigate('AgentManager')
+                                //this.props.navigation.navigate('AgentManager')
 
                             } else {
                                 this.jionAgent()
