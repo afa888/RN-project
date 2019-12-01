@@ -22,6 +22,7 @@ import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
 import {PieChart, BarChart, Grid, XAxis} from 'react-native-svg-charts'
+import AgentQr from '../agent/AgentQr'
 
 
 let userName = ''
@@ -78,8 +79,25 @@ export default class AgentManager extends Component<Props> {
             inviteData: {},
             pieData: {},
             barData: [],
+            isShow: false,
 
         };
+    }
+
+    componentDidMount() {
+        this.timer = setTimeout(
+            () => {
+                console.log('把一个定时器的引用挂在this上');
+                this.setState({isShow: true})
+            },
+            3000
+        );
+    }
+
+    componentWillUnmount() {
+        // 如果存在this.timer，则使用clearTimeout清空。
+        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+        this.timer && clearTimeout(this.timer);
     }
 
 
@@ -234,11 +252,11 @@ export default class AgentManager extends Component<Props> {
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
-                     {/*    {<QRCode
+                        {this.state.isShow && <QRCode
                             value={'聚隆科技离开就'}
                             size={115}
                             bgColor="white"
-                            fgColor="black"/>}*/}
+                            fgColor="black"/>}
                     </View>
 
                     <View style={{
@@ -536,7 +554,7 @@ export default class AgentManager extends Component<Props> {
 
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
 
-        if ((Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+        if ((Object.keys(this.state.agentData).length !== 0 && Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
             Object.keys(this.state.inviteData).length !== 0)) {
 
             return (<View style={{flex: 1}}>
@@ -571,6 +589,7 @@ export default class AgentManager extends Component<Props> {
                     </ImageBackground>}
                     {this.createAgentBtn()}
                     {this.createQr()}
+
                     <View style={{
                         width: DeviceValue.windowWidth,
                         backgroundColor: MainTheme.BackgroundColor
@@ -617,20 +636,20 @@ export default class AgentManager extends Component<Props> {
 
     render() {
         console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
-/*        console.log(this.state.agentData)
-        console.log((Object.keys(this.state.agentData).length !== 0 ))
+        /*        console.log(this.state.agentData)
+                console.log((Object.keys(this.state.agentData).length !== 0 ))
 
-        console.log(this.state.pieData)
-        console.log((Object.keys(this.state.pieData).length !== 0))
+                console.log(this.state.pieData)
+                console.log((Object.keys(this.state.pieData).length !== 0))
 
-        console.log(this.state.barData)
-        console.log((this.state.barData.length > 0))
+                console.log(this.state.barData)
+                console.log((this.state.barData.length > 0))
 
-        console.log(this.state.inviteData)
-        console.log((Object.keys(this.state.inviteData).length !== 0))
+                console.log(this.state.inviteData)
+                console.log((Object.keys(this.state.inviteData).length !== 0))
 
-        console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
-            Object.keys(this.state.inviteData).length !== 0))*/
+                console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+                    Object.keys(this.state.inviteData).length !== 0))*/
         return (<View style={{flex: 1}}>
                 {this.creatView()}
             </View>
