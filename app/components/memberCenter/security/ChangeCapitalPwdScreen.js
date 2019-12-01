@@ -73,7 +73,7 @@ export default class ChangeCapitalPwdScreen extends Component<Props> {
             <SafeAreaView style={styles.container}>
                 <View style={{ paddingTop: 10, height: 20, width: DeviceValue.windowWidth }}></View>
                 <TXInput label="原密码" forbiddenDot={true} keyboardType='numeric' secureTextEntry={true} maxLength={4} placeholder="请输入原密码" textAlign='right' onChange={(value) => this._onChange('password', value)} value={this.state.password || ''} />
-                <TXInput label="新密码" forbiddenDot={true} keyboardType='numeric' secureTextEntry={true} maxLength={4} placeholder="密码须为4位数字的组合" textAlign='right' onChange={(value) => this._onChange('npassword', value)} value={this.state.npassword || ''} />
+                <TXInput label="新密码" forbiddenDot={true} keyboardType='numeric' secureTextEntry={true} maxLength={4} placeholder="密码须为4位数字" textAlign='right' onChange={(value) => this._onChange('npassword', value)} value={this.state.npassword || ''} />
                 <TXInput label="确认密码" forbiddenDot={true} keyboardType='numeric' secureTextEntry={true} maxLength={4} placeholder="请再次填写新密码" textAlign='right' onChange={(value) => this._onChange('renpassword', value)} value={this.state.renpassword || ''} />
                 <View style={{ paddingTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 50, width: DeviceValue.windowWidth }}>
                     <Text style={{ fontSize: 10 }}>提款密码须为</Text>
