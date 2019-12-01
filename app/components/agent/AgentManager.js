@@ -25,6 +25,7 @@ import {PieChart, BarChart, Grid, XAxis} from 'react-native-svg-charts'
 
 
 let userName = ''
+let isOneTime = true
 export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
@@ -77,8 +78,6 @@ export default class AgentManager extends Component<Props> {
             inviteData: {},
             pieData: {},
             barData: [],
-            isRedBagVisible: false,
-            outstandingCommissions: 0.00,
 
         };
     }
@@ -101,17 +100,13 @@ export default class AgentManager extends Component<Props> {
     }
 
 
-
-
-
-
     //http://192.168.107.144:400/JJF/agency/getSelfAgentData
     getSelfAgentData = () => {
         http.post('agency/getSelfAgentData', null, true).then((res) => {
             if (res.status === 10000) {
                 console.log(res)
                 if (res.data !== {} || res.data !== null) {
-                    this.setState({agentData: res.data, outstandingCommissions: res.data.outstandingCommissions})
+                    this.setState({agentData: res.data})
                 }
 
             }
@@ -239,11 +234,11 @@ export default class AgentManager extends Component<Props> {
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
-                        {<QRCode
-                            value={inviteLink}
+                     {/*    {<QRCode
+                            value={'聚隆科技离开就'}
                             size={115}
                             bgColor="white"
-                            fgColor="black"/>}
+                            fgColor="black"/>}*/}
                     </View>
 
                     <View style={{
@@ -536,26 +531,18 @@ export default class AgentManager extends Component<Props> {
         });
 
     }
+    creatView = () => {
+        console.log("开始初始化界面")
 
-    //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
-    /*  shouldComponentUpdate(nextProps, nextState) {
-          if (this.state.barData===nextState.barData) {
-              return false
-          } else {
-              return true
-          }
-      }*/
-
-    render() {
-        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
-        return (<View style={{flex: 1}}>
-                {this.state.agentData !== {} && this.state.pieData !== {} && this.state.barData.length > 0 &&
-                this.state.inviteData !== {} &&
+
+        if ((Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+            Object.keys(this.state.inviteData).length !== 0)) {
+
+            return (<View style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-                    {this.state.agentData !== {} &&
-                    <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
-                                     resizeMode='cover' style={styles.bgImagbg}>
+                    {<ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
+                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth}}>
                             <Text style={[styles.agentTitle, {
@@ -573,7 +560,8 @@ export default class AgentManager extends Component<Props> {
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
+                            <Text
+                                style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
                         </View>
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
@@ -581,17 +569,17 @@ export default class AgentManager extends Component<Props> {
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
                         </View>
                     </ImageBackground>}
-                    {this.state.agentData !== {} && this.createAgentBtn()}
-                    {this.state.inviteData !== {} && this.createQr()}
+                    {this.createAgentBtn()}
+                    {this.createQr()}
                     <View style={{
                         width: DeviceValue.windowWidth,
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
-                        {this.state.pieData !== {} && this.createPie()}
-                        {this.state.barData.length > 0 && this.createBar()}
+                        {this.createPie()}
+                        {this.createBar()}
                     </View>
 
-                </ScrollView>}
+                </ScrollView>
                 <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal6"}>
 
                     <View style={styles.modalView}>
@@ -612,6 +600,39 @@ export default class AgentManager extends Component<Props> {
                     </View>
 
                 </Modal>
+            </View>)
+        } else {
+            null
+        }
+    }
+
+    //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
+    /*  shouldComponentUpdate(nextProps, nextState) {
+          if (this.state.barData===nextState.barData) {
+              return false
+          } else {
+              return truerrrrr
+          }
+      }*/
+
+    render() {
+        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
+/*        console.log(this.state.agentData)
+        console.log((Object.keys(this.state.agentData).length !== 0 ))
+
+        console.log(this.state.pieData)
+        console.log((Object.keys(this.state.pieData).length !== 0))
+
+        console.log(this.state.barData)
+        console.log((this.state.barData.length > 0))
+
+        console.log(this.state.inviteData)
+        console.log((Object.keys(this.state.inviteData).length !== 0))
+
+        console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+            Object.keys(this.state.inviteData).length !== 0))*/
+        return (<View style={{flex: 1}}>
+                {this.creatView()}
             </View>
         )
     }
