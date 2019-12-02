@@ -388,7 +388,7 @@ export default class MemberCenterIndexScreen extends Component<Props> {
                         return (
                             <TouchableOpacity style={styles.assertsItems}
                                 onPress={() => this.gotoAssetDetails(items[0])}>
-                                <Text style={styles.assetsNumber}>{TXTools.formatMoneyAmount(items[1])}</Text>
+                                <Text style={styles.assetsNumber}>{TXTools.formatMoneyAmount(items[1], false)}</Text>
                                 <Text style={styles.assetsCategory}>{items[0]}</Text>
                             </TouchableOpacity>
                         );
