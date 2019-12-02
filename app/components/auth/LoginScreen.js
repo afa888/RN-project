@@ -133,7 +133,7 @@ export default class LoginScreen extends Component<Props> {
     render() {
         const { passWordShow } = this.state;
         const params = this.props.navigation.state.params;
-        const routeName = (params && params.backRoute) ? params.backRoute:'Home';
+        const routeName = (params && params.backRoute) ? params.backRoute : 'Home';
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, margin: 12, backgroundColor: 'white' }}>
@@ -222,7 +222,7 @@ export default class LoginScreen extends Component<Props> {
                                 inActiveText={'X'}
                                 circleSize={15}
                                 barHeight={15}
-                                activeTextStyle={{ fontFamily: 'ArialHebrew',}}
+                                activeTextStyle={{ fontFamily: 'ArialHebrew', }}
                                 backgroundActive={MainTheme.SpecialColor}
                                 backgroundInactive={MainTheme.LightGrayColor}
                                 changeValueImmediately={true}

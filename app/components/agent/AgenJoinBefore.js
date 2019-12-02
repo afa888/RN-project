@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
@@ -13,52 +13,46 @@ import {
     AgentRedColor,
     AgentBlueColor,
 } from "../../utils/AllColor";
-import {getStoreData} from "../../http/AsyncStorage";
+import { getStoreData, UserSession } from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
-import {Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel} from 'react-native-tcharts'
-import {MarqueeHorizontal} from "react-native-marquee-ab";
-import {CAGENT} from "../../utils/Config";
+import { Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel } from 'react-native-tcharts'
+import { MarqueeHorizontal } from "react-native-marquee-ab";
+import { CAGENT } from "../../utils/Config";
 import http from "../../http/httpFetch";
-import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
+import TXProgressHUB from "../../tools/TXProgressHUB";
 
-let isJoin = false//控制是否显示按钮
-let isMe = false //控制那个按钮的文字和逻辑调转
 export default class AgenJoinBefore extends Component<Props> {
 
-    static navigationOptions = ({navigation}) => {
-        const {params} = navigation.state;
-        if (params !== undefined && params.isJoin !== undefined) {
-            isJoin = params.isJoin;
-            isMe = params.isMe;
-            console.log("加入钱")
-
-            console.log(isJoin)
-            console.log(isMe)
+    static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state;
+        let isJoin = false;
+        if (params !== undefined) {
+            isJoin = params.isJoin == undefined ? false : params.isJoin;
         }
         return {
             headerTitle: <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                 <Text style={{
                     fontSize: 18,
                     color: 'black',
                     fontWeight: 'bold'
-                }}>{isJoin ? '我的代理' : '代理规则'} </Text></View>,
+                }}>{isJoin ? '代理规则' : '代理招募'} </Text></View>,
             headerLeft: (
                 <TouchableOpacity onPress={() => {
                     navigation.goBack()
                 }}>
                     <Image source={require('../../static/img/titlebar_back_normal.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               margin: 12
-                           }}/>
+                        style={{
+                            resizeMode: 'contain',
+                            width: 20,
+                            height: 20,
+                            margin: 12
+                        }} />
                 </TouchableOpacity>
             ),
-            headerRight: <View/>
+            headerRight: <View />
         };
     };
 
@@ -72,12 +66,16 @@ export default class AgenJoinBefore extends Component<Props> {
     }
 
     componentWillMount(): void {
-        /* let {navigation} = this.props;
-         let isJoin = navigation.getParam('isJoin', '');*/
-        this.setState({isJoin: isJoin})
         this.postNotice()
         this.getAgentData()
+    }
 
+    componentDidMount() {
+        let { navigation } = this.props;
+        let isJoined = navigation.getParam('isJoin', false);
+
+        this.setState({ isJoin: isJoined });
+        this.props.navigation.setParams({ isJoin: isJoined });
     }
 
     jionAgent = () => {
@@ -97,7 +95,7 @@ export default class AgenJoinBefore extends Component<Props> {
         http.get('agency/getAgentData', null).then((res) => {
             if (res.status === 10000) {
                 if (res.data !== null && res.data !== {})
-                    this.setState({agentData: res.data})
+                    this.setState({ agentData: res.data })
             }
         }).catch(err => {
             console.error(err)
@@ -120,7 +118,7 @@ export default class AgenJoinBefore extends Component<Props> {
                 }
                 console.log("jjjjjjjj")
                 console.log(imgUrl)
-                this.setState({noticeData: imgUrl})
+                this.setState({ noticeData: imgUrl })
 
             }
         }).catch(err => {
@@ -128,86 +126,97 @@ export default class AgenJoinBefore extends Component<Props> {
         });
     }
 
+    reanderActionButton() {
+        const { isJoin } = this.state;
+        let btnTitle = isJoin ? "我的代理" : "立即加入";
+        return (
+            <TouchableOpacity onPress={this.onActionButtonPressed}>
+                <View style={{
+                    width: 180,
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: AgentBlueColor,
+                    marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9)
+                }}>
+                    <Text style={{ color: MainTheme.commonButtonTitleColor }}>{btnTitle}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    onActionButtonPressed = () => {
+        const { isJoin } = this.state;
+        if (isJoin) { // 代理管理
+            if (UserSession.agencyStatus == 0) {
+                this.props.navigation.navigate('AgentManager');
+            }
+            else if (UserSession.agencyStatus == 1) {
+                TXProgressHUB.show("您的代理资格已被停用！");
+            }
+        }
+        else {
+            this.jionAgent();
+        }
+    }
 
     render() {
 
-        return (<SafeAreaView style={{flex: 1}}>
-                <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-                    <ImageBackground source={require('../../static/img/agent/wxdl_banner.png')}
-                                     resizeMode='cover' style={styles.bgImagbg}>
-                        <View style={styles.noticeView}>
-                            <Image source={require('../../static/img/agent/wxdl_icon_gg.png')}
-                                   style={{
-                                       resizeMode: 'contain',
-                                       width: 16,
-                                       height: 16,
-                                       marginLeft: 6,
-                                   }}/>
-                            {this.state.noticeData.length > 0 && <MarqueeHorizontal
-                                textList={this.state.noticeData}
-                                speed={60}
-                                width={DeviceValue.windowWidth - 30 - 40}
-                                height={25}
-                                direction={'left'}
-                                reverse={false}
-                                bgContainerStyle={{backgroundColor: 'transparent'}}
-                                textStyle={{fontSize: 12, marginLeft: 12, color: textTitleColor}}
-                                onTextClick={(item) => {
-                                    alert('' + JSON.stringify(item));
-                                }}
-                            />}
+        return (<SafeAreaView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
+                <ImageBackground source={require('../../static/img/agent/wxdl_banner.png')}
+                    resizeMode='cover' style={styles.bgImagbg}>
+                    <View style={styles.noticeView}>
+                        <Image source={require('../../static/img/agent/wxdl_icon_gg.png')}
+                            style={{
+                                resizeMode: 'contain',
+                                width: 16,
+                                height: 16,
+                                marginLeft: 6,
+                            }} />
+                        {this.state.noticeData.length > 0 && <MarqueeHorizontal
+                            textList={this.state.noticeData}
+                            speed={60}
+                            width={DeviceValue.windowWidth - 30 - 40}
+                            height={25}
+                            direction={'left'}
+                            reverse={false}
+                            bgContainerStyle={{ backgroundColor: 'transparent' }}
+                            textStyle={{ fontSize: 12, marginLeft: 12, color: textTitleColor }}
+                            onTextClick={(item) => {
+                                alert('' + JSON.stringify(item));
+                            }}
+                        />}
+                    </View>
+                    <View style={styles.agentView}>
+                        <View style={styles.agentItemView}>
+                            <Text style={styles.agentTextView16}>{this.state.agentData.yesterdayAgent}
+                                <Text style={styles.agentTextView10}>人</Text>
+                            </Text>
+                            <Text style={styles.agentTextView10}>昨日新增代理</Text>
                         </View>
-                        <View style={styles.agentView}>
-                            <View style={styles.agentItemView}>
-                                <Text style={styles.agentTextView16}>{this.state.agentData.yesterdayAgent}
-                                    <Text style={styles.agentTextView10}>人</Text>
-                                </Text>
-                                <Text style={styles.agentTextView10}>昨日新增代理</Text>
-                            </View>
-                            <View style={styles.agentItemView}>
-                                <Text style={styles.agentTextView16}>{this.state.agentData.totalOfCommission} <Text
-                                    style={styles.agentTextView10}>笔</Text></Text>
-                                <Text style={styles.agentTextView10}>累积提拥笔数</Text>
-                            </View>
-                            <View style={styles.agentItemView}>
-                                <Text style={styles.agentTextView16}> {this.state.agentData.totalAgent}<Text
-                                    style={styles.agentTextView10}>人</Text></Text>
-                                <Text style={styles.agentTextView10}>总共服务代理</Text>
-                            </View>
-
-
+                        <View style={styles.agentItemView}>
+                            <Text style={styles.agentTextView16}>{this.state.agentData.totalOfCommission} <Text
+                                style={styles.agentTextView10}>笔</Text></Text>
+                            <Text style={styles.agentTextView10}>累积提拥笔数</Text>
                         </View>
-                    </ImageBackground>
+                        <View style={styles.agentItemView}>
+                            <Text style={styles.agentTextView16}> {this.state.agentData.totalAgent}<Text
+                                style={styles.agentTextView10}>人</Text></Text>
+                            <Text style={styles.agentTextView10}>总共服务代理</Text>
+                        </View>
 
-                    <ImageBackground source={require('../../static/img/agent/wxdlbg.jpg')}
-                                     resizeMode='cover' style={styles.bgImg}>
-                        {this.state.isJoin && <TouchableOpacity onPress={() => {
-                            if (isMe) {
-                                this.props.navigation.goBack()
-                                //this.props.navigation.navigate('AgentManager')
 
-                            } else {
-                                this.jionAgent()
+                    </View>
+                </ImageBackground>
 
-                            }
-                        }}>
-                            <View style={{
-                                width: 180,
-                                height: 30,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: AgentBlueColor,
-                                marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9)
-                            }}>
+                <ImageBackground source={require('../../static/img/agent/wxdlbg.jpg')}
+                    resizeMode='cover' style={styles.bgImg}>
+                    {this.reanderActionButton()}
+                </ImageBackground>
 
-                                <Text style={{color: MainTheme.commonButtonTitleColor}}>{isMe ? '我的代理' : '立即加入'}</Text>
-                            </View>
-                        </TouchableOpacity>}
-
-                    </ImageBackground>
-
-                </ScrollView>
-            </SafeAreaView>
+            </ScrollView>
+        </SafeAreaView>
         )
     }
 }
@@ -250,6 +259,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor:'blue'
     },
-    agentTextView16: {color: AgentRedColor, fontSize: 16, fontWeight: 'bold', marginRight: 2},
-    agentTextView10: {color: AgentRedColor, fontSize: 10, fontWeight: 'bold',}
+    agentTextView16: { color: AgentRedColor, fontSize: 16, fontWeight: 'bold', marginRight: 2 },
+    agentTextView10: { color: AgentRedColor, fontSize: 10, fontWeight: 'bold', }
 });

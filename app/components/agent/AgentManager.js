@@ -286,44 +286,6 @@ export default class AgentManager extends Component<Props> {
         
     }
 
-    createQr = () => {
-        let {inviteLink, agencyShare} = this.state.inviteData
-        console.log('输出邀请')
-        return (
-            <View style={{position: 'relative', top: -30,}}>
-                <Text style={styles.cotentTitle}>邀请方式</Text>
-                <View style={styles.qrView}>
-                    <View style={styles.qrImageView}>
-                        {this.state.isShow && <QRCode
-                            value={'聚隆科技离开就'}
-                            size={115}
-                            bgColor="white"
-                            fgColor="black"/>}
-                    </View>
-
-                    <View style={{
-                        height: 120, flex: 1, marginLeft: 6
-                    }}>
-                        <TouchableOpacity onPress={() => {
-                            this.copyText(inviteLink)
-                        }}>
-                            <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
-                                                                                     style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            this.copyText(agencyShare)
-                        }}>
-                            <Text style={styles.tgwaText}>推广文案：<Text
-                                style={{color: MainTheme.DarkGrayColor}}>{agencyShare}</Text></Text>
-                        </TouchableOpacity>
-
-                    </View>
-                </View>
-                <Text
-                    style={[styles.textGray, {marginLeft: 15, marginRight: 15}]}>长按二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
-            </View>)
-    }
-
     createPie = () => {
         let {directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum} = this.state.pieData
         let diPercent = directNum === 0 || directNum === NaN ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100

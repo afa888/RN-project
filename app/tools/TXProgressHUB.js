@@ -3,7 +3,7 @@ import React from "react";
 import ProgressHUD from "./src/ProgressHUD";
 import HUD from "./src/HUD";
 import MyToast from "./src/MyToast"
-import {Platform}from'react-native';
+import { Platform } from 'react-native';
 import RNProgressHUB from 'react-native-progresshub';
 
 export default class TXProgressHUB {
@@ -13,25 +13,25 @@ export default class TXProgressHUB {
      * @param text
      * @param duration 默认 3 秒
      */
-    static show(text, duration=3000) {
+    static show(text, duration = 3000) {
         // RNProgressHUB.showSimpleText(text,duration)
         if (Platform.OS == 'ios') {
-            ProgressHUD.showText(text,duration);
-        }else {
+            ProgressHUD.showText(text, duration);
+        } else {
             // MyToast.showText(text);
-            RNProgressHUB.showSimpleText(text,duration);
+            RNProgressHUB.showSimpleText(text, duration);
         }
     }
 
     static showSpinIndeterminate(text) {
         if (Platform.OS == 'ios') {
             ProgressHUD.showSpinIndeterminate();
-        }else {
+        } else {
             RNProgressHUB.showSpinIndeterminate();
         }
-        
+
     }
- 
+
     /**
      * 关闭toast
      * closeToast
@@ -40,18 +40,18 @@ export default class TXProgressHUB {
     static close(duration) {
         if (Platform.OS == 'ios') {
             ProgressHUD.dismiss();
-        }else {
+        } else {
             RNProgressHUB.dismiss();
         }
     }
 
-    static dismiss () {
+    static dismiss() {
         if (Platform.OS == 'ios') {
             ProgressHUD.dismiss();
-        }else {
+        } else {
             RNProgressHUB.dismiss();
         }
-        
+
     }
 
     /**
