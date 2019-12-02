@@ -210,7 +210,7 @@ export default class DepositManagerScreen extends Component<Props> {
             }else if(this.state.money.length ==0){
                 TXToastManager.show('请输入存款金额');
             }else if(!money_validate(this.state.money)){
-                TXToastManager.show('存款金额只能为数字');
+                TXToastManager.show('请输入正确的金额');
             }
             else if(cagentBankCardEntity.hasOwnProperty('minquota') && (parseInt(this.state.money) < parseInt(cagentBankCardEntity.minquota) || parseInt(this.state.money) > parseInt(cagentBankCardEntity.maxquota))){
                 TXToastManager.show('单笔限额为'+ cagentBankCardEntity.minquota +'~'+ cagentBankCardEntity.maxquota +'元');
@@ -230,7 +230,7 @@ export default class DepositManagerScreen extends Component<Props> {
             }else if(money.length ==0) {
                 TXToastManager.show('请输入存款金额');
             }else if(!money_validate(this.state.money)){
-                TXToastManager.show('存款金额只能为数字');
+                TXToastManager.show('请输入正确的金额');
             }else if(parseInt(money) < parseInt(payModel.minquota) || parseInt(money) > parseInt(payModel.maxquota)){
                 TXToastManager.show('单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'元');
             }else {
@@ -252,7 +252,7 @@ export default class DepositManagerScreen extends Component<Props> {
                     TXToastManager.show(msg);
 
                 }else if(!money_validate(this.state.money)){
-                    TXToastManager.show('存款金额只能为数字');
+                    TXToastManager.show('请输入正确的金额');
                 }else if(payModel.hasOwnProperty('minquota') && (parseInt(money) < parseInt(payModel.minquota) || parseInt(money) > parseInt(payModel.maxquota))){
                     TXToastManager.show('单笔限额为'+ payModel.minquota +'~'+ payModel.maxquota +'元');
                 }else {

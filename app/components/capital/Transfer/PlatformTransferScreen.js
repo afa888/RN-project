@@ -287,7 +287,7 @@ export default class PlatformTransfer extends Component<Props> {
         }else if(this.state.money.length == 0){
             Alert.alert('请输入转入金额');
         }else if(!money_validate(this.state.money)){
-            TXToastManager.show('平台转账金额只能为数字');
+            TXToastManager.show('请输入正确的平台转账金额');
         }
         else if (parseInt(this.state.money)<1 || parseInt(this.state.money) > 100000) {
             Alert.alert('输入金额范围1~100000元');
