@@ -10,7 +10,7 @@ import {
     CircleGoldColor,
     theme_color,
     BarBlueColor,
-    BarGreenColor
+    BarGreenColor,
 } from "../../utils/AllColor";
 import {getStoreData, LoginStateKey, UserNameKey, UserPwdKey} from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
@@ -22,28 +22,20 @@ import RedBagDialog from "../../customizeview/RedBagDialog";
 import Modal from 'react-native-modalbox';
 import AsyncStorage from "@react-native-community/async-storage";
 import {PieChart, BarChart, Grid, XAxis} from 'react-native-svg-charts'
+import AgentQr from '../agent/AgentQr'
 
 
 let userName = ''
+let isOneTime = true
 export default class AgentManager extends Component<Props> {
 
     static navigationOptions = ({navigation}) => {
         return {
-            headerTitle: <View
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}> 代理管理</Text></View>,
+            headerTitle: (
+                MainTheme.renderCommonTitle('代理管理')
+            ),
             headerLeft: (
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Image source={require('../../static/img/titlebar_back_normal.png')}
-                           style={{
-                               resizeMode: 'contain',
-                               width: 20,
-                               height: 20,
-                               margin: 12
-                           }}/>
-                </TouchableOpacity>
+                MainTheme.renderCommonBack(navigation)
             ),
             headerRight: (
                 <View
@@ -55,7 +47,8 @@ export default class AgentManager extends Component<Props> {
                         marginRight: 12
                     }}>
                     <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
-                        navigation.navigate('AgenJoinBefore')
+                        // navigation.navigate('AgenJoinBefore', {isJoin: false, isMe: false})
+                        navigation.navigate('AgenJoinBefore', {isJoin: true, isMe: true});
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -86,9 +79,25 @@ export default class AgentManager extends Component<Props> {
             inviteData: {},
             pieData: {},
             barData: [],
-            isRedBagVisible: false,
-            outstandingCommissions: 0.00
+            isShow: false,
+
         };
+    }
+
+    componentDidMount() {
+        this.timer = setTimeout(
+            () => {
+                console.log('把一个定时器的引用挂在this上');
+                this.setState({isShow: true})
+            },
+            3000
+        );
+    }
+
+    componentWillUnmount() {
+        // 如果存在this.timer，则使用clearTimeout清空。
+        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+        this.timer && clearTimeout(this.timer);
     }
 
 
@@ -108,13 +117,14 @@ export default class AgentManager extends Component<Props> {
         this.getRecentCommissionChart();
     }
 
+
     //http://192.168.107.144:400/JJF/agency/getSelfAgentData
     getSelfAgentData = () => {
         http.post('agency/getSelfAgentData', null, true).then((res) => {
             if (res.status === 10000) {
                 console.log(res)
                 if (res.data !== {} || res.data !== null) {
-                    this.setState({agentData: res.data, outstandingCommissions: res.data.outstandingCommissions})
+                    this.setState({agentData: res.data})
                 }
 
             }
@@ -236,16 +246,17 @@ export default class AgentManager extends Component<Props> {
 
     createQr = () => {
         let {inviteLink, agencyShare} = this.state.inviteData
+        console.log('输出邀请')
         return (
             <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={styles.qrImageView}>
-                        <QRCode
-                            value={inviteLink}
+                        {this.state.isShow && <QRCode
+                            value={'聚隆科技离开就'}
                             size={115}
                             bgColor="white"
-                            fgColor="black"/>
+                            fgColor="black"/>}
                     </View>
 
                     <View style={{
@@ -273,8 +284,8 @@ export default class AgentManager extends Component<Props> {
 
     createPie = () => {
         let {directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum} = this.state.pieData
-        let diPercent = directNum === 0 ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
-        let teamNumPercent = teamNum === 0 ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let diPercent = directNum === 0 || directNum === NaN ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let teamNumPercent = teamNum === 0 || teamNum === NaN ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
 
         const data = [40, 60]
         const randomColor = [theme_color, CircleGoldColor]
@@ -318,8 +329,9 @@ export default class AgentManager extends Component<Props> {
             </View>
             <View style={{flexDirection: 'row'}}>
                 {directNum !== 0 && teamNum !== 0 ? <PieChart
-                    style={styles.pieView}
-                    data={pieData}/> : <View style={styles.pieView}/>}
+                        style={styles.pieView}
+                        data={pieData}/> :
+                    <Image source={require('../../static/img/agent/circle.png')} style={styles.pieView}/>}
                 <View style={styles.pieRightView}>
                     <View style={styles.pieRightItemView}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}><Image
@@ -436,51 +448,44 @@ export default class AgentManager extends Component<Props> {
                     </View>
                 </TouchableOpacity>
             </View>
-            <View style={{flexDirection: 'row'}}>
-                <View style={{width: 30, height: 170, marginLeft: 15,}}>
-                    <Text style={{
-                        fontSize: 10,
-                        width: 30,
-                        textAlign: 'right',
-                        height: 15,
-                        marginTop: (170 / 11.5) * 1.4 - 7,
-                    }}>{Math.round(maxNum)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
-                    <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
-                    <Text style={styles.barText}>0</Text>
-                </View>
 
-                <BarChart
-                    style={{
-                        height: 171,
-                        width: DeviceValue.windowWidth - 30 - 30,
-                        marginRight: 15,
-                    }}
-                    data={barData}
-                    yAccessor={({item}) => item.value}
-                    svg={{
-                        fill: BarGreenColor,
-                    }}
-                    contentInset={{top: 0, bottom: 1}}
-                    {...this.props}
-                >
-                    <Grid/>
-                </BarChart>
+            {maxNum !== 0 ?
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{width: 30, height: 170, marginLeft: 15,}}>
+                        <Text style={styles.barTextOne}>{Math.round(maxNum)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5 * 2)}</Text>
+                        <Text style={styles.barText}>{Math.round(maxNum / 5)}</Text>
+                        <Text style={styles.barText}>0</Text>
+                    </View>
 
-            </View>
-            <XAxis
+                    <BarChart
+                        style={styles.barView}
+                        data={barData}
+                        yAccessor={({item}) => item.value}
+                        svg={{
+                            fill: BarGreenColor,
+                        }}
+                        contentInset={{top: 0, bottom: 1}}
+                        {...this.props}
+                    >
+                        <Grid/>
+                    </BarChart>
+
+                </View> : <Image source={require('../../static/img/agent/table.png')}
+                                 style={styles.barBg}/>}
+            {maxNum !== 0 ? <XAxis
                 style={{marginLeft: 45, width: DeviceValue.windowWidth - 30 - 30, height: 20, marginTop: 6}}
                 data={teemNum}
                 formatLabel={(value, index) => {
                     if ((index + 1) % 2 === 0) {
-                        return dataNum[(index + 1) / 2-1]
+                        return dataNum[(index + 1) / 2 - 1]
                     }
                 }}
                 contentInset={{left: 10, right: 10}}
                 svg={{fontSize: 10, fill: 'black'}}
-            />
+            /> : null}
             <View
                 style={{
                     flexDirection: 'row',
@@ -497,7 +502,7 @@ export default class AgentManager extends Component<Props> {
                             width: 8,
                             height: 8,
                             marginRight: 6,
-                            backgroundColor: BarGreenColor
+                            backgroundColor: BarBlueColor
                         }}/>
                     <Text style={styles.textGray}>直属</Text>
                 </View>
@@ -508,7 +513,7 @@ export default class AgentManager extends Component<Props> {
                         height: 8,
                         marginRight: 6,
                         marginLeft: 12,
-                        backgroundColor: BarBlueColor
+                        backgroundColor: BarGreenColor
                     }}/>
                 <Text style={styles.textGray}>团队</Text>
             </View>
@@ -544,23 +549,18 @@ export default class AgentManager extends Component<Props> {
         });
 
     }
+    creatView = () => {
+        console.log("开始初始化界面")
 
-    //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.barData.length <= 0) {
-            return false
-        } else {
-            return true
-        }
-    }
-
-    render() {
-        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
-        return (<SafeAreaView style={{flex: 1}}>
+
+        if ((Object.keys(this.state.agentData).length !== 0 && Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+            Object.keys(this.state.inviteData).length !== 0)) {
+
+            return (<View style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-                    <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
-                                     resizeMode='cover' style={styles.bgImagbg}>
+                    {<ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
+                                      resizeMode='cover' style={styles.bgImagbg}>
                         <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth}}>
                             <Text style={[styles.agentTitle, {
@@ -578,23 +578,24 @@ export default class AgentManager extends Component<Props> {
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
+                            <Text
+                                style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
                         </View>
                         <View style={styles.titleView}>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
                             <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
                         </View>
-                    </ImageBackground>
+                    </ImageBackground>}
                     {this.createAgentBtn()}
                     {this.createQr()}
+
                     <View style={{
                         width: DeviceValue.windowWidth,
-                        height: 1000,
                         backgroundColor: MainTheme.BackgroundColor
                     }}>
-                        {this.state.pieData !== {} && this.createPie()}
-                        {this.state.barData.length > 0 && this.createBar()}
+                        {this.createPie()}
+                        {this.createBar()}
                     </View>
 
                 </ScrollView>
@@ -618,7 +619,40 @@ export default class AgentManager extends Component<Props> {
                     </View>
 
                 </Modal>
-            </SafeAreaView>
+            </View>)
+        } else {
+            null
+        }
+    }
+
+    //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
+    /*  shouldComponentUpdate(nextProps, nextState) {
+          if (this.state.barData===nextState.barData) {
+              return false
+          } else {
+              return truerrrrr
+          }
+      }*/
+
+    render() {
+        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
+        /*        console.log(this.state.agentData)
+                console.log((Object.keys(this.state.agentData).length !== 0 ))
+
+                console.log(this.state.pieData)
+                console.log((Object.keys(this.state.pieData).length !== 0))
+
+                console.log(this.state.barData)
+                console.log((this.state.barData.length > 0))
+
+                console.log(this.state.inviteData)
+                console.log((Object.keys(this.state.inviteData).length !== 0))
+
+                console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
+                    Object.keys(this.state.inviteData).length !== 0))*/
+        return (<View style={{flex: 1}}>
+                {this.creatView()}
+            </View>
         )
     }
 }
@@ -685,25 +719,25 @@ const styles = StyleSheet.create({
         height: 120
     },
     tgText: {
-        height: 28,
+        height: 26,
         borderRadius: 4,
         borderColor: MainTheme.theme_color,
         borderWidth: 0.5,
         justifyContent: 'center',
         padding: 2,
         color: MainTheme.theme_color,
+        marginTop: 1
 
     },
     tgwaText: {
         height: 86,
+        width: DeviceValue.windowWidth - 30 - 6 - 4 - 115,
         borderRadius: 4,
         borderColor: MainTheme.theme_color,
         borderWidth: 0.5,
-        justifyContent: 'center',
         padding: 2,
         marginTop: 6,
-        color: MainTheme.theme_color
-
+        color: MainTheme.theme_color,
     },
     qrImageView: {
         width: 120, height: 120, borderRadius: 4, padding: 1,
@@ -818,5 +852,24 @@ const styles = StyleSheet.create({
         marginLeft: (DeviceValue.windowWidth - 30 - 30) / 7 - 7,
         backgroundColor: 'blue',
         textAlign: 'center'
+    },
+    barView: {
+        height: 171,
+        width: DeviceValue.windowWidth - 30 - 30 - 3,
+        marginRight: 15,
+        marginLeft: 3
+    },
+    barBg: {
+        resizeMode: 'contain',
+        width: DeviceValue.windowWidth - 30,
+        height: (DeviceValue.windowWidth - 30) * (557 / 729),
+        margin: 15
+    },
+    barTextOne: {
+        fontSize: 10,
+        width: 30,
+        textAlign: 'right',
+        height: 15,
+        marginTop: (170 / 11.5) * 1.4 - 7,
     }
 });

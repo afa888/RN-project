@@ -241,8 +241,8 @@ ios   TxwNewApp-Ios
 
 */
 
-/*code-push release-react TxwNewApp-Android android -t 1.0.1 -d Production --des '老虎bug9' -m true
-code-push release-react TxwNewApp-Ios ios -t 1.0.0 -d Production --des '老虎bug5' -m true
+/*code-push release-react TxwNewApp-Android android -t 1.0.1 -d Production --des '老虎bug18' -m true
+code-push release-react TxwNewApp-Ios ios -t 1.0.0 -d Production --des '老虎bug18' -m true
 
 这里的版本号要特别注意对应build.gradle中设置的versionName "1.0.1"
 */

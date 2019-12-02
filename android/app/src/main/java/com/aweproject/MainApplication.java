@@ -29,6 +29,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import com.demohud.MyToast.ToastReactPackage;
 
 import javax.annotation.Nullable;
@@ -48,7 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new SvgPackage(),
+                    new SvgPackage(),
                     new RNProgressHUBPackage(),
                     new ScratchViewPackage(),
                     new SplashScreenReactPackage(),

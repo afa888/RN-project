@@ -83,7 +83,7 @@ export class MainTheme {
      */
     static renderCommonTitle = (title) => {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                 <Text style={MainTheme.GlobalStyles.PageTitle}>{title}</Text>
             </View>
         );
@@ -95,13 +95,13 @@ export class MainTheme {
      */
     static renderCommonBack = (navigation) => {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <TouchableOpacity style={{width: 60, height: 20, alignItems: 'flex-start'}}
-                                  onPress={() => {
-                                      navigation.goBack()
-                                  }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ width: 60, height: 20, alignItems: 'flex-start' }}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}>
                     <Image source={require('../static/img/titlebar_back_normal.png')}
-                           style={MainTheme.GlobalStyles.PageBackImage}/>
+                        style={MainTheme.GlobalStyles.PageBackImage} />
                 </TouchableOpacity>
             </View>
         );
@@ -109,12 +109,12 @@ export class MainTheme {
 
     /**
      * 生成普通页面的更多/筛选按钮
-     * 使用方式：headerRight: MainTheme.renderCommonMore(navigation, ()=>{ // todo... });
+     * 使用方式：headerRight: MainTheme.renderCommonMore(()=>{ // todo... });
      */
-    static renderCommonMore = (navigation, callback, icon = require('../static/img/more.png')) => {
+    static renderCommonMore = (callback, icon = require('../static/img/more.png')) => {
         return (
-            <TouchableOpacity style={{width: 60, height: 28, alignItems: 'center'}} onPress={callback}>
-                <Image source={icon} style={{resizeMode: 'contain', width: 25, height: 25, marginRight: 12}}/>
+            <TouchableOpacity style={{ width: 60, height: 28, alignItems: 'center' }} onPress={callback}>
+                <Image source={icon} style={{ resizeMode: 'contain', width: 25, height: 25, marginRight: 12 }} />
             </TouchableOpacity>
         );
     }
@@ -125,7 +125,7 @@ export class MainTheme {
      */
     static renderCommonBottomSubmitButton = (onPressF, title = '下一步') => {
         return (
-            <View style={{paddingTop: 7, alignItems: 'center', height: 60}}>
+            <View style={{ paddingTop: 7, alignItems: 'center', height: 60 }}>
                 <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
                     <View style={{
                         justifyContent: 'center',
@@ -135,7 +135,7 @@ export class MainTheme {
                         backgroundColor: MainTheme.commonButtonBGColor
                     }}>
 
-                        <Text style={{color: MainTheme.commonButtonTitleColor, fontSize: 20}}>{title}</Text>
+                        <Text style={{ color: MainTheme.commonButtonTitleColor, fontSize: 20 }}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -148,7 +148,7 @@ export class MainTheme {
      */
     static renderCommonSubmitButton = (onPressF, title = '确定', paddingLeft = 22.5) => {
         return (
-            <View style={{paddingTop: 18, alignItems: 'center', height: 60}}>
+            <View style={{ paddingTop: 18, alignItems: 'center', height: 60 }}>
                 <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
                     <View style={{
                         borderRadius: 8,
@@ -159,7 +159,7 @@ export class MainTheme {
                         backgroundColor: MainTheme.commonButtonBGColor
                     }}>
 
-                        <Text style={{color: MainTheme.commonButtonTitleColor, fontSize: 16}}>{title}</Text>
+                        <Text style={{ color: MainTheme.commonButtonTitleColor, fontSize: 16 }}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -172,7 +172,7 @@ export class MainTheme {
      */
     static renderCommonCancelButton = (onPressF, title = '取消') => {
         return (
-            <View style={{paddingTop: 18, alignItems: 'center', height: 60}}>
+            <View style={{ paddingTop: 18, alignItems: 'center', height: 60 }}>
                 <TouchableOpacity onPress={onPressF} activeOpacity={0.2} focusedOpacity={0.5}>
                     <View style={{
                         borderRadius: 8,
@@ -186,7 +186,7 @@ export class MainTheme {
                         backgroundColor: MainTheme.backgroundColor
                     }}>
 
-                        <Text style={{color: MainTheme.specialTextColor, fontSize: 16}}>{title}</Text>
+                        <Text style={{ color: MainTheme.specialTextColor, fontSize: 16 }}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
