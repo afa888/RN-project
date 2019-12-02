@@ -47,7 +47,8 @@ export default class AgentManager extends Component<Props> {
                         marginRight: 12
                     }}>
                     <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center' }} onPress={() => {
-                        navigation.navigate('AgenJoinBefore', { isJoin: true })
+                        // navigation.navigate('AgenJoinBefore', {isJoin: false, isMe: false})
+                        navigation.navigate('AgenJoinBefore', { isJoin: true, isMe: true });
                     }}>
                         <View style={{
                             flexDirection: 'column',
@@ -84,14 +85,21 @@ export default class AgentManager extends Component<Props> {
     }
 
     componentDidMount() {
-        this.timer = setTimeout(
-            () => {
-                console.log('把一个定时器的引用挂在this上');
-                this.setState({ isShow: true })
-            },
-            3000
-        );
+        // this.timer = setTimeout(
+        //     () => {
+        //         console.log('把一个定时器的引用挂在this上');
+        //         this.setState({isShow: true})
+        //     },
+        //     3000
+        // );
     }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !(this.props === nextProps) ||
+            !(this.state === nextState);
+    }
+
+    // componentShouldUpdate
 
     componentWillUnmount() {
         // 如果存在this.timer，则使用clearTimeout清空。
@@ -243,42 +251,39 @@ export default class AgentManager extends Component<Props> {
         );
     }
 
-    createQr = () => {
-        let { inviteLink, agencyShare } = this.state.inviteData
-        console.log('输出邀请')
+    createHeaderView = () => {
+        let { agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions } = this.state.agentData;
         return (
-            <View style={{ position: 'relative', top: -30, }}>
-                <Text style={styles.cotentTitle}>邀请方式</Text>
-                <View style={styles.qrView}>
-                    <View style={styles.qrImageView}>
-                        {this.state.isShow && <QRCode
-                            value={'聚隆科技离开就'}
-                            size={115}
-                            bgColor="white"
-                            fgColor="black" />}
-                    </View>
-
-                    <View style={{
-                        height: 120, flex: 1, marginLeft: 6
-                    }}>
-                        <TouchableOpacity onPress={() => {
-                            this.copyText(inviteLink)
-                        }}>
-                            <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
-                                style={{ color: MainTheme.DarkGrayColor }}>{inviteLink}</Text></Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            this.copyText(agencyShare)
-                        }}>
-                            <Text style={styles.tgwaText}>推广文案：<Text
-                                style={{ color: MainTheme.DarkGrayColor }}>{agencyShare}</Text></Text>
-                        </TouchableOpacity>
-
-                    </View>
+            <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
+                resizeMode='cover' style={styles.bgImagbg}>
+                <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth }}>
+                    <Text style={[styles.agentTitle, {
+                        fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
+                    }]}>￥{outstandingCommissions}</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.refs.modal6.open()
+                        }}
+                        style={[styles.agentTitle, styles.takeMonyView]}>
+                        <Text style={[styles.agentTitle, { fontSize: 10 }]}>提取佣金</Text>
+                    </TouchableOpacity>
                 </View>
-                <Text
-                    style={[styles.textGray, { marginLeft: 15, marginRight: 15 }]}>长按二维码可保存邀请图至相册，点击推广链接或推广文案复制到剪贴板</Text>
-            </View>)
+                <Text style={[styles.agentTitle, { margin: 8 }]}>未结佣金</Text>
+                <View style={styles.titleView}>
+                    <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
+                    <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
+                    <Text
+                        style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
+                </View>
+                <View style={styles.titleView}>
+                    <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
+                    <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
+                    <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
+                </View>
+            </ImageBackground>
+        );
+
     }
 
     createPie = () => {
@@ -548,7 +553,7 @@ export default class AgentManager extends Component<Props> {
         });
 
     }
-    creatView = () => {
+    createView = () => {
         console.log("开始初始化界面")
 
         let { agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions } = this.state.agentData;
@@ -556,71 +561,44 @@ export default class AgentManager extends Component<Props> {
         if ((Object.keys(this.state.agentData).length !== 0 && Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
             Object.keys(this.state.inviteData).length !== 0)) {
 
-            return (
-                <View style={{ flex: 1 }}>
-                    <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
-                        <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
-                            resizeMode='cover' style={styles.bgImagbg}>
-                            <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth }}>
-                                <Text style={[styles.agentTitle, {
-                                    fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
-                                }]}>￥{outstandingCommissions}</Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.refs.modal6.open()
-                                    }}
-                                    style={[styles.agentTitle, styles.takeMonyView]}>
-                                    <Text style={[styles.agentTitle, { fontSize: 10 }]}>提取佣金</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={[styles.agentTitle, { margin: 8 }]}>未结佣金</Text>
-                            <View style={styles.titleView}>
-                                <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
-                                <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
-                                <Text
-                                    style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
-                            </View>
-                            <View style={styles.titleView}>
-                                <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
-                                <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
-                                <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
-                            </View>
-                        </ImageBackground>
+            return (<View style={{ flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false}
+                    style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
+                    {this.createHeaderView()}
+                    {this.createAgentBtn()}
 
-                        {this.createAgentBtn()}
+                    <AgentQr />
 
-                        {this.createQr()}
+                    <View style={{
+                        width: DeviceValue.windowWidth,
+                        backgroundColor: MainTheme.BackgroundColor
+                    }}>
+                        {this.createPie()}
+                        {this.createBar()}
+                    </View>
 
-                        <View style={{
-                            width: DeviceValue.windowWidth,
-                            backgroundColor: MainTheme.BackgroundColor
-                        }}>
-                            {this.createPie()}
-                            {this.createBar()}
-                        </View>
-                    </ScrollView>
-                    <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal6"}>
+                </ScrollView>
+                <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal6"}>
 
-                        <View style={styles.modalView}>
-                            <Text style={styles.choiceText}>请选择:</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.refs.modal6.close()
-                                    this.props.navigation.navigate('AgentCommissionTransfer');
-                                }}
-                                style={styles.touchView}>
-                                <Text style={[styles.agentTitle, { fontSize: 14 }]}>转至中心钱包</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={this.onShowBank.bind(this)}
-                                style={styles.touchBankView}>
-                                <Text style={{ fontSize: 14, color: theme_color }}>提现至银行卡</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.modalView}>
+                        <Text style={styles.choiceText}>请选择:</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.refs.modal6.close()
+                                this.props.navigation.navigate('AgentCommissionTransfer');
+                            }}
+                            style={styles.touchView}>
+                            <Text style={[styles.agentTitle, { fontSize: 14 }]}>转至中心钱包</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.onShowBank.bind(this)}
+                            style={styles.touchBankView}>
+                            <Text style={{ fontSize: 14, color: theme_color }}>提现至银行卡</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                    </Modal>
-                </View >)
+                </Modal>
+            </View>)
         } else {
             null
         }
@@ -636,23 +614,23 @@ export default class AgentManager extends Component<Props> {
       }*/
 
     render() {
-        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
+        console.log('AgentManager render');
         /*        console.log(this.state.agentData)
                 console.log((Object.keys(this.state.agentData).length !== 0 ))
-
+    
                 console.log(this.state.pieData)
                 console.log((Object.keys(this.state.pieData).length !== 0))
-
+    
                 console.log(this.state.barData)
                 console.log((this.state.barData.length > 0))
-
+    
                 console.log(this.state.inviteData)
                 console.log((Object.keys(this.state.inviteData).length !== 0))
-
+    
                 console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
                     Object.keys(this.state.inviteData).length !== 0))*/
         return (<View style={{ flex: 1 }}>
-            {this.creatView()}
+            {this.createView()}
         </View>
         )
     }
