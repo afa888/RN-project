@@ -18,6 +18,7 @@ import MainTheme from "../../../utils/AllColor"
 import {category_group_divide_line_color} from "../../../utils/AllColor"
 import DeviceValue from '../../../utils/DeviceValue'
 import Password from 'react-native-password-pay'
+import {money_validate} from "../../../utils/Validate";
 var TimerMixin = require('react-timer-mixin');
 
 let screenWidth = Dimensions.get('window').width;
@@ -119,7 +120,12 @@ export default class WithdrawalScreen extends Component<Props> {
     }
 
     _onRequestWithDrawal = () => {
+        if(!money_validate(this.state.money)){
+            TXToastManager.show('请输入正确的提现金额');
+            return;
+        }
         let params = {cardid:this.state.cardid,credit:this.state.money,password:this.state.password};
+
 
         http.post('User/WithDraw', params,true).then((res) => {
             if (res && res.status === 10000) {

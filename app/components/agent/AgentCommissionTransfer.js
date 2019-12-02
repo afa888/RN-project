@@ -42,7 +42,7 @@ export default class AgentCommissionTransfer extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            agentData: {},
+            agentData: null,
 
         };
     }
@@ -87,8 +87,9 @@ export default class AgentCommissionTransfer extends Component<Props> {
     }
 
     render() {
-        let {outstandingCommissions, commissionBeginDate, commissionEndDate, allExtractedCommissions} = this.state.agentData
-        let allEx = allExtractedCommissions.toFixed(2)
+        if (this.state.agentData) {
+            let {outstandingCommissions, commissionBeginDate, commissionEndDate, allExtractedCommissions} = this.state.agentData
+            let allEx = allExtractedCommissions.toFixed(2);
         return (<View style={{flex: 1, alignItems: 'center'}}>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>转存金额</Text>
@@ -124,6 +125,10 @@ export default class AgentCommissionTransfer extends Component<Props> {
                 </TouchableOpacity>
             </View>
         )
+        }else {
+            return null
+        }
+        
     }
 }
 
