@@ -85,14 +85,21 @@ export default class AgentManager extends Component<Props> {
     }
 
     componentDidMount() {
-        this.timer = setTimeout(
-            () => {
-                console.log('把一个定时器的引用挂在this上');
-                this.setState({isShow: true})
-            },
-            3000
-        );
+        // this.timer = setTimeout(
+        //     () => {
+        //         console.log('把一个定时器的引用挂在this上');
+        //         this.setState({isShow: true})
+        //     },
+        //     3000
+        // );
     }
+
+    shouldComponentUpdate(nextProps, nextState){
+        return !(this.props === nextProps) ||
+             !(this.state === nextState);
+    }
+
+    // componentShouldUpdate
 
     componentWillUnmount() {
         // 如果存在this.timer，则使用clearTimeout清空。
@@ -242,6 +249,41 @@ export default class AgentManager extends Component<Props> {
                 }
             </View>
         );
+    }
+
+    createHeaderView = () => {
+        let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
+        return(
+            <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
+                                      resizeMode='cover' style={styles.bgImagbg}>
+                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth}}>
+                            <Text style={[styles.agentTitle, {
+                                fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
+                            }]}>￥{outstandingCommissions}</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.refs.modal6.open()
+                                }}
+                                style={[styles.agentTitle, styles.takeMonyView]}>
+                                <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
+                        <View style={styles.titleView}>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
+                            <Text
+                                style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
+                        </View>
+                        <View style={styles.titleView}>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
+                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
+                        </View>
+                    </ImageBackground>
+        );
+        
     }
 
     createQr = () => {
@@ -549,7 +591,7 @@ export default class AgentManager extends Component<Props> {
         });
 
     }
-    creatView = () => {
+    createView = () => {
         console.log("开始初始化界面")
 
         let {agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions} = this.state.agentData;
@@ -559,36 +601,10 @@ export default class AgentManager extends Component<Props> {
 
             return (<View style={{flex: 1}}>
                 <ScrollView style={{flex: 1, backgroundColor: MainTheme.BackgroundColor}}>
-                    {<ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
-                                      resizeMode='cover' style={styles.bgImagbg}>
-                        <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center', width: DeviceValue.windowWidth}}>
-                            <Text style={[styles.agentTitle, {
-                                fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
-                            }]}>￥{outstandingCommissions}</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.refs.modal6.open()
-                                }}
-                                style={[styles.agentTitle, styles.takeMonyView]}>
-                                <Text style={[styles.agentTitle, {fontSize: 10}]}>提取佣金</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={[styles.agentTitle, {margin: 8}]}>未结佣金</Text>
-                        <View style={styles.titleView}>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{agencyLevel}</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle18]}>{teamNum}</Text>
-                            <Text
-                                style={[styles.agentTitle, styles.fontSizeTitle18]}>{allExtractedCommissions}</Text>
-                        </View>
-                        <View style={styles.titleView}>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>代理等级</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>团队人数</Text>
-                            <Text style={[styles.agentTitle, styles.fontSizeTitle14]}>累计提拥</Text>
-                        </View>
-                    </ImageBackground>}
+                    {this.createHeaderView()}
                     {this.createAgentBtn()}
-                    {this.createQr()}
+                    
+                    <AgentQr />
 
                     <View style={{
                         width: DeviceValue.windowWidth,
@@ -635,7 +651,7 @@ export default class AgentManager extends Component<Props> {
       }*/
 
     render() {
-        console.log("属狗  这里多次请求网络 state变化会导致多次刷新页面")
+        console.log('AgentManager render');
         /*        console.log(this.state.agentData)
                 console.log((Object.keys(this.state.agentData).length !== 0 ))
 
@@ -651,7 +667,7 @@ export default class AgentManager extends Component<Props> {
                 console.log("最后的结果"+(Object.keys(this.state.agentData).length !== 0&& Object.keys(this.state.pieData).length !== 0 && this.state.barData.length > 0 &&
                     Object.keys(this.state.inviteData).length !== 0))*/
         return (<View style={{flex: 1}}>
-                {this.creatView()}
+                {this.createView()}
             </View>
         )
     }
