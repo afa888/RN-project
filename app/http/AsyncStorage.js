@@ -9,7 +9,7 @@ export const LoginStateKey = '@loginState';
 
 export const UserSession = {
     isLogin: false,     // 用户是否已经登录
-    agencyStatus: 2,    // 无限代理的状态（0：正常，1：停用，2：尚未加入，-1：错误或平台尚未开通无限代理）
+    agencyStatus: -1,    // 无限代理的状态（0：正常，1：停用，2：尚未加入，-1：错误或平台尚未开通无限代理）
 }
 
 /**
@@ -85,6 +85,8 @@ export const clearAllStore = async () => {
     try {
         // await AsyncStorage.clear()
         UserSession.isLogin = false;
+        UserSession.agencyStatus = -1;
+
         let unDeletedKeys = [RememberUserKey, UserNameKey, UserPwdKey];
         AsyncStorage.getAllKeys().then((keys) => {
             let keyArr = keys.filter((key) => {

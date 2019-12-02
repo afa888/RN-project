@@ -107,9 +107,9 @@ export default class AgentRewardRecorder extends Component<Props> {
      * 加载更多
      */
     loadMore = () => {
-        const { isLoadingMore, isRefresh, isNoMoreData } = this.state;
+        const { isLoadingMore, isRefreshing, isNoMoreData } = this.state;
 
-        if (isLoadingMore || isRefresh || isNoMoreData) {
+        if (isLoadingMore || isRefreshing || isNoMoreData) {
             console.log("正在数据请求或没有更多数据！");
         }
         else {
@@ -149,7 +149,7 @@ export default class AgentRewardRecorder extends Component<Props> {
                 });
 
                 if (isRefresh) {
-                    pageSize = 1;
+                    this.currentPageNo = 1;
                     this.setState({
                         data: res.data.list,
                     });

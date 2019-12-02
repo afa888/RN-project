@@ -8,7 +8,7 @@ import {
 
 import MainTheme from '../../utils/AllColor';
 
-export default class HelpScreen extends Component {
+export default class AgentPausedPage extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: (
@@ -32,7 +32,7 @@ export default class HelpScreen extends Component {
      */
     checkRules = () => {
         const { navigation } = this.props;
-        navigation.navigate('AgenJoinBefore');
+        this.props.navigation.navigate('AgenJoinBefore', { isJoin: true });
     }
 
     /**

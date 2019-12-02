@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Platform,
     StyleSheet,
@@ -16,7 +16,7 @@ import {
 import Dimensions from 'Dimensions'
 import http from "../../http/httpFetch";
 import httpBaseManager from '../../http/httpBaseManager'
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DeviceValue from "../../utils/DeviceValue";
 import HomeNoticeView from './HomeNoticeView'
@@ -31,8 +31,8 @@ import {
 } from "../../utils/AllColor";
 import HomeBottomView from "./HomeBottomView";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
-import Toast, {DURATION} from 'react-native-easy-toast'
-import {CAGENT} from '../../utils/Config'
+import Toast, { DURATION } from 'react-native-easy-toast'
+import { CAGENT } from '../../utils/Config'
 import CodePush from 'react-native-code-push';
 import TXTools from '../../utils/Htools';
 import {
@@ -40,14 +40,14 @@ import {
     INNER_MESSAGER_MESSAGE_NUM_URL,
     INNER_MESSAGER_STATUS_CHANGED,
 } from './InnerMessager';
-import {getStoreData, mergeStoreData, checkLoginState} from "../../http/AsyncStorage";
+import { getStoreData, mergeStoreData, checkLoginState, UserSession } from "../../http/AsyncStorage";
 import TXToastManager from "../../tools/TXToastManager";
 
 
 export default class HomeScreen extends Component<Props> {
 
-    static navigationOptions = ({navigation}) => {
-        const {params} = navigation.state;
+    static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state;
         let badgeWidth = 14;
         if (params && params.badgeValue > 0) {
             if (params.badgeValue > 9) {
@@ -59,14 +59,14 @@ export default class HomeScreen extends Component<Props> {
         }
 
         return {
-            headerTitle: <View style={{flex: 1, alignItems: "center"}}>
+            headerTitle: <View style={{ flex: 1, alignItems: "center" }}>
                 <Image source={require('../../static/img/banner.png')}
-                       style={{
-                           flex: 1,
-                           resizeMode: 'contain',
-                           width: DeviceValue.windowWidth,
-                           height: 48,
-                       }}/>
+                    style={{
+                        flex: 1,
+                        resizeMode: 'contain',
+                        width: DeviceValue.windowWidth,
+                        height: 48,
+                    }} />
             </View>,
             headerRight: <View
                 style={{
@@ -76,21 +76,21 @@ export default class HomeScreen extends Component<Props> {
                     alignItems: 'center',
                     marginRight: 12
                 }}>
-                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center', marginRight: 10,}}
-                                  onPress={() => {
-                                      checkLoginState().then((isLogin) => {
-                                          if (isLogin) {
-                                              navigation.navigate('InnerMessager');
-                                          } else {
-                                              TXToastManager.show('请先登录！');
-                                              navigation.navigate('LoginService');
-                                          }
-                                      }).catch(err => console.log('读取用户登录状态失败：' + err));
-                                  }}>
+                <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center', marginRight: 10, }}
+                    onPress={() => {
+                        checkLoginState().then((isLogin) => {
+                            if (isLogin) {
+                                navigation.navigate('InnerMessager');
+                            } else {
+                                TXToastManager.show('请先登录！');
+                                navigation.navigate('LoginService');
+                            }
+                        }).catch(err => console.log('读取用户登录状态失败：' + err));
+                    }}>
                     <View style={styles.innerMessageIcon}>
                         {
                             params && params.badgeValue > 0 && (
-                                <View style={{...styles.badgeContainer, width: badgeWidth}}>
+                                <View style={{ ...styles.badgeContainer, width: badgeWidth }}>
                                     <Text style={styles.badgeText}>
                                         {params.badgeValue > 99 ? '99+' : params.badgeValue}
                                     </Text>
@@ -98,12 +98,12 @@ export default class HomeScreen extends Component<Props> {
                             )
                         }
                         <Image source={require('../../static/img/nav_icon_email_nor.png')}
-                               style={{resizeMode: 'contain', width: 18, height: 18,}}/>
-                        <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>消息</Text>
+                            style={{ resizeMode: 'contain', width: 18, height: 18, }} />
+                        <Text style={{ color: textTitleColor, fontSize: 8, marginTop: 2 }}>消息</Text>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{width: 28, height: 48, alignItems: 'center'}} onPress={() => {
+                <TouchableOpacity style={{ width: 28, height: 48, alignItems: 'center' }} onPress={() => {
                     navigation.navigate('CustomerService')
 
                 }}>
@@ -120,8 +120,8 @@ export default class HomeScreen extends Component<Props> {
                                 resizeMode: 'contain',
                                 width: 18,
                                 height: 18,
-                            }}/>
-                        <Text style={{color: textTitleColor, fontSize: 8, marginTop: 2}}>客服</Text>
+                            }} />
+                        <Text style={{ color: textTitleColor, fontSize: 8, marginTop: 2 }}>客服</Text>
                     </View>
                 </TouchableOpacity>
             </View>,
@@ -145,7 +145,7 @@ export default class HomeScreen extends Component<Props> {
         // 站内信
         this.innerMessagerListener =
             DeviceEventEmitter.addListener(INNER_MESSAGER_STATUS_CHANGED, (val) => {
-                this.props.navigation.setParams({badgeValue: val});
+                this.props.navigation.setParams({ badgeValue: val });
             });
 
         // 获取用户基本信息
@@ -167,7 +167,7 @@ export default class HomeScreen extends Component<Props> {
             if (isLogin) {
                 this.requestInnerMessageInfo();
             } else {
-                this.props.navigation.setParams({badgeValue: 0});
+                this.props.navigation.setParams({ badgeValue: 0 });
             }
         }).catch(err => console.log('读取用户登录状态失败：' + err));
     }
@@ -185,8 +185,8 @@ export default class HomeScreen extends Component<Props> {
             data: {},
             dataImagUrl: [],
             dicountUrl: ["https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/1.jpg",
-                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/2.jpg",
-                "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/3.jpg",],
+            "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/2.jpg",
+            "https://mobile.worldwealth.com.cn/mobile" + CAGENT + "/image/Home/3.jpg",],
             noticeTitle: [],
             redData: {}
         }
@@ -200,7 +200,7 @@ export default class HomeScreen extends Component<Props> {
             noticeList.push(notice[i].value + "\r\n" + "\r")
         }
 
-        this.props.navigation.navigate('NoticeScreen', {data: noticeList})
+        this.props.navigation.navigate('NoticeScreen', { data: noticeList })
     }
 
     // http://m.txbet1788.com/TXW/game/getPageTabRecommend?src=TXW&cagent=TXW&terminal=2
@@ -245,7 +245,7 @@ export default class HomeScreen extends Component<Props> {
                 otherParam: '',
                 gameName: item.name,
                 gameId: item.id,
-            } : {otherParam: item.logImgUrl, gameId: item.id, gameName: item.name,})
+            } : { otherParam: item.logImgUrl, gameId: item.id, gameName: item.name, })
         } else {
             this.forwardGame(item)
         }
@@ -262,7 +262,7 @@ export default class HomeScreen extends Component<Props> {
             if (res.status === 10000) {
                 let categoryList = []
                 for (var i = 0; i < res.data.length; i++) {
-                    let itemLeft = {key: res.data[i].name, isSelect: i == 0 ? true : false}
+                    let itemLeft = { key: res.data[i].name, isSelect: i == 0 ? true : false }
                     categoryList.push(itemLeft);
                 }
                 DeviceValue.CategoryData = res.data
@@ -283,7 +283,7 @@ export default class HomeScreen extends Component<Props> {
         http.get('game/getPageTabRecommend', prams).then(res => {
             console.log(res);
             if (res.status === 10000) {
-                this.setState({data: res.data})
+                this.setState({ data: res.data })
             }
         }).catch(err => {
             console.error(err)
@@ -298,7 +298,7 @@ export default class HomeScreen extends Component<Props> {
                 getStoreData('userInfoState').then(userInfo => {
                     if (!userInfo.hasOwnProperty('scratchStatus') || userInfo.scratchStatus === 0) {
                         // 没有领取过 刮刮乐 就 去 服务器查询是否有活动
-                        let prams = {type: '2', cagentCode: CAGENT};
+                        let prams = { type: '2', cagentCode: CAGENT };
                         http.post('gglActivity/getReward.do', prams).then(res => {
                             console.log("刮刮乐")
                             console.log(res);
@@ -307,7 +307,7 @@ export default class HomeScreen extends Component<Props> {
                                 if (res.data.status == '0') {
                                     //verifyPhone 1 是收机号 注册 无需验证， 0 是快速注册 需要验证手机号
                                     if (res.data.hasOwnProperty('activityId') && res.data.hasOwnProperty('usermoney') && res.data.hasOwnProperty('verifyPhone')) {
-                                        this.setState({scratchData: res.data});
+                                        this.setState({ scratchData: res.data });
                                         this.showScrach();
                                     }
 
@@ -348,7 +348,7 @@ export default class HomeScreen extends Component<Props> {
             console.log("红包")
             console.log(res);
             if (res.status === 10000) {
-                this.setState({redData: res.data})
+                this.setState({ redData: res.data })
 
                 if (res.data.status !== "faild") {
                     this.showRedBag();
@@ -362,17 +362,17 @@ export default class HomeScreen extends Component<Props> {
 
     showRedBag = () => {
 
-        this.setState({isRedBagVisible: true});
+        this.setState({ isRedBagVisible: true });
     }
     gotoDiscout = () => {
         this.props.navigation.navigate('DiscountsScreen')
     }
 
     gotoDiscoutDetail = (url) => {
-        this.props.navigation.navigate('DiscountDetail', {url: url})
+        this.props.navigation.navigate('DiscountDetail', { url: url })
     }
     hideDialog = () => {
-        this.setState({isRedBagVisible: false});
+        this.setState({ isRedBagVisible: false });
     }
     gotoWebView = () => {
         this.props.navigation.navigate('RnWebScreen')
@@ -386,28 +386,70 @@ export default class HomeScreen extends Component<Props> {
         let from = TXTools.formatDateToCommonString(theDay);
         let to = TXTools.formatDateToCommonString(new Date());
         // 发送数据请求
-        http.post(INNER_MESSAGER_MESSAGE_NUM_URL, {bdate: from, edate: to})
+        http.post(INNER_MESSAGER_MESSAGE_NUM_URL, { bdate: from, edate: to })
             .then(res => {
                 if (res.status == 10000) {
-                    this.props.navigation.setParams({badgeValue: res.data.noread});
+                    this.props.navigation.setParams({ badgeValue: res.data.noread });
                 }
             }).catch(err => {
-            console.error(err);
-        });
+                console.error(err);
+            });
     }
 
     showScrach = () => {
         console.log('刮刮乐开始显示');
-        this.setState({isScrachVisible: true});
+        this.setState({ isScrachVisible: true });
     }
     hideScrach = () => {
-        this.setState({isScrachVisible: false});
+        this.setState({ isScrachVisible: false });
         this.httpRedBag();
+    }
+
+    /**
+     * 点击无限代理的广告
+     */
+    onAgencyADTapped = () => {
+        if (UserSession.agencyStatus == -1) {
+            http.post('User/getUserInfo', null, true).then(res => {
+                if (res.status === 10000) {
+                    UserSession.agencyStatus = res.data.agencyStatus;
+                    this.onJumpAgencyPage();
+                    return;
+                }
+                else {
+                    TXToastManager.show(res.msg || '请求失败，请重试！');
+                }
+            }).catch(err => {
+                TXToastManager.show("网络异常，请重试！");
+            });
+        }
+        else {
+            this.onJumpAgencyPage();
+        }
+    }
+    /**
+     * 根据用户的无限代理状态调转到对应页面
+     */
+    onJumpAgencyPage = () => {
+        switch (UserSession.agencyStatus) {
+            case 0: // 正常
+                this.props.navigation.navigate('AgenJoinBefore', { isJoin: true });
+                break;
+            case 1: // 停用
+                this.props.navigation.navigate('AgentPausedPage');
+                break;
+            case 2: // 未加入
+                this.props.navigation.navigate('AgenJoinBefore');
+                break;
+            default:
+                console.error('未知的代理状态:' + UserSession.agencyStatus);
+                break;
+        }
     }
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center'}}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
                 {this.state.isRedBagVisible && <RedBagDialog
                     _dialogContent={this.state.noticeTitle}
                     _dialogVisible={this.state.isRedBagVisible}
@@ -429,30 +471,27 @@ export default class HomeScreen extends Component<Props> {
                 />}
                 <Toast
                     ref="toast"
-                    style={{backgroundColor: 'black'}}
+                    style={{ backgroundColor: 'black' }}
                     position='center'
                     opacity={0.4}
-                    textStyle={{color: 'white'}}
+                    textStyle={{ color: 'white' }}
                 />
-                <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
-                    <View style={{flex: 1}}>
+                <ScrollView style={{ flex: 1, backgroundColor: category_group_divide_line_color }}>
+                    <View style={{ flex: 1 }}>
                         <HomeNoticeView showDialog={
                             this.noticeScreen.bind(this)
-                        }/>
+                        } />
 
                         <HomeMidView data={this.state.data.gameClassifyEntities}
-                                     goMoreGame={this.goMoreGame.bind(this)}/>
-                        <TouchableOpacity style={styles.agentView} onPress={() => {
-                            this.props.navigation.navigate('AgenJoinBefore')
-
-                        }}>
+                            goMoreGame={this.goMoreGame.bind(this)} />
+                        <TouchableOpacity style={styles.agentView} onPress={this.onAgencyADTapped}>
                             <Image source={require('../../static/img/agent/img_home_qxdl.png')}
-                                   style={styles.agentIg}/>
+                                style={styles.agentIg} />
                         </TouchableOpacity>
 
                         <HomeBottomView dicountUrl={this.state.dicountUrl}
-                                        gotoDiscout={this.gotoDiscout.bind(this)}
-                                        gotoDiscoutDetail={this.gotoDiscoutDetail.bind(this)}/>
+                            gotoDiscout={this.gotoDiscout.bind(this)}
+                            gotoDiscoutDetail={this.gotoDiscoutDetail.bind(this)} />
                     </View>
 
                 </ScrollView>
@@ -465,13 +504,13 @@ export default class HomeScreen extends Component<Props> {
 
 const styles = StyleSheet.create({
 
-    wrapper: {height: 150},
+    wrapper: { height: 150 },
     slideFastImage: {
         width: DeviceValue.windowWidth,
         height: 150,
     },
-    itemView: {backgroundColor: 'white', height: 40, flexDirection: 'row', marginTop: 12, alignItems: 'center'},
-    noticeView: {backgroundColor: 'white', height: 90, flexDirection: 'row', alignItems: 'center'},
+    itemView: { backgroundColor: 'white', height: 40, flexDirection: 'row', marginTop: 12, alignItems: 'center' },
+    noticeView: { backgroundColor: 'white', height: 90, flexDirection: 'row', alignItems: 'center' },
     conView: {
         flex: 1,
         flexDirection: 'row',
