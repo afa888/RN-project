@@ -558,7 +558,7 @@ export default class AgentManager extends Component<Props> {
 
             return (
                 <View style={{ flex: 1 }}>
-                    <ScrollView style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: MainTheme.BackgroundColor }}>
                         <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                             resizeMode='cover' style={styles.bgImagbg}>
                             <Text style={[styles.agentTitle, styles.welcomTitle]}>欢迎您,{userName}</Text>
