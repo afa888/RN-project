@@ -52,6 +52,7 @@ export default class AgenJoinBefore extends Component<Props> {
                         }} />
                 </TouchableOpacity>
             ),
+            headerRight: <View />
         };
     };
 
