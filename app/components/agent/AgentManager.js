@@ -584,8 +584,9 @@ export default class AgentManager extends Component<Props> {
                         <Text style={styles.choiceText}>请选择:</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                this.refs.modal6.close()
-                                this.props.navigation.navigate('AgentCommissionTransfer');
+                                this.refs.modal6.close();
+                                let { agentData } = this.state;
+                                this.props.navigation.navigate('AgentCommissionTransfer',{agentData:agentData});
                             }}
                             style={styles.touchView}>
                             <Text style={[styles.agentTitle, { fontSize: 14 }]}>转至中心钱包</Text>

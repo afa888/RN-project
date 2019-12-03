@@ -20,6 +20,7 @@ import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import TXToastManager from "../../tools/TXToastManager";
+import httpBaseManager from '../../http/httpBaseManager'
 
 let isJoin = false
 export default class AgentCommissionTransfer extends Component<Props> {
@@ -57,9 +58,13 @@ export default class AgentCommissionTransfer extends Component<Props> {
     */
 
     withdrawlCommission = () => {
-        http.post('agency/withdrawlCommission', null, true).then((res) => {
+        const {agentData} = this.props.navigation.state.params;
+        let params = {amount:agentData.outstandingCommissions,commissionBeginDate:agentData.commissionBeginDate,
+            commissionEndDate:agentData.commissionEndDate,settlementType:'1'};// 0 提现到银行卡， 1 转存到钱包
+        http.post('agency/withdrawlCommission', params, true).then((res) => {
             if (res.status === 10000) {
-                this.props.navigation.navigate('AgentCommissionSuccess');
+                httpBaseManager.queryUserInfo();//关闭当前界面并显示成功界面 防止返回时又回到次界面
+                this.props.navigation.replace('AgentCommissionSuccess');
 
             } else {
                 TXToastManager.show('申请失败')
