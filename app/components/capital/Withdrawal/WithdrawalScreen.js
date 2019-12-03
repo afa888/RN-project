@@ -120,10 +120,7 @@ export default class WithdrawalScreen extends Component<Props> {
     }
 
     _onRequestWithDrawal = () => {
-        if(!money_validate(this.state.money)){
-            TXToastManager.show('请输入正确的提现金额');
-            return;
-        }
+        
         let params = {cardid:this.state.cardid,credit:this.state.money,password:this.state.password};
 
 
@@ -164,9 +161,12 @@ export default class WithdrawalScreen extends Component<Props> {
 
     _onCheckWithdrawal = () => {
         if(this.state.money.length == 0){
-            Alert.alert('请输入取款金额为100~500000元');
-        }else if(parseInt(this.state.money)<100 || parseInt(this.state.money)>500000){
-            Alert.alert('请输入取款金额为100~500000元');
+            TXToastManager.show('请输入取款金额为100~500000元');
+        }else if(!money_validate(this.state.money)){
+            TXToastManager.show('请输入正确的提现金额');
+        }
+        else if(parseInt(this.state.money)<100 || parseInt(this.state.money)>500000){
+            TXToastManager.show('请输入取款金额为100~500000元');
         }else {
             this.setModalVisible(true);
         }
@@ -189,13 +189,18 @@ export default class WithdrawalScreen extends Component<Props> {
         let denominator = parseInt(this.state.markingQuantity);
         let element = parseInt(this.state.userQuantity);
         let proportion;
+        let showP;
         if (denominator == 0 || isNaN(denominator)) {
             proportion = 0.99999;
+            showP = '100 %';
         }
         else if(denominator <= element) {
             proportion = 0.99999;
+            showP = '100 %';
         }else {
             proportion = (element * 1.0) / (denominator * 1.0);
+
+            showP = proportion * 100 + '%';
         }
 
         let des = '单笔限额' + this.state.minWithdrawMoney + '-' + this.state.maxWithdrawMoney + '元'
@@ -297,7 +302,7 @@ export default class WithdrawalScreen extends Component<Props> {
                         <ImageBackground style={{ flex: 1,width:58,height:30}} resizeMode='cover'
                             source={require('../../../static/img/drawing_icon_dm02.png')} >
                             <View style={{paddingLeft:5,paddingRight:5,paddingBottom:7,width:58,height:30,alignItems:'center',justifyContent:'center'}}>
-                                <Text adjustsFontSizeToFit={true} minimumFontScale={0.01} style={{color:MainTheme.commonButtonTitleColor}}>{this.state.markingQuantity}</Text>
+                                <Text adjustsFontSizeToFit={true} minimumFontScale={0.01} style={{color:MainTheme.commonButtonTitleColor}}>{showP}</Text>
                             </View>
                         </ImageBackground>
                     </View>
@@ -306,14 +311,8 @@ export default class WithdrawalScreen extends Component<Props> {
                         <View style={{height:10,width:(DeviceValue.windowWidth - 40) * (1 - proportion),backgroundColor:category_group_divide_line_color}}></View>
                     </View>
                     <View style={{height:30,flexDirection:'row'}}>
-                        <View style={{width:(DeviceValue.windowWidth - 40) * proportion - 20}}></View>
-                        <ImageBackground style={{flex: 1,width:58,height:30}} resizeMode='cover'
-                            source={require('../../../static/img/drawing_icon_dm01.png')} >
-                            <View style={{paddingTop:7,width:58,height:30,alignItems:'center',justifyContent:'center'}}>
-                                <Text style={{color:MainTheme.commonButtonTitleColor}}>{this.state.userQuantity}</Text>
-                            </View>
-                            
-                        </ImageBackground>
+                        <Text style={{color:MainTheme.GrayColor}}>{this.state.userQuantity} / {this.state.markingQuantity}</Text>
+                        
                     </View>
                 </View>
 

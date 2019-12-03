@@ -47,9 +47,8 @@ export default class AgentCommissionSuccess extends Component<Props> {
         };
     }
 
-    componentWillMount(): void {
-
-
+    componentDidMount() {
+        DeviceEventEmitter.emit('userInfoChanged',{needFresh:true});//通知代理首页数据有变更，需要刷新
     }
 
 

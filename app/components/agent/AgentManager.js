@@ -105,10 +105,18 @@ export default class AgentManager extends Component<Props> {
         // 如果存在this.timer，则使用clearTimeout清空。
         // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
         this.timer && clearTimeout(this.timer);
+
+        //删除 监听
+        this.listener.remove();
     }
 
 
     componentWillMount(): void {
+
+        this.listener = DeviceEventEmitter.addListener('userInfoChanged', (val) => {
+            this.getAllData();
+        });
+
         AsyncStorage.multiGet([UserNameKey, UserPwdKey])
             .then((results) => {
                 console.log('用户信息');
@@ -118,6 +126,10 @@ export default class AgentManager extends Component<Props> {
             }).catch(() => {
                 console.error("Load account info error.");
             });
+        this.getAllData();
+    }
+
+    getAllData = () => {
         this.getSelfAgentData();
         this.getInviteMethod();
         this.getTeamCompositionChart();
