@@ -153,7 +153,7 @@ export default class TeamManagerScreen extends Component<Props> {
             hierarchicalType: type,
         };
         let dicountList = [];
-        http.post('agency/getTeamManagementInfo', prams).then(res => {
+        http.get('agency/getTeamManagementInfo', prams).then(res => {
             console.log(res);
             this.setState({ refreshing: false })
             if (res.status === 10000) {
@@ -487,50 +487,6 @@ export default class TeamManagerScreen extends Component<Props> {
 
     }
 
-    selectTime = (index) => {
-        console.log("oldIndex=" + oldIndex)
-        console.log("index=" + index)
-        if (index === 0) {
-            startTime = oneDay
-        } else if (index === 1) {
-            startTime = treeDay
-        } else if (index === 2) {
-            startTime = oneWeek
-        } else if (index === 3) {
-            startTime = oneMonth
-        }
-        let yearMonthDay = startTime.split(' ')[0].split('-')
-        this.setState({
-            startTime: yearMonthDay[0] + '-' + yearMonthDay[1] + '-' + yearMonthDay[2],
-            endTime: lastEndTime
-        })
-        console.log("this.state.startTime.length=" + this.state.startTime + "  " + treeDay)
-
-        if (oldIndex !== index) {
-            this.refreshData()
-        }
-        oldIndex = index;
-    }
-
-    getSeletTime = () => {
-        let viewAarry = []
-        let timeAarry = ['今天', '三天', '一周', '一月']
-        for (let i = 0; i < 4; i++) {
-            viewAarry.push(
-                <TouchableOpacity onPress={() => {
-                    this.setState({ index: i, data: [] })
-                    this.selectTime(i)
-                }}><Text style={styles.timeText}>{timeAarry[i]}</Text>
-                </TouchableOpacity>)
-        }
-        viewAarry[this.state.index] = <TouchableOpacity onPress={() => {
-            this.setState({ index: this.state.index, data: [] })
-            this.selectTime(this.state.index)
-        }}>
-            <Text style={styles.timeSelectText}>{timeAarry[this.state.index]}</Text>
-        </TouchableOpacity>
-        return viewAarry
-    }
     /**
      * 渲染记录筛选的条件
      */
@@ -557,55 +513,6 @@ export default class TeamManagerScreen extends Component<Props> {
 
                 <View style={{borderRadius:4,borderWidth:0.5,borderColor:MainTheme.SpecialColor}}>
                     <Text style={[styles.timeSelectText,{color:MainTheme.SpecialColor}]}>{this.state.teamPeopleCount}人</Text>
-                </View>
-            </View>
-        );
-    }
-    /**
-     * 查询的时间间隔
-     */
-    renderSearchTimeDetail = () => {
-        return (
-            <View style={{ backgroundColor: MainTheme.SpecialColor }}>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    height: deviceValue.windowWidth / 8,
-                    alignItems: 'center'
-                }}>
-                    {this.getSeletTime()}
-
-                </View>
-                <View style={styles.timeDividerView} />
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 5,
-                    alignItems: 'center'
-                }}>
-                    <Text style={{ color: 'white', fontSize: 12, marginLeft: 12 }}>选择时间:</Text>
-                    <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={() => {
-                                this.showDialog(true, true)
-                            }}>
-                                <Text style={{
-                                    color: 'white',
-                                    fontSize: 14
-                                }}>{this.state.startTime}---</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {
-                                this.showDialog(true, false)
-                            }}>
-                                <Text style={{
-                                    color: 'white',
-                                    fontSize: 14
-                                }}>{this.state.endTime}</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.choiceTimeDividerView} />
-                    </View>
                 </View>
             </View>
         );
@@ -695,10 +602,28 @@ export default class TeamManagerScreen extends Component<Props> {
                             onDayPress={(days) => {
                                 console.log("回调", days)
                                 if (isStartTag) {
-                                    this.setState({ startTime: days.year + "-" + days.month + "-" + days.day })
+
+                                    let day = String(days.day);
+                                    let month = String(days.month);
+                                    if (day.length === 1) {
+                                        day = '0' + day
+                                    }
+                                    if (month.length === 1) {
+                                        month = '0' + month
+                                    }
+
+                                    this.setState({ startTime: days.year + "-" + month + "-" + day })
                                     startTime = days.dateString + ' ' + '00' + ':' + '00' + ':' + '00'
                                 } else {
-                                    this.setState({ endTime: days.year + "-" + days.month + "-" + days.day })
+                                    let day = String(days.day);
+                                    let month = String(days.month);
+                                    if (day.length === 1) {
+                                        day = '0' + day
+                                    }
+                                    if (month.length === 1) {
+                                        month = '0' + month
+                                    }
+                                    this.setState({ endTime: days.year + "-" + month + "-" + day })
                                     endTime = days.dateString + ' ' + '23' + ':' + '59' + ':' + '59'
 
                                 }
