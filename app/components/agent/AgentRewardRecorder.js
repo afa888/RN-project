@@ -247,9 +247,9 @@ export default class AgentRewardRecorder extends Component<Props> {
      */
     renderTopBanner() {
         const items = [
-            { account: TXTools.formatMoneyAmount(this.state.outstandingCommissions), title: '当前未结' },
+            { account: TXTools.formatMoneyAmount(this.state.outstandingCommissions, false), title: '当前未结' },
             { account: '' + this.state.extractedTimes + ' 次', title: '已提取' },
-            { account: TXTools.formatMoneyAmount(this.state.allExtractedCommissions), title: '累计提取' },
+            { account: TXTools.formatMoneyAmount(this.state.allExtractedCommissions, false), title: '累计提取' },
         ];
         return (
             <View style={styles.topBannerContainer}>
