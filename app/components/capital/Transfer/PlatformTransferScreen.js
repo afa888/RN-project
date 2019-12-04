@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform,Keyboard,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
+import {Platform,DeviceEventEmitter,Keyboard,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
 import Dimensions from 'Dimensions'
 import TXInput from "../../../tools/TXInput"
 import {TXAlert} from "../../../tools/TXAlert"
@@ -268,7 +268,7 @@ export default class PlatformTransfer extends Component<Props> {
                 this._gameList('false');//重新获取资金数据
                 // 更新本地缓存
                 mergeStoreData('userInfoState',
-                    { balance: wallet }).then(() => {
+                    { balance: res.data.wallet }).then(() => {
                     DeviceEventEmitter.emit('bindSuccess','更新钱包余额');
                 });
             }
