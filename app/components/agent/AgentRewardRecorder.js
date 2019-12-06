@@ -56,7 +56,7 @@ export default class AgentRewardRecorder extends Component<Props> {
         isNoMoreData: false,
         isModalVisible: false,      // 过滤的弹框是否显示
         isCalendarVisible: false,   // 日期选择弹框是否显示 
-        curSelectTypeIndex: 0,      // 当前的选择的排序类型的索引（ORDER_TYPES）
+        curSelectTypeIndex: 1,      // 当前的选择的排序类型的索引（ORDER_TYPES）
         maxDate: '',                // 日历控件的最大可选日期
         minDate: '',                // 日历控件的最小可选日期
 
@@ -218,7 +218,7 @@ export default class AgentRewardRecorder extends Component<Props> {
     cancelFilter = () => {
         this.setState({
             isModalVisible: false,
-            curSelectTypeIndex: 0,
+            curSelectTypeIndex: 1,
             startTime: '',
             endTime: '',
         }, this.refreshData);
