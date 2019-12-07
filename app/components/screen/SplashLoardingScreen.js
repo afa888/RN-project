@@ -114,7 +114,7 @@ class SplashLoardingScreen extends Component<Props> {
             type: 1,
         };
         http.post('mobleWebcomConfig.do', prams).then((res) => {
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 console.log(res)
                 let imgUrl = []
                 if (res.data.length > 0) {

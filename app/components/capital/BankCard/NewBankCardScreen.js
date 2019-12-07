@@ -148,7 +148,7 @@ export default class NewBankCardScreen extends Component<Props> {
                 <TXInput label="提款密码" secureTextEntry={true} placeholder="4位提款密码" textAlign='right' maxLength={4} onChange={(value) => this._onChange('password', value)} value={this.state.password || ''}/>
                 
                 <View style={{paddingTop:10,height:60,width:Dimensions.get('window').width}}>
-                    <Text style={{paddingLeft:10,fontSize:12,color:MainTheme.tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
+                    <Text style={{paddingRight:10,paddingLeft:10,fontSize:12,lineHeight:20,color:MainTheme.tipsSpecialTextColor}}>为了您账户安全,真实姓名需要和绑定银行卡姓名一致，请绑定持卡本人的银行卡并确认卡号，避免后期提款无法到账。</Text>
                 </View>
                 {
                     MainTheme.renderCommonSubmitButton(()=>this._onBindCard(),'立即绑定')

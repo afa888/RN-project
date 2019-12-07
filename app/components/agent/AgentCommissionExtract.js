@@ -53,12 +53,13 @@ export default class AgentCommissionExtract extends Component {
         http.post('agency/withdrawlCommission', params).then(res => {
             console.log(res);
             if (res) {
-                TXToastManager.show(res.msg);
                 if (res.status === 10000) {
                     //重新查询用户信息
                     httpBaseManager.queryUserInfo();
                     //关闭当前界面并显示成功界面 防止返回时又回到次界面
                     this.props.navigation.replace('AgentCommissionSuccess');
+                }else {
+                    TXToastManager.show(res.msg);
                 }
             }else {
                 TXToastManager.netError();
@@ -79,7 +80,7 @@ export default class AgentCommissionExtract extends Component {
                     <TXInput label="提取类型" isUpdate={false}  textAlign='right'  value='提现到银行卡' />
                     <TXInput label="银行卡号" isUpdate={false}  textAlign='right'  value={this.state.bank} />
                     <View style={styles.tips}>
-                        <Text style={{fontSize:12,color:MainTheme.GrayColor}}>将佣金提现到银行卡，需先提交平台审核，完成审核后将于X个工作日内存入您提供的银行卡账户内，若有任何疑问，请联系<Text onPress={this.onlineSupport} style={{color:MainTheme.specialTextColor}} > 在线客服 </Text></Text>
+                        <Text style={{fontSize:12,lineHeight:20,color:MainTheme.GrayColor}}>将佣金提现到银行卡，需先提交平台审核，完成审核后将于2个工作日内存入您提供的银行卡账户内，若有任何疑问，请联系<Text onPress={this.onlineSupport} style={{color:MainTheme.specialTextColor}} > 在线客服 </Text></Text>
                         
                     </View>
 

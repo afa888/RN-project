@@ -19,9 +19,10 @@ import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
 import { Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel } from 'react-native-tcharts'
 import { MarqueeHorizontal } from "react-native-marquee-ab";
-import { CAGENT } from "../../utils/Config";
+import { CAGENT,WEBNUM } from "../../utils/Config";
 import http from "../../http/httpFetch";
 import TXProgressHUB from "../../tools/TXProgressHUB";
+import FastImage from 'react-native-fast-image'
 
 export default class AgenJoinBefore extends Component<Props> {
 
@@ -61,13 +62,15 @@ export default class AgenJoinBefore extends Component<Props> {
         this.state = {
             noticeData: []
             , agentData: {},
-            isJoin: false
+            isJoin: false,
+            appLevelImagles:''
         };
     }
 
     componentWillMount(): void {
         this.postNotice()
         this.getAgentData()
+        this.agentImageData()
     }
 
     componentDidMount() {
@@ -94,8 +97,7 @@ export default class AgenJoinBefore extends Component<Props> {
     getAgentData = () => {
         http.get('agency/getAgentData', null).then((res) => {
             if (res.status === 10000) {
-                if (res.data !== null && res.data !== {})
-                    this.setState({ agentData: res.data })
+                    this.setState({ agentData: res.data });
             }
         }).catch(err => {
             console.error(err)
@@ -126,10 +128,26 @@ export default class AgenJoinBefore extends Component<Props> {
         });
     }
 
+    agentImageData = () => {
+        let params = {terminal: DeviceValue.terminal,
+            cagent: CAGENT,
+            src: WEBNUM }
+        http.get('agency/noLoginGetCopyPictures', params).then((res) => {
+            if (res.status === 10000) {
+                this.setState({ appLevelImagles: res.data.appLevelImagles })
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
     reanderActionButton() {
-        const { isJoin } = this.state;
+        const { isJoin,appLevelImagles } = this.state;
         let btnTitle = isJoin ? "我的代理" : "立即加入";
         return (
+            <View style={{marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9),justifyContent: 'center',
+                    alignItems: 'center',}}>
             <TouchableOpacity onPress={this.onActionButtonPressed}>
                 <View style={{
                     width: 180,
@@ -137,11 +155,30 @@ export default class AgenJoinBefore extends Component<Props> {
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: AgentBlueColor,
-                    marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9)
+                    
                 }}>
                     <Text style={{ color: MainTheme.commonButtonTitleColor }}>{btnTitle}</Text>
                 </View>
             </TouchableOpacity>
+
+            <FastImage
+                    style={{
+                        width: DeviceValue.windowWidth - 50,
+                        height: 42,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 90
+                    }}
+                    source={{
+                        uri: appLevelImagles.startsWith('//') ? "http:" + appLevelImagles : appLevelImagles,
+                        priority: FastImage.priority.normal,
+
+                    }}
+                    resizeMode={FastImage.resizeMode.contain}
+                />
+
+            </View>
+            
         );
     }
 

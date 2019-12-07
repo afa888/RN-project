@@ -44,6 +44,7 @@ export default class AgentCommissionTransfer extends Component<Props> {
         super(props);
         this.state = {
             agentData: null,
+            wallet:0,
 
         };
     }
@@ -51,6 +52,12 @@ export default class AgentCommissionTransfer extends Component<Props> {
     componentWillMount(): void {
         this.getUserInfo();
 
+    }
+
+    componentDidMount() {
+        getStoreData('userInfoState').then((userInfo) => {
+          this.setState({wallet:userInfo.balance});
+      });
     }
 
     /*
@@ -113,7 +120,7 @@ export default class AgentCommissionTransfer extends Component<Props> {
                 <View style={styles.devidelineView}/>
                 <View style={styles.itemView}>
                     <Text style={styles.itemTitleText}>当前余额</Text>
-                    <Text style={styles.itemtTileGrayColorText}>{allEx}</Text>
+                    <Text style={styles.itemtTileGrayColorText}>{this.state.wallet}</Text>
                 </View>
                 <View style={styles.devidelineView}/>
 
