@@ -3,6 +3,7 @@ import {
     View, FlatList, Text, Image,
     TouchableOpacity, SafeAreaView,
     StyleSheet, RefreshControl, Modal,
+    TouchableWithoutFeedback,
 } from "react-native";
 
 import deviceValue from "../../utils/DeviceValue";
@@ -221,11 +222,22 @@ export default class AgentWithdrawalRecorder extends Component<Props> {
     }
 
     showModal = () => {
+        const { curSelectTypeIndex, startTime, endTime } = this.state;
+        this.bufferedState = {
+            old_curSelectTypeIndex: curSelectTypeIndex,
+            old_startTime: startTime,
+            old_endTime: endTime,
+        };
         this.setState({ isModalVisible: true });
     }
 
     hideModal = () => {
-        this.setState({ isModalVisible: false });
+        this.setState({
+            isModalVisible: false,
+            curSelectTypeIndex: this.bufferedState.old_curSelectTypeIndex,
+            startTime: this.bufferedState.old_startTime,
+            endTime: this.bufferedState.old_endTime,
+        });
     }
 
     showCalendar = (isStart = true) => {
@@ -483,7 +495,9 @@ export default class AgentWithdrawalRecorder extends Component<Props> {
             >
                 <SafeAreaView style={{ flex: 1, flexDirection: 'row', }}>
 
-                    <View style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+                    <TouchableWithoutFeedback onPress={this.hideModal}>
+                        <View style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+                    </TouchableWithoutFeedback>
 
                     <View style={styles.modalRightContainer}>
 
