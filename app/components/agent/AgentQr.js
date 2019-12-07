@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
-    DeviceEventEmitter, Alert, Button
+    DeviceEventEmitter, Alert, Button,Clipboard
 } from "react-native";
 import {
     MainTheme,
@@ -62,6 +62,13 @@ export default class AgentQr extends Component<Props> {
 
     }
 
+    async copyText(text) {
+        Clipboard.setString(text);
+        let str = await Clipboard.getString()
+        TXToastManager.show('复制成功');
+    // console.log(str)//我是文本
+    }
+
 
     render() {
         console.log('QRCOde render');
@@ -71,7 +78,7 @@ export default class AgentQr extends Component<Props> {
             <View style={{position: 'relative', top: -30,}}>
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
-                    <View style={{...styles.qrImageView,height:115,width:115}}>
+                    <View style={{...styles.qrImageView,height:120,width:120}}>
                         <QRCode
                             getRef={(c) => (this.svg = c)}
                             value={inviteLink} />
@@ -81,15 +88,15 @@ export default class AgentQr extends Component<Props> {
                         height: 120, flex: 1, marginLeft: 6
                     }}>
                         <TouchableOpacity onPress={() => {
-                          //  this.copyText(inviteLink)
+                           this.copyText(inviteLink)
                         }}>
                             <Text numberOfLines={1} style={styles.tgText}>推广链接：<Text numberOfLines={1}
                                                                                      style={{color: MainTheme.DarkGrayColor}}>{inviteLink}</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-                           // this.copyText(agencyShare)
+                           this.copyText(agencyShare)
                         }}>
-                            <Text style={styles.tgwaText}>推广文案：<Text
+                            <Text style={{...styles.tgwaText,lineHeight:20}} numberOfLines={4}>推广文案：<Text
                                 style={{color: MainTheme.DarkGrayColor}}>{agencyShare}</Text></Text>
                         </TouchableOpacity>
 

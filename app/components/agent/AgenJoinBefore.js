@@ -19,9 +19,10 @@ import DeviceValue from "../../utils/DeviceValue";
 import QRCode from 'react-native-qrcode';
 import { Rect, Polygon, Circle, Ellipse, Radar, Pie, Line, Bar, Scatter, Funnel } from 'react-native-tcharts'
 import { MarqueeHorizontal } from "react-native-marquee-ab";
-import { CAGENT } from "../../utils/Config";
+import { CAGENT,WEBNUM } from "../../utils/Config";
 import http from "../../http/httpFetch";
 import TXProgressHUB from "../../tools/TXProgressHUB";
+import FastImage from 'react-native-fast-image'
 
 export default class AgenJoinBefore extends Component<Props> {
 
@@ -61,13 +62,16 @@ export default class AgenJoinBefore extends Component<Props> {
         this.state = {
             noticeData: []
             , agentData: {},
-            isJoin: false
+            isJoin: false,
+            appLevelImagles:'',
+            commissionJson:{},
         };
     }
 
     componentWillMount(): void {
         this.postNotice()
         this.getAgentData()
+        this.agentImageData()
     }
 
     componentDidMount() {
@@ -94,8 +98,7 @@ export default class AgenJoinBefore extends Component<Props> {
     getAgentData = () => {
         http.get('agency/getAgentData', null).then((res) => {
             if (res.status === 10000) {
-                if (res.data !== null && res.data !== {})
-                    this.setState({ agentData: res.data })
+                    this.setState({ agentData: res.data });
             }
         }).catch(err => {
             console.error(err)
@@ -126,10 +129,36 @@ export default class AgenJoinBefore extends Component<Props> {
         });
     }
 
+    agentImageData = () => {
+        let params = {terminal: DeviceValue.terminal,
+            cagent: CAGENT,
+            src: WEBNUM }
+        http.get('agency/noLoginGetCopyPictures', params).then((res) => {
+            if (res.status === 10000) {
+                this.setState({ appLevelImagles: res.data.appLevelImagles,commissionJson:JSON.parse(res.data.commissionJson) })
+
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
     reanderActionButton() {
-        const { isJoin } = this.state;
+        const { isJoin,appLevelImagles,commissionJson } = this.state;
         let btnTitle = isJoin ? "我的代理" : "立即加入";
+
+        let days;
+        let money;
+        if (commissionJson && Object.keys(commissionJson).length > 0) {
+            days = commissionJson.minCycle + '天';
+            money = commissionJson.minAmount + '元';
+        }else {
+            days = '30天';
+            money = '1000元'
+        }
         return (
+            <View style={{marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9),justifyContent: 'center',
+                    alignItems: 'center',}}>
             <TouchableOpacity onPress={this.onActionButtonPressed}>
                 <View style={{
                     width: 180,
@@ -137,11 +166,33 @@ export default class AgenJoinBefore extends Component<Props> {
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: AgentBlueColor,
-                    marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9)
+                    
                 }}>
                     <Text style={{ color: MainTheme.commonButtonTitleColor }}>{btnTitle}</Text>
                 </View>
             </TouchableOpacity>
+
+            <FastImage
+                    style={{
+                        width: DeviceValue.windowWidth - 50,
+                        height: 42,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 90
+                    }}
+                    source={{
+                        uri: appLevelImagles.startsWith('//') ? "http:" + appLevelImagles : appLevelImagles,
+                        priority: FastImage.priority.normal,
+
+                    }}
+                    resizeMode={FastImage.resizeMode.contain}
+                />
+
+            <View style={{paddingLeft:25,paddingRight:20,marginTop:610}}>
+                <Text style={{color:'white',fontSize:10,lineHeight:14}}>1. 提取方式：可绑定银行卡，在满足提取条件后，直接从官网或APP个人中心未结佣金位置发起提取申请，也可以联系客服，通过线下转账方式申请提取；{'\n'}2. 提取周期：<Text style={{color:'#FDF678'}}>{days}</Text>，即从上次提取完成开始，至少需要超过<Text style={{color:'#FDF678'}}>{days}</Text>，才可以发起下次提取；{'\n'}3. 最小提佣金额：<Text style={{color:'#FDF678'}}>{money}</Text>，即本次未结佣金提取金额需大于<Text style={{color:'#FDF678'}}>{money}</Text>，才能发起提取，若小于该金额，请等待佣金累积至该金额后再次申请提取；{'\n'}4. 如有任何疑问，请咨询客服；{'\n'}5.本活动最终解释权归天下网络所有。</Text>
+            </View>
+            </View>
+            
         );
     }
 

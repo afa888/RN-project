@@ -264,7 +264,7 @@ export default class AgentManager extends Component<Props> {
     }
 
     createHeaderView = () => {
-        let { agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions } = this.state.agentData;
+        let {withdraw, agencyLevel, teamNum, allExtractedCommissions, outstandingCommissions } = this.state.agentData;
         return (
             <ImageBackground source={require('../../static/img/agent/dlgl_bg.png')}
                 resizeMode='cover' style={styles.bgImagbg}>
@@ -273,13 +273,13 @@ export default class AgentManager extends Component<Props> {
                     <Text style={[styles.agentTitle, {
                         fontSize: 22, marginLeft: DeviceValue.windowWidth / 2 - 32
                     }]}>￥{outstandingCommissions}</Text>
-                    <TouchableOpacity
+                    {withdraw ? <TouchableOpacity
                         onPress={() => {
                             this.refs.modal6.open()
                         }}
                         style={[styles.agentTitle, styles.takeMonyView]}>
                         <Text style={[styles.agentTitle, { fontSize: 10 }]}>提取佣金</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
                 </View>
                 <Text style={[styles.agentTitle, { margin: 8 }]}>未结佣金</Text>
                 <View style={styles.titleView}>
@@ -300,8 +300,8 @@ export default class AgentManager extends Component<Props> {
 
     createPie = () => {
         let { directNum, teamNum, yesterdayDirectNum, weekDirectNum, yesterdayTeamNum, weekTeamNum } = this.state.pieData
-        let diPercent = directNum === 0 || directNum === NaN ? 0 : (directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
-        let teamNumPercent = teamNum === 0 || teamNum === NaN ? 0 : (teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(2) * 100
+        let diPercent = directNum === 0 || directNum === NaN ? 0 : (100 * directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(0)
+        let teamNumPercent = teamNum === 0 || teamNum === NaN ? 0 : (100 * teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(0)
 
         const data = [40, 60]
         const randomColor = [theme_color, CircleGoldColor]

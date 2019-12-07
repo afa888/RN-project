@@ -193,9 +193,7 @@ export default class TeamManagerScreen extends Component<Props> {
     }
 
     choseType = () => {
-        if (this.state.startTime.length == 0) {
-            this.getmyDate();
-        }
+
         this.setState({ isModalVisible: true });
     };
 
@@ -218,7 +216,7 @@ export default class TeamManagerScreen extends Component<Props> {
                         <Text style={{...styles.recordItemCellType,color: MainTheme.DarkGrayColor,marginBottom: 10}}>累计提供佣金</Text>
                     </View>
                     <View style={styles.recordIetmCellDetailPanel}>
-                        <Text style={{textAlign:'right',color: MainTheme.DarkGrayColor}}>查看佣金详情 ></Text>
+                        <Text style={{textAlign:'right',color: MainTheme.DarkGrayColor}}>查看佣金详情</Text>
                     </View>
                 </View>
             </View>
@@ -388,22 +386,6 @@ export default class TeamManagerScreen extends Component<Props> {
         
     }
 
-    /**
-     * 获取上个月月底日期
-     */
-    getLastMonthAndDay = () => {
-        var nowDate = new Date();
-        var year = nowDate.getFullYear();
-        var month = nowDate.getMonth();
-        if (month == 0) {
-            month = 12;
-            year = year - 1;
-        }
-        var lastDay = new Date(year, month, 0);
-        var yyyyMMdd = year + "-" + month + "-" + lastDay.getDate();
-        console.log(yyyyMMdd);
-    }
-
     getmyDate = () => {
         let date = new Date();
         console.log("日历")
@@ -439,11 +421,11 @@ export default class TeamManagerScreen extends Component<Props> {
         /* Alert.alert(month.length + "month")*/
         /*  Alert.alert(year.length + "year")
         Alert.alert(day.length + "day")*/
-        this.setState({ endTime: year + '-' + month + '-' + day, currentData: year + '-' + month + '-' + day })
+        // this.setState({ endTime: year + '-' + month + '-' + day, currentData: year + '-' + month + '-' + day })
         console.log('看日期', year + '-' + month + '-' + day + "          " + year + '-' + date.getMonth() + '-' + day)
         oneDay = year + '-' + month + '-' + day + ' ' + '00' + ':' + '00' + ':' + '00'
         startTime = oneDay
-        this.setState({ startTime: year + '-' + month + '-' + day })
+        // this.setState({ startTime: year + '-' + month + '-' + day })
 
 
         var treeDaydate = new Date(date - 2 * 24 * 3600 * 1000);
@@ -527,21 +509,21 @@ export default class TeamManagerScreen extends Component<Props> {
                 onRequestClose={this.hideModal}
             >
                 <SafeAreaView style={{ flex: 1, flexDirection: 'row', }}>
-                    <View style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+                    <TouchableOpacity style={{ flex: 3, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onPress={() => this.setState({ isModalVisible: false })} />
                     <View style={styles.modalRightContainer}>
                         <Text style={styles.modalRightTitle}>筛选排序</Text>
                         {/* 注册日期 */}
                         <Text style={{ ...styles.modalRightSubtitle, marginTop: 40,marginLeft:10 }}>注册日期</Text>
                         <View style={styles.modalTimePeriodContainer}>
                             <TouchableOpacity onPress={() => this.showDialog(true, true)}>
-                                <Text style={styles.modalRightSubtitle}>
-                                    {this.state.startTime}
+                                <Text style={this.state.startTime.length > 0 ? styles.modalRightSubtitle : styles.modalRightSubtitlePlaceholder}>
+                                    {this.state.startTime.length > 0 ? this.state.startTime : '请选择开始日期'}
                                 </Text>
                             </TouchableOpacity>
-                            <View style={{ marginLeft: 10, marginRight: 10 }}><Text>~</Text></View>
-                            <TouchableOpacity onPress={() => this.showDialog(true, false)}>
-                                <Text style={styles.modalRightSubtitle}>
-                                    {this.state.endTime}
+                            <View style={{ marginLeft: 10, marginRight: 15 }}><Text>~</Text></View>
+                            <TouchableOpacity style={{width:80}}  onPress={() => this.showDialog(true, false)}>
+                                <Text style={this.state.endTime.length > 0 ? styles.modalRightSubtitle : styles.modalRightSubtitlePlaceholder}>
+                                    {this.state.endTime.length > 0 ? this.state.endTime : '请选择结束日期'}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -664,6 +646,9 @@ export default class TeamManagerScreen extends Component<Props> {
 
     showDialog = (blo, b) => {
         Picker.hide()
+        if (this.state.startTime.length == 0) {
+            this.getmyDate();
+        }
         isStartTag = b
         if (!isStartTag) {
             this.setState({ minDate: startTime.split(' ')[0] });
@@ -872,6 +857,12 @@ const styles = StyleSheet.create({
     modalRightSubtitle: {
         fontSize: 14,
         color: MainTheme.DarkGrayColor,
+    },
+    modalRightSubtitlePlaceholder: {
+        fontSize: 12,
+        marginLeft: 10,
+        minWidth: deviceValue.windowWidth * 0.25,
+        color: MainTheme.GrayColor,
     },
 
     modalTimePeriodContainer: {
