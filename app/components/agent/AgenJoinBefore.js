@@ -63,7 +63,8 @@ export default class AgenJoinBefore extends Component<Props> {
             noticeData: []
             , agentData: {},
             isJoin: false,
-            appLevelImagles:''
+            appLevelImagles:'',
+            commissionJson:{},
         };
     }
 
@@ -134,7 +135,7 @@ export default class AgenJoinBefore extends Component<Props> {
             src: WEBNUM }
         http.get('agency/noLoginGetCopyPictures', params).then((res) => {
             if (res.status === 10000) {
-                this.setState({ appLevelImagles: res.data.appLevelImagles })
+                this.setState({ appLevelImagles: res.data.appLevelImagles,commissionJson:JSON.parse(res.data.commissionJson) })
 
             }
         }).catch(err => {
@@ -143,8 +144,18 @@ export default class AgenJoinBefore extends Component<Props> {
     }
 
     reanderActionButton() {
-        const { isJoin,appLevelImagles } = this.state;
+        const { isJoin,appLevelImagles,commissionJson } = this.state;
         let btnTitle = isJoin ? "我的代理" : "立即加入";
+
+        let days;
+        let money;
+        if (commissionJson && Object.keys(commissionJson).length > 0) {
+            days = commissionJson.minCycle + '天';
+            money = commissionJson.minAmount + '元';
+        }else {
+            days = '30天';
+            money = '1000元'
+        }
         return (
             <View style={{marginTop: DeviceValue.windowWidth * (3023 / 1125) * (1 / 9),justifyContent: 'center',
                     alignItems: 'center',}}>
@@ -177,6 +188,9 @@ export default class AgenJoinBefore extends Component<Props> {
                     resizeMode={FastImage.resizeMode.contain}
                 />
 
+            <View style={{paddingLeft:25,paddingRight:20,marginTop:610}}>
+                <Text style={{color:'white',fontSize:10,lineHeight:14}}>1. 提取方式：可绑定银行卡，在满足提取条件后，直接从官网或APP个人中心未结佣金位置发起提取申请，也可以联系客服，通过线下转账方式申请提取；{'\n'}2. 提取周期：<Text style={{color:'#FDF678'}}>{days}</Text>，即从上次提取完成开始，至少需要超过<Text style={{color:'#FDF678'}}>{days}</Text>，才可以发起下次提取；{'\n'}3. 最小提佣金额：<Text style={{color:'#FDF678'}}>{money}</Text>，即本次未结佣金提取金额需大于<Text style={{color:'#FDF678'}}>{money}</Text>，才能发起提取，若小于该金额，请等待佣金累积至该金额后再次申请提取；{'\n'}4. 如有任何疑问，请咨询客服；{'\n'}5.本活动最终解释权归天下网络所有。</Text>
+            </View>
             </View>
             
         );
