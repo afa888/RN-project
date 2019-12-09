@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Platform,TouchableOpacity, StyleSheet, Text, View, Button, Alert, Image,StatusBar} from 'react-native';
 import Dimensions from 'Dimensions'
-import {TouchableWithoutFeedback,ImageBackground,Swiper,FlatList,ScrollView,RefreshControl} from 'react-native';
+import {CameraRoll,TouchableWithoutFeedback,ImageBackground,Swiper,FlatList,ScrollView,RefreshControl} from 'react-native';
 import TXInput from "../../../tools/TXInput"
 import FastImage from 'react-native-fast-image'
 import Picker from 'react-native-picker';
@@ -59,6 +59,16 @@ export default class PayScan extends Component<Props> {
     );
   }
 
+  saveToGallery = (pathName) => {
+      CameraRoll.saveToCameraRoll(pathName, "photo")
+        .then(() => {
+          TXToastManager.show("保存图片成功!");
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    }
+
     render () {
         var titleArr = [];
         if(this.props.params.currentPayModel.cagentPayerPOList.length > 0)
@@ -100,7 +110,7 @@ export default class PayScan extends Component<Props> {
                         
                         <TouchableWithoutFeedback
                             onLongPress={() => {
-                                alert('长按')
+                                this.saveToGallery(imgUrl);
                             }} 
                         >
                             <FastImage
