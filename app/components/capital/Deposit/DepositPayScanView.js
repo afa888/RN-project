@@ -10,6 +10,8 @@ import Tips from './DepositTipsView'
 import TXToastManager from "../../../tools/TXToastManager"
 import MainTheme from "../../../utils/AllColor"
 import {textTitleColor,textThreeHightTitleColor} from "../../../utils/AllColor"
+import { PermissionsAndroid } from 'react-native'
+import RNFS from 'react-native-fs'
 
 
 //扫码
@@ -59,14 +61,76 @@ export default class PayScan extends Component<Props> {
     );
   }
 
-  saveToGallery = (pathName) => {
-      CameraRoll.saveToCameraRoll(pathName, "photo")
-        .then(() => {
-          TXToastManager.show("保存图片成功!");
-        })
-        .catch(err => {
-          console.log("err", err);
-        });
+   async requestPhotosPermission(pathName) {
+      try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            this.DownloadImage(pathName);
+          } else {
+            console.log("Photos permission denied")
+          }
+      } catch (err) {
+        console.warn(err)
+      }
+    }
+
+    DownloadImage=(uri)=> {
+     if (!uri) return null;
+     return new Promise((resolve, reject) => {
+         let timestamp = (new Date()).getTime();//获取当前时间错         
+         let random = String(((Math.random() * 1000000) | 0))//六位随机数
+         let dirs = Platform.OS === 'ios' ? RNFS.LibraryDirectoryPath : RNFS.ExternalDirectoryPath; //外部文件，共享目录的绝对路径（仅限android）
+         const downloadDest = `${dirs}/${timestamp+random}.jpg`;
+         const formUrl = uri;
+         const options = {
+             fromUrl: formUrl,             
+             toFile: downloadDest,             
+             background: true,
+             begin: (res) => {
+
+             },
+         };
+         try {
+             const ret = RNFS.downloadFile(options);
+             ret.promise.then(res => {
+                 // console.log('success', res);
+                 // console.log('file://' + downloadDest)
+                 var promise = CameraRoll.saveToCameraRoll(downloadDest);
+                 promise.then(function(result) {
+                    console.log('保存成功！地址如下：\n', result);
+                    TXToastManager.show("保存图片成功!");
+                 }).catch(function(error) {
+                    console.log('error', error);
+                    TXToastManager.show("保存失败!");
+                 });
+                 resolve(res);
+             }).catch(err => {
+                 reject(new Error(err))
+             });
+         } catch (e) {
+             reject(new Error(e))
+         } 
+     }) 
+    }
+
+
+   saveToGallery = (pathName) => {
+    
+    CameraRoll.saveToCameraRoll(pathName, "photo")
+                .then(() => {
+                  TXToastManager.show("保存图片成功!");
+                })
+                .catch(err => {
+                  console.log("err", err);
+                });
+    }
+
+    saveImageToGallery = (pathName) => {
+        if (Platform.OS == 'ios') {
+            this.saveToGallery(pathName);
+        }else {
+            this.requestPhotosPermission(pathName);
+        }
     }
 
     render () {
@@ -110,7 +174,7 @@ export default class PayScan extends Component<Props> {
                         
                         <TouchableWithoutFeedback
                             onLongPress={() => {
-                                this.saveToGallery(imgUrl);
+                                this.saveImageToGallery(imgUrl);
                             }} 
                         >
                             <FastImage
