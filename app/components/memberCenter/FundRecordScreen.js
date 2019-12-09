@@ -49,13 +49,9 @@ const RESULT_TYPES = [
     { title: '失败', key: 'zz', value: '3' },
 ];
 
-let pageSize = 1;
+let pageNumber = 1;
 let total = 0;
-let lastEndTime = '';//这里因为点击了日历，如果选择了结束时间，那么点击今天，三天，一周的时候又要重新设置结束时间
-let lastminData = '';//这里因为先点击结束时间就会重新设置mindata，那再点击开始时间，日历要重新设置会这种
 let isStartTag = true;
-let selectDetailIndex = -1
-
 
 export default class FundRecordScreen extends Component<Props> {
 
@@ -136,7 +132,7 @@ export default class FundRecordScreen extends Component<Props> {
 
     //http://m.txbet1788.com/TXW/User/queryByTreasurePage
     refreshData = () => {
-        pageSize = 1;
+        pageNumber = 1;
         this.setState({
             refreshing: true,
             data: []
@@ -150,7 +146,7 @@ export default class FundRecordScreen extends Component<Props> {
         const resultStatus = RESULT_TYPES[curSelectResultIndex].value;
 
         let prams = {
-            pageNo: pageSize,
+            pageNo: pageNumber,
             pageSize: 20,
             startTime: startTime + ' 00:00:00',
             endTime: endTime + ' 23:59:59',
@@ -171,7 +167,7 @@ export default class FundRecordScreen extends Component<Props> {
             if (res.status === 10000) {
                 total = res.data.total
                 this.isLoreMore = false;
-                if (pageSize > 1) {
+                if (pageNumber > 1) {
                     if (res.data.list !== null) {
                         let more = this.state.data;
                         console.log("长度 " + res.data.list.length)
@@ -253,8 +249,7 @@ export default class FundRecordScreen extends Component<Props> {
                 isLoreMoreing: 'LoreMoreing',
             });
             this.isLoreMore = true;
-            pageSize++
-            console.log("耶稣pageSize=  " + pageSize)
+            pageNumber++;
             this.postList()
         }
     }
