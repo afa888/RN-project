@@ -72,12 +72,13 @@ export default class DiscountsDitailScreen extends Component<Props> {
             <View style={{flex: 1}}>
                 {this.state.height > 0 &&
                 <ScrollView style={{flex: 1, backgroundColor: category_group_divide_line_color}}>
-                    <Image
+                    <FastImage
                         source={{
                             uri: url,
-
+                            priority: FastImage.priority.normal,
                         }}
-                        style={{width: deviceValue.windowWidth, height: this.state.height, resizeMode: 'cover',}}
+                        style={{width: deviceValue.windowWidth, height: this.state.height, resizeMode: 'cover'}}
+                        resizeMode={FastImage.resizeMode.contain}
                     />
                 </ScrollView>}
             </View>

@@ -303,7 +303,7 @@ export default class AgentManager extends Component<Props> {
         let diPercent = directNum === 0 || directNum === NaN ? 0 : (100 * directNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(0)
         let teamNumPercent = teamNum === 0 || teamNum === NaN ? 0 : (100 * teamNum / (this.state.pieData.directNum + this.state.pieData.teamNum)).toFixed(0)
 
-        const data = [40, 60]
+        const data = [diPercent, teamNumPercent]
         const randomColor = [theme_color, CircleGoldColor]
         const pieData = data
             .filter((value) => value > 0)
@@ -344,7 +344,7 @@ export default class AgentManager extends Component<Props> {
                 </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row' }}>
-                {directNum !== 0 && teamNum !== 0 ? <PieChart
+                {directNum != 0 || teamNum != 0 ? <PieChart
                     style={styles.pieView}
                     data={pieData} /> :
                     <Image source={require('../../static/img/agent/circle.png')} style={styles.pieView} />}
@@ -393,6 +393,35 @@ export default class AgentManager extends Component<Props> {
         </View>)
     }
 
+    getmaxRound = (maxNum) => {
+        let length = maxNum.toString().length;
+        let maxSingleNum = parseInt(maxNum.toString().substring(0,1)) + 1;
+        
+        let multiple;
+        if (length == 1) {
+            return 10;
+        }else if(length == 2)
+        {
+            multiple = 10;
+        }else if(length == 3)
+        {
+            multiple = 100;
+        }else if(length == 4)
+        {
+            multiple = 1000;
+        }else if(length == 5)
+        {
+            multiple = 10000;
+        }else if(length == 6)
+        {
+            multiple = 100000;
+        }else if(length == 7)
+        {
+            multiple = 1000000;
+        }
+
+        return maxSingleNum * multiple;
+    }
 
     createBar = () => {
         if (this.state.barData.length <= 0) {
@@ -416,6 +445,8 @@ export default class AgentManager extends Component<Props> {
             return b > a ? b : a;
         });
         let maxNum = Math.round(maxDirectNum > maxTeemNum ? maxDirectNum : maxTeemNum)//四色五入
+        maxNum = this.getmaxRound(maxNum);
+
         console.log("属猪" + Math.round(maxNum))
         console.log(teemNum)
         console.log(directNum)
@@ -485,6 +516,8 @@ export default class AgentManager extends Component<Props> {
                         }}
                         contentInset={{ top: 0, bottom: 1 }}
                         {...this.props}
+                        yMin = {0}
+                        yMax = {maxNum}
                     >
                         <Grid />
                     </BarChart>
