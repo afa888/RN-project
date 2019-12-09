@@ -23,6 +23,7 @@ import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import QRCode from 'react-native-qrcode-svg';
 import RNFS from 'react-native-fs';
+import { PermissionsAndroid } from 'react-native'
 
 let isJoin = false
 export default class AgentQr extends Component<Props> {
@@ -47,6 +48,25 @@ export default class AgentQr extends Component<Props> {
         // 如果存在this.timer，则使用clearTimeout清空。
         // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
         this.timer && clearTimeout(this.timer);
+    }
+
+    async requestPhotosPermission() {
+
+        if (Platform.OS ==='ios') {
+            this.saveIamge();
+        }else {
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+                  if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    this.saveIamge();
+                  } else {
+                    console.log("Photos permission denied")
+                  }
+              } catch (err) {
+                console.warn(err)
+              }
+        }
+      
     }
 
     saveIamge = ()=> {
@@ -109,7 +129,7 @@ export default class AgentQr extends Component<Props> {
                         
                     <TouchableOpacity style={{flex:1,position:'absolute'}}
                             onLongPress={() => {
-                                this.saveIamge()
+                                this.requestPhotosPermission()
                             }} >
                             <QRCode
                             getRef={(c) => (this.svg = c)}

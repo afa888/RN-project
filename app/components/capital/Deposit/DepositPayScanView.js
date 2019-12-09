@@ -63,7 +63,7 @@ export default class PayScan extends Component<Props> {
 
    async requestPhotosPermission(pathName) {
       try {
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             this.DownloadImage(pathName);
           } else {
