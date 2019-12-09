@@ -21,7 +21,7 @@ export default class HomeBottomView extends Component<Props> {
         let dicountList = [];
         http.post('mobleWebcomConfig.do', prams).then(res => {
             console.log(res);
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 if (res.data !== undefined && res.data.length > 0) {
                     for (var i = 0; i < res.data.length; i++) {
                         if (res.data[i].src1 === CAGENT) {

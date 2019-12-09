@@ -498,7 +498,7 @@ export default class AgentManager extends Component<Props> {
 
             {maxNum !== 0 ?
                 <View style={{ flexDirection: 'row' }}>
-                    <View style={{ width: 30, height: 170, marginLeft: 15, }}>
+                    <View style={{ width: 45, height: 170, marginLeft: 15, }}>
                         <Text style={styles.barTextOne}>{Math.round(maxNum)}</Text>
                         <Text style={styles.barText}>{Math.round(maxNum / 5 * 4)}</Text>
                         <Text style={styles.barText}>{Math.round(maxNum / 5 * 3)}</Text>
@@ -858,7 +858,7 @@ const styles = StyleSheet.create({
     barText: {
         marginTop: (170 / 11.5) * 2 - 15,
         fontSize: 10,
-        width: 30,
+        width: 45,
         textAlign: 'right',
         height: 15
     },
@@ -880,7 +880,7 @@ const styles = StyleSheet.create({
     },
     barView: {
         height: 171,
-        width: DeviceValue.windowWidth - 30 - 30 - 3,
+        width: DeviceValue.windowWidth - 30 - 45 - 3,
         marginRight: 15,
         marginLeft: 3
     },
@@ -892,7 +892,7 @@ const styles = StyleSheet.create({
     },
     barTextOne: {
         fontSize: 10,
-        width: 30,
+        width: 45,
         textAlign: 'right',
         height: 15,
         marginTop: (170 / 11.5) * 1.4 - 7,

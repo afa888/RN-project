@@ -44,7 +44,7 @@ export default class GameListScreen extends Component<Props> {
             terminal: DeviceValue.terminal,
         };
         http.get('game/getPageTab', prams).then(res => {
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 this.setState({
                     data: res.data,
 

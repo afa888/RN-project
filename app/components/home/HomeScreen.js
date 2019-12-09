@@ -259,7 +259,7 @@ export default class HomeScreen extends Component<Props> {
         http.get('game/getPageTab', prams).then(res => {
             console.log("平台推荐");
             console.log(res);
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 let categoryList = []
                 for (var i = 0; i < res.data.length; i++) {
                     let itemLeft = { key: res.data[i].name, isSelect: i == 0 ? true : false }
@@ -282,7 +282,7 @@ export default class HomeScreen extends Component<Props> {
         };
         http.get('game/getPageTabRecommend', prams).then(res => {
             console.log(res);
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 this.setState({ data: res.data })
             }
         }).catch(err => {
@@ -388,7 +388,7 @@ export default class HomeScreen extends Component<Props> {
         // 发送数据请求
         http.post(INNER_MESSAGER_MESSAGE_NUM_URL, { bdate: from, edate: to })
             .then(res => {
-                if (res.status == 10000) {
+                if (res && res.status == 10000) {
                     this.props.navigation.setParams({ badgeValue: res.data.noread });
                 }
             }).catch(err => {

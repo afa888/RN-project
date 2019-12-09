@@ -53,6 +53,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>使用相册用来保存图片</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>使用相册用来保存图片</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
