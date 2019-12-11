@@ -804,6 +804,7 @@ const styles = StyleSheet.create({
 
     modalRightSubtitle: {
         fontSize: 14,
+        marginLeft: 10,
         color: MainTheme.DarkGrayColor,
         minWidth: 100,
     },

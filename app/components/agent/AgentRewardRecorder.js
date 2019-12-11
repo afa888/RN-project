@@ -769,10 +769,10 @@ const styles = StyleSheet.create({
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 15,
-        borderWidth: 0.5,
-        borderColor: MainTheme.SpecialColor,
-        backgroundColor: MainTheme.BackgroundColor,
+        // borderRadius: 15,
+        // borderWidth: 0.5,
+        // borderColor: MainTheme.SpecialColor,
+        backgroundColor: '#EEEEEE',
     },
 
     modalFilterOptionContainerHighlighted: {
@@ -782,9 +782,9 @@ const styles = StyleSheet.create({
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 15,
-        borderWidth: 0.5,
-        borderColor: MainTheme.BackgroundColor,
+        // borderRadius: 15,
+        // borderWidth: 0.5,
+        // borderColor: MainTheme.BackgroundColor,
         backgroundColor: MainTheme.SpecialColor,
     },
 
