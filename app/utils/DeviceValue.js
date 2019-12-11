@@ -12,4 +12,5 @@ export default class DeviceValue extends Component<Props> {
     static CategoryList=[]
     static baseUrl = "";
     static terminal = Platform.OS === "ios" ? 3 : 2;
+    static OS = Platform.OS;
 }

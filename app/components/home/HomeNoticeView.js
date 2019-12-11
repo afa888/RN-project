@@ -82,7 +82,7 @@ export default class HomeNoticeView extends Component<Props> {
 
         };
         http.post('gonggao.do', prams).then((res) => {
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 console.log(res)
                 let imgUrl = []
                 if (res.data.length > 0) {

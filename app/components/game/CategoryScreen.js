@@ -44,7 +44,7 @@ export default class GameListScreen extends Component<Props> {
             terminal: DeviceValue.terminal,
         };
         http.get('game/getPageTab', prams).then(res => {
-            if (res.status === 10000) {
+            if (res && res.status === 10000) {
                 this.setState({
                     data: res.data,
 
@@ -99,7 +99,7 @@ export default class GameListScreen extends Component<Props> {
 
     render() {
         let sreenView = []
-        for (var i = 0; i < this.state.data.length - 3; i++) {
+        for (var i = 0; i < this.state.data.length - 4; i++) {
             sreenView.push(<CategoryGameGridListScreen tabLabel={this.state.data[i].name}
                                                        dataList={this.state.data[i].gameClassifyEntities}
                                                        id={this.state.data[i].id}

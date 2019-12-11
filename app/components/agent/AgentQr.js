@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {
     StyleSheet, View, Text, ImageBackground, Image,
     TouchableOpacity, ScrollView, SafeAreaView,
-    DeviceEventEmitter, Alert, Button,Clipboard
+    DeviceEventEmitter, Alert, Button,Clipboard,TouchableWithoutFeedback
 } from "react-native";
+import { Platform, CameraRoll } from 'react-native';
 import {
     MainTheme,
     textTitleColor,
@@ -21,6 +22,8 @@ import {CAGENT} from "../../utils/Config";
 import http from "../../http/httpFetch";
 import AndroidNativeGameActiviy from "../../customizeview/AndroidIosNativeGameActiviy";
 import QRCode from 'react-native-qrcode-svg';
+import RNFS from 'react-native-fs';
+import { PermissionsAndroid } from 'react-native'
 
 let isJoin = false
 export default class AgentQr extends Component<Props> {
@@ -45,6 +48,49 @@ export default class AgentQr extends Component<Props> {
         // 如果存在this.timer，则使用clearTimeout清空。
         // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
         this.timer && clearTimeout(this.timer);
+    }
+
+    async requestPhotosPermission() {
+
+        if (Platform.OS ==='ios') {
+            this.saveIamge();
+        }else {
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+                  if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    this.saveIamge();
+                  } else {
+                    console.log("Photos permission denied")
+                  }
+              } catch (err) {
+                console.warn(err)
+              }
+        }
+      
+    }
+
+    saveIamge = ()=> {
+      this.svg.toDataURL((data: any) => {
+        const imgPathName = `${RNFS.CachesDirectoryPath}/share-qr.png`;
+        RNFS.writeFile(imgPathName, data, "base64")
+          .then(() => {
+            return this.saveToGallery(imgPathName);
+          })
+          .catch(res => {
+            console.error(res);
+            TXToastManager.show("保存图片失败!");
+          });
+      });
+    }
+
+    saveToGallery = (pathName) => {
+      CameraRoll.saveToCameraRoll(pathName, "photo")
+        .then(() => {
+          TXToastManager.show("保存图片成功!");
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
     }
 
     getInviteMethod = () => {
@@ -79,9 +125,16 @@ export default class AgentQr extends Component<Props> {
                 <Text style={styles.cotentTitle}>邀请方式</Text>
                 <View style={styles.qrView}>
                     <View style={{...styles.qrImageView,height:120,width:120}}>
-                        <QRCode
+                    
+                        
+                    <TouchableOpacity style={{flex:1,position:'absolute'}}
+                            onLongPress={() => {
+                                this.requestPhotosPermission()
+                            }} >
+                            <QRCode
                             getRef={(c) => (this.svg = c)}
                             value={inviteLink} />
+                     </TouchableOpacity>
                     </View>
 
                     <View style={{
