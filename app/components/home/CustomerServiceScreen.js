@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity,Linking,ActivityIndicator,Platform,FlatList,RefreshControl, StyleSheet, Text, View, Button, Alert, Image,StatusBar,TouchableHighlight} from 'react-native';
+import {TouchableOpacity,ImageBackground,Linking,ActivityIndicator,Platform,FlatList,RefreshControl, StyleSheet, Text, View, Button, Alert, Image,StatusBar,TouchableHighlight} from 'react-native';
 import Dimensions from 'Dimensions'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {CAGENT,WEBNUM} from "../../utils/Config";
@@ -131,7 +131,12 @@ export default class CustomerServiceScreen extends Component<Props> {
 
         let nameString;
         if (item.prefix && item.prefix.length > 0) {
-            nameString = item.prefix + item.value;
+            if (item.type == 1) {
+                nameString = item.prefix.replace(':','');
+            }else {
+                nameString = item.value;//item.prefix + item.value; // 只显示配置值
+            }
+            
         }else {
             nameString = item.value;
         }
@@ -164,21 +169,21 @@ export default class CustomerServiceScreen extends Component<Props> {
         }
 
         return (
-            <View style={{alignItems:'center',height: 50,backgroundColor:'#FFFFFF'}}>
+            <View style={{padding:1,alignItems:'center',height: 65}}>
                 {
+                    <ImageBackground source={require('../../static/img/zxkf_bg.png')} resizeMode='cover' style={{width:335,height:63}}>
                     <TouchableOpacity
                         onPress={() => this.clickItem(item,index)}>
-                        <View style={{paddingLeft:30,width:Dimensions.get('window').width - 80,height:35,flexDirection:'row',alignItems:'center'
+                        <View style={{paddingLeft:30,width:Dimensions.get('window').width - 80,height:63,flexDirection:'row',alignItems:'center',justifyContent:'center'
                         }}>
-                        {iconView}
-                        {item.type == 1 ?
-                        <View style={{paddingLeft:10}}><Image style={ styles.loadingImage } source={ loadingImage }/></View>
-                         :
-                         <Text style={{flex:1,color:'#000000',paddingLeft:10}}>{nameString}</Text>
-                        }
+                            {iconView}
+                            {
+                             <Text style={{flex:1,color:'#000000',paddingLeft:10}}>{nameString}</Text>
+                            }
 
                         </View>
                     </TouchableOpacity>
+                    </ImageBackground>
                 }
 
             </View>
@@ -196,7 +201,7 @@ export default class CustomerServiceScreen extends Component<Props> {
                 </View>
                 <FlatList
                         numColumns={1}
-                        style={[styles.flatListStyle,{height:height,width:Dimensions.get('window').width - 80}]}
+                        style={[styles.flatListStyle,{height:height,width:335}]}
                         data={this.state.dataList}
                         renderItem={this.renderItem.bind(this)}
                         keyExtractor={this._keyExtractor}

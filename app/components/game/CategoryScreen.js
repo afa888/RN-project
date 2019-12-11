@@ -99,7 +99,7 @@ export default class GameListScreen extends Component<Props> {
 
     render() {
         let sreenView = []
-        for (var i = 0; i < this.state.data.length - 3; i++) {
+        for (var i = 0; i < this.state.data.length - 4; i++) {
             sreenView.push(<CategoryGameGridListScreen tabLabel={this.state.data[i].name}
                                                        dataList={this.state.data[i].gameClassifyEntities}
                                                        id={this.state.data[i].id}
