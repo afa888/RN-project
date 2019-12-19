@@ -96,7 +96,7 @@ const LoginBeforeTabs = {
     注册: { screen: RegisterStack, navigationOptions: { tabBarVisible: false } },
     优惠: { screen: DiscountsScreenStack },
     // 登录: { screen: LoginStack, navigationOptions: { tabBarVisible: false } }
-    会员: { screen: MemberCenterIndexStack }
+    我的: { screen: MemberCenterIndexStack }
 };
 const LoginAfterTabs = {
     首页: { screen: HomeStack },
@@ -104,7 +104,7 @@ const LoginAfterTabs = {
     存款: { screen: DepositStack, navigationOptions: { tabBarVisible: false, color: theme_color }, color: theme_color },
     优惠: { screen: DiscountsScreenStack },
     // 会员中心: { screen: MemberCenterIndexStack }
-    会员: { screen: MemberCenterIndexStack }
+    我的: { screen: MemberCenterIndexStack }
 };
 export default class MainScreen extends Component<Props> {
     constructor(props) {
@@ -184,7 +184,7 @@ export default class MainScreen extends Component<Props> {
                             source={focused ? require('../../static/img/tab_user_hover.png') :
                                 require('../../static/img/tab_user_normal.png')}
                             style={styles.tab_icom} />;
-                    } else if (routeName === '会员中心' || routeName === '会员') {
+                    } else if (routeName === '会员中心' || routeName === '我的') {
                         return <Image
                             source={focused ? require('../../static/img/tab_user_hover.png') :
                                 require('../../static/img/tab_user_normal.png')}

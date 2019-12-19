@@ -120,7 +120,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <Text>{'没有更多了'}</Text>
+                    <Text>{''}</Text>
                 </View>
             )
         } else {
@@ -141,7 +141,7 @@ export default class CategoryGameGridListScreen extends Component<Props> {
                 />
                 <FlatList
                     numColumns={2}
-                    style={{backgroundColor: "white"}}
+                    style={{backgroundColor: "white",marginBottom:25}}
                     data={this.state.data}
                     ListHeaderComponent={this.renderHeader}//头部
                     ListFooterComponent={this.renderFooter}//尾巴

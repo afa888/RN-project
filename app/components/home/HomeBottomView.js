@@ -53,19 +53,19 @@ export default class HomeBottomView extends Component<Props> {
                 <View style={{backgroundColor:theme_color,height:20,width:5}}/>
                 <Text style={{fontWeight: 'bold',marginLeft:5,color:textTitleColor}}>精选大促</Text>
 
-                <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}>各种优惠为您撑腰</Text>
+                <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}></Text>
                 <TouchableOpacity onPress={() => {
                     this.props.gotoDiscout()
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{color: theme_color, fontSize: 14}}>更多</Text>
-                        <Image source={require('../../static/img/arrow_more.png')}
+                        <Text style={{ fontSize: 12}}>更多</Text>
+                       {/* <Image source={require('../../static/img/arrow_more.png')}
                                style={{
                                    resizeMode: 'contain',
                                    width: 12,
                                    height: 12,
                                    marginLeft: 6
-                               }}/>
+                               }}/>*/}
                     </View>
                 </TouchableOpacity>
             </View>

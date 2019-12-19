@@ -70,7 +70,7 @@ export default class HomeMidView extends Component<Props> {
         return (<View>
             <View style={{
                 backgroundColor: 'white',
-                height: 40,
+                height: 30,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -80,25 +80,25 @@ export default class HomeMidView extends Component<Props> {
                 <View style={{backgroundColor: theme_color, height: 20, width: 5}}/>
                 <Text style={{fontWeight: 'bold', marginLeft: 5, color: textTitleColor}}>平台推荐</Text>
 
-                <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}>精彩荟萃，激情无限</Text>
+                <Text style={{fontSize: 12, color: theme_color, flex: 1, marginLeft: 12}}></Text>
                 <TouchableOpacity onPress={() => {
                     this.props.goMoreGame('navigate')
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{color: theme_color, fontSize: 14}}>更多</Text>
-                        <Image source={require('../../static/img/arrow_more.png')}
+                        <Text style={{fontSize: 12}}>更多</Text>
+                     {/*   <Image source={require('../../static/img/arrow_more.png')}
                                style={{
                                    resizeMode: 'contain',
                                    width: 12,
                                    height: 12,
                                    marginLeft: 6
-                               }}/>
+                               }}/>*/}
                     </View>
                 </TouchableOpacity>
             </View>
 
             <FlatList
-                style={{backgroundColor: 'white'}}
+                style={{backgroundColor: 'white',marginBottom:15}}
                 numColumns={4}
                 data={this.props.data}
                 keyExtractor={item => item.id}
