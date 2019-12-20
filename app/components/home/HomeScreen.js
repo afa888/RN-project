@@ -555,7 +555,6 @@ const styles = StyleSheet.create({
         width: DeviceValue.windowWidth,
         height: DeviceValue.windowWidth * (201 / 1035) + 20,
         backgroundColor: 'white',
-        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center'
     },
