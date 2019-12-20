@@ -177,7 +177,7 @@ export default class BetterBanner extends PureComponent {
     setActiveIndicatorX(x) {
         if (this.activeIndicator !== null) {
             x = this.props.isSeamlessScroll ? (x - this.activeIndicatorX) : x;
-           // x = Platform.OS === 'ios' ? x - this.props.indicatorGap / 2 : x;
+            // x = Platform.OS === 'ios' ? x - this.props.indicatorGap / 2 : x;
             this.activeIndicator.setNativeProps({style: {left: x}})
         }
 
@@ -205,7 +205,7 @@ export default class BetterBanner extends PureComponent {
             let indicatorX = 0;
             let bannerContentY = 0;
             //指示器滚动效果--自动滚动
-           // console.log(" indicatorX  initActiveIndicatorX== " + this.initActiveIndicatorX + "    this.nextPage=    " + this.nextPage + "    this.activeIndicatorX=      " + this.activeIndicatorX)
+            // console.log(" indicatorX  initActiveIndicatorX== " + this.initActiveIndicatorX + "    this.nextPage=    " + this.nextPage + "    this.activeIndicatorX=      " + this.activeIndicatorX)
             if (this.isAutoScroll) {
                 indicatorX = this.initActiveIndicatorX + this.nextPage * this.activeIndicatorX;
                 bannerContentY = this.nextPage * 32
@@ -298,7 +298,7 @@ export default class BetterBanner extends PureComponent {
             onLayout={() => this.activeIndicator.measure((x, y, width, height, pageX, pageY) => {
                 if (!this.initActiveIndicatorX) {
                     this.initActiveIndicatorX = 0;//这里有点瞎搞。但是来回切换的时候rn会给我一个undefind,然后用到它的地方就好报错
-                   // console.log(" indicatorX    renderActiveIndicator initActiveIndicatorX   " + this.initActiveIndicatorX)
+                    // console.log(" indicatorX    renderActiveIndicator initActiveIndicatorX   " + this.initActiveIndicatorX)
                 }
             })}
         />);
