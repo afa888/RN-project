@@ -12,7 +12,7 @@
     "fetch": "^1.1.0",
     "querystring": "^0.2.0",
     "react": "16.8.3",
-    "react-native": "0.59.10",
+    "react-native": "0.62.3",
     "react-native-calendars": "^1.205.0",
     "react-native-check-box": "^2.1.7",
     "react-native-code-push": "^5.7.0",
